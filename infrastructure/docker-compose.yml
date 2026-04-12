@@ -1,0 +1,127 @@
+# Astro Fleet — Docker Compose Configuration
+# Self-hosted multi-site Astro infrastructure with Traefik + Caddy
+#
+# SETUP:
+# 1. Copy .env.example to .env
+# 2. Update .env with your domain and email
+# 3. Add volume mounts for each site (see CADDY SERVICE section)
+# 4. Run: docker-compose up -d
+#
+# For production, use docker-compose -f docker-compose.yml up -d
+
+version: "3.8"
+
+services:
+  # ============================================================================
+  # TRAEFIK — Reverse Proxy & SSL/TLS Certificate Manager
+  # ============================================================================
+  # Traefik automatically provisions Let's Encrypt certificates for all domains.
+  # It listens on ports 80 (HTTP) and 443 (HTTPS).
+  # Static sites are served through Caddy behind Traefik.
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      # ACME email for Let's Encrypt certificate notifications
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      # Optional: Enable Traefik dashboard (uncomment if needed)
+      # - "--api.insecure=false"
+      # - "--api.dashboard=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:/letsencrypt
+    environment:
+      - ACME_EMAIL=${ACME_EMAIL}
+    restart: unless-stopped
+    networks:
+      - astro-fleet
+
+  # ============================================================================
+  # CADDY — Static Site Server
+  # ============================================================================
+  # Caddy serves all static Astro sites behind Traefik.
+  # It handles gzip compression, precompressed assets, security headers, and caching.
+  #
+  # CUSTOMIZATION:
+  # For each site you deploy, add a volume mount:
+  #   - ../sites/{yourdomain}.com/dist:/srv/{yourdomain}.com:ro
+  # Then add a Traefik label (see SITES section below).
+  caddy:
+    image: caddy:2-alpine
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+      # SITES — Mount each built site directory here (read-only)
+      # Example for your first site:
+      # - ../sites/example.com/dist:/srv/example.com:ro
+      # - ../sites/another.com/dist:/srv/another.com:ro
+    labels:
+      - "traefik.enable=true"
+      # SITES — Add Traefik routing labels here for each site
+      # Example for your first site:
+      # - "traefik.http.routers.example.rule=Host(`example.com`) || Host(`www.example.com`)"
+      # - "traefik.http.routers.example.entrypoints=websecure"
+      # - "traefik.http.routers.example.tls.certresolver=letsencrypt"
+      #
+      # Example for a second site:
+      # - "traefik.http.routers.another.rule=Host(`another.com`) || Host(`www.another.com`)"
+      # - "traefik.http.routers.another.entrypoints=websecure"
+      # - "traefik.http.routers.another.tls.certresolver=letsencrypt"
+
+      # Global HTTP-to-HTTPS redirect
+      - "traefik.http.routers.caddy-http.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.caddy-http.entrypoints=web"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.caddy-http.middlewares=redirect-to-https"
+      - "traefik.http.services.caddy.loadbalancer.server.port=80"
+    restart: unless-stopped
+    networks:
+      - astro-fleet
+
+  # ============================================================================
+  # POSTGRESQL — Database (optional, for future CMS integration)
+  # ============================================================================
+  # PostgreSQL stores CMS content if you integrate a headless CMS like Payload.
+  # For Astro Fleet v1 (static-only), this is optional but included for future extensibility.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fleet}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change_me_to_a_random_string}
+      POSTGRES_DB: ${POSTGRES_DB:-fleet}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fleet} -d ${POSTGRES_DB:-fleet}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - astro-fleet
+    # Note: PostgreSQL is not exposed externally. Only services in the astro-fleet
+    # network can connect (e.g., a CMS running in a future container).
+
+volumes:
+  pgdata:
+    driver: local
+  letsencrypt:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
+    driver: local
+
+networks:
+  astro-fleet:
+    driver: bridge

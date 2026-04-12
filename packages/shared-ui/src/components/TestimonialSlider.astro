@@ -1,0 +1,302 @@
+---
+export interface Testimonial {
+  clientName: string;
+  company: string;
+  role?: string;
+  quote: string;
+  rating?: number;
+}
+
+export interface Props {
+  testimonials: Testimonial[];
+  heading?: string;
+}
+
+const {
+  testimonials,
+  heading = 'What Our Clients Say',
+} = Astro.props;
+
+const sliderId = `testimonial-slider-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<section class="testimonials" aria-label="Client testimonials">
+  <div class="testimonials__container">
+    {heading && (
+      <h2 class="testimonials__heading">{heading}</h2>
+    )}
+
+    <div class="testimonials__track-wrapper">
+      <div class="testimonials__track" id={sliderId}>
+        {testimonials.map((testimonial) => (
+          <article class="testimonials__card">
+            <!-- Quote icon -->
+            <svg class="testimonials__quote-icon" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151C7.563 6.068 6 8.789 6 11h4v10H0z"/>
+            </svg>
+
+            <!-- Quote text -->
+            <blockquote class="testimonials__quote">
+              <p>{testimonial.quote}</p>
+            </blockquote>
+
+            <!-- Rating stars -->
+            {testimonial.rating && (
+              <div class="testimonials__rating" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill={i < testimonial.rating! ? 'currentColor' : 'none'}
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    class:list={['testimonials__star', { 'testimonials__star--filled': i < testimonial.rating! }]}
+                    aria-hidden="true"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                ))}
+              </div>
+            )}
+
+            <!-- Author -->
+            <footer class="testimonials__author">
+              <cite class="testimonials__cite">
+                <span class="testimonials__name">{testimonial.clientName}</span>
+                <span class="testimonials__meta">
+                  {testimonial.role && <span>{testimonial.role}, </span>}
+                  <span class="testimonials__company">{testimonial.company}</span>
+                </span>
+              </cite>
+            </footer>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- Navigation dots (CSS radio buttons for no-JS cycling) -->
+    {testimonials.length > 1 && (
+      <div class="testimonials__dots" role="tablist" aria-label="Testimonial navigation">
+        {testimonials.map((_, index) => (
+          <label class="testimonials__dot-label">
+            <input
+              type="radio"
+              name={`${sliderId}-dot`}
+              class="testimonials__dot-input"
+              checked={index === 0}
+              aria-label={`Show testimonial ${index + 1}`}
+              data-slide-index={index}
+              data-slider-id={sliderId}
+            />
+            <span class="testimonials__dot" role="tab"></span>
+          </label>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    padding: 4rem 1.5rem;
+    background: #f8fafc;
+  }
+
+  .testimonials__container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .testimonials__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--color-text-dark, #0f172a);
+    text-align: center;
+    margin: 0 0 2.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  /* ===== Track / Scroll Snap ===== */
+  .testimonials__track-wrapper {
+    overflow: hidden;
+  }
+
+  .testimonials__track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.5rem 0;
+  }
+
+  .testimonials__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ===== Card ===== */
+  .testimonials__card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    background: #ffffff;
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .testimonials__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  }
+
+  .testimonials__quote-icon {
+    color: var(--color-accent, #00d4ff);
+    opacity: 0.3;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+  }
+
+  .testimonials__quote {
+    margin: 0 0 1.25rem;
+    flex: 1;
+  }
+
+  .testimonials__quote p {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #334155;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* ===== Rating Stars ===== */
+  .testimonials__rating {
+    display: flex;
+    gap: 0.125rem;
+    margin-bottom: 1rem;
+  }
+
+  .testimonials__star {
+    color: #fbbf24;
+  }
+
+  .testimonials__star:not(.testimonials__star--filled) {
+    color: #e2e8f0;
+  }
+
+  /* ===== Author ===== */
+  .testimonials__author {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 1rem;
+  }
+
+  .testimonials__cite {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .testimonials__name {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text-dark, #0f172a);
+  }
+
+  .testimonials__meta {
+    font-size: 0.8125rem;
+    color: #64748b;
+  }
+
+  .testimonials__company {
+    color: var(--color-accent, #00d4ff);
+    font-weight: 500;
+  }
+
+  /* ===== Navigation Dots ===== */
+  .testimonials__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .testimonials__dot-input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  .testimonials__dot-label {
+    cursor: pointer;
+  }
+
+  .testimonials__dot {
+    display: block;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background: #cbd5e1;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .testimonials__dot-input:checked + .testimonials__dot {
+    background: var(--color-accent, #00d4ff);
+    transform: scale(1.2);
+  }
+
+  .testimonials__dot-label:hover .testimonials__dot {
+    background: #94a3b8;
+  }
+
+  .testimonials__dot-input:checked + .testimonials__dot:hover {
+    background: var(--color-accent, #00d4ff);
+  }
+
+  /* ===== Responsive ===== */
+  @media (min-width: 640px) {
+    .testimonials__card {
+      flex: 0 0 calc(50% - 0.75rem);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .testimonials__card {
+      flex: 0 0 calc(33.333% - 1rem);
+    }
+
+    .testimonials__heading {
+      font-size: 2.75rem;
+    }
+  }
+</style>
+
+<script>
+  // Minimal JS for dot navigation (scroll to correct card)
+  document.querySelectorAll<HTMLInputElement>('.testimonials__dot-input').forEach((input) => {
+    input.addEventListener('change', () => {
+      const index = Number(input.dataset.slideIndex);
+      const sliderId = input.dataset.sliderId;
+      const track = document.getElementById(sliderId!);
+      if (track) {
+        const card = track.children[index] as HTMLElement;
+        if (card) {
+          track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+</script>

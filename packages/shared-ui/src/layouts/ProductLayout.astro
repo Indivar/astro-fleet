@@ -1,0 +1,100 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import CTABlock from '../components/CTABlock.astro';
+import type { Props as BaseLayoutProps } from './BaseLayout.astro';
+import type { BreadcrumbItem } from '../components/Breadcrumb.astro';
+
+export interface Props extends BaseLayoutProps {
+  /** Breadcrumb items for the page */
+  breadcrumbs?: BreadcrumbItem[];
+  /** Product category name */
+  category?: string;
+  /** Show CTA at bottom of page */
+  showCTA?: boolean;
+  /** CTA heading text */
+  ctaHeading?: string;
+  /** CTA description text */
+  ctaDescription?: string;
+  /** CTA primary button */
+  ctaPrimaryButton?: { text: string; href: string };
+  /** CTA secondary button */
+  ctaSecondaryButton?: { text: string; href: string };
+}
+
+const {
+  breadcrumbs,
+  category,
+  showCTA = true,
+  ctaHeading = 'Need a Custom Solution?',
+  ctaDescription = 'Our team can help you find the right product for your requirements.',
+  ctaPrimaryButton = { text: 'Request a Quote', href: '/contact' },
+  ctaSecondaryButton = { text: 'View All Products', href: '/products' },
+  ...baseProps
+} = Astro.props;
+---
+
+<BaseLayout {...baseProps}>
+  <slot name="head" slot="head" />
+
+  <!-- Breadcrumb Navigation -->
+  {breadcrumbs && breadcrumbs.length > 0 && (
+    <div class="product-layout__breadcrumb">
+      <div class="product-layout__container">
+        <Breadcrumb items={breadcrumbs} />
+      </div>
+    </div>
+  )}
+
+  <!-- Product Hero / Header area -->
+  <slot name="hero" />
+
+  <!-- Main Product Content -->
+  <div class="product-layout__content">
+    <div class="product-layout__container">
+      <slot />
+    </div>
+  </div>
+
+  <!-- Product Sidebar / Additional Content -->
+  <slot name="sidebar" />
+
+  <!-- Related Products Section -->
+  <slot name="related" />
+
+  <!-- Bottom CTA -->
+  {showCTA && (
+    <CTABlock
+      heading={ctaHeading}
+      description={ctaDescription}
+      primaryButton={ctaPrimaryButton}
+      secondaryButton={ctaSecondaryButton}
+      variant="dark"
+    />
+  )}
+
+  <slot name="footer-scripts" slot="footer-scripts" />
+</BaseLayout>
+
+<style>
+  .product-layout__breadcrumb {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .product-layout__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .product-layout__content {
+    padding: 2rem 0 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .product-layout__content {
+      padding: 3rem 0 5rem;
+    }
+  }
+</style>

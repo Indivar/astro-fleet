@@ -1,0 +1,160 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import ServiceCard from '@astro-fleet/shared-ui/src/components/ServiceCard.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../lib/site-config';
+
+const services = [
+  {
+    title: 'Web Development',
+    description:
+      'Custom websites and web applications built with modern frameworks. We prioritise performance, accessibility, and long-term maintainability.',
+    href: '/contact/',
+    linkText: 'Enquire now',
+  },
+  {
+    title: 'Cloud Hosting',
+    description:
+      'Managed hosting on Cloudflare Pages, AWS, or your preferred provider. Sub-30 ms edge delivery with automatic cache invalidation on deploy.',
+    href: '/contact/',
+    linkText: 'Enquire now',
+  },
+  {
+    title: 'SEO Optimisation',
+    description:
+      'Technical SEO audits, structured data, Core Web Vitals tuning, and content strategy. Every page ships with valid JSON-LD out of the box.',
+    href: '/contact/',
+    linkText: 'Enquire now',
+  },
+  {
+    title: 'Content Strategy',
+    description:
+      'Editorial planning, keyword research, and content calendars aligned to your business goals. Built for teams who publish regularly.',
+    href: '/contact/',
+    linkText: 'Enquire now',
+  },
+  {
+    title: 'Analytics',
+    description:
+      'Privacy-first analytics setup with Plausible or GA4. Custom dashboards, conversion tracking, and monthly insight reports.',
+    href: '/contact/',
+    linkText: 'Enquire now',
+  },
+  {
+    title: 'Support',
+    description:
+      'Ongoing maintenance, dependency updates, and on-call support plans. We keep your sites healthy so you can focus on your business.',
+    href: '/contact/',
+    linkText: 'Enquire now',
+  },
+];
+---
+
+<BaseLayout
+  title={`Services — ${SITE_NAME}`}
+  description="Explore our full range of services: web development, cloud hosting, SEO, content strategy, analytics, and ongoing support."
+  keywords={['web development', 'cloud hosting', 'SEO', 'content strategy', 'analytics', 'support']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Get Started"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <div class="container">
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Services' },
+      ]}
+    />
+  </div>
+
+  <!-- Page hero -->
+  <section class="services-hero section">
+    <div class="container">
+      <h1 class="services-hero__title">Our Services</h1>
+      <p class="services-hero__sub">
+        From a single landing page to a full multi-site fleet — we cover everything
+        you need to launch fast and grow with confidence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Services grid -->
+  <section class="section">
+    <div class="container">
+      <div class="services-grid">
+        {services.map((s) => (
+          <ServiceCard
+            title={s.title}
+            description={s.description}
+            href={s.href}
+            linkText={s.linkText}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Not Sure Which Service You Need?"
+    description="Drop us a message and we'll recommend the right approach for your project."
+    primaryButton={{ text: 'Contact Us', href: '/contact/' }}
+    variant="light"
+  />
+</BaseLayout>
+
+<style>
+  .services-hero {
+    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
+    padding-bottom: 2rem;
+  }
+
+  .services-hero__title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--color-primary, #1e3a5f);
+    margin-bottom: 1rem;
+  }
+
+  .services-hero__sub {
+    font-size: 1.125rem;
+    color: #475569;
+    line-height: 1.7;
+    max-width: 560px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .services-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

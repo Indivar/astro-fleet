@@ -1,0 +1,114 @@
+---
+export interface TrustItem {
+  icon?: string;
+  text: string;
+}
+
+/**
+ * SECURITY: item.icon is rendered via set:html to support inline SVG.
+ * Only pass trusted, hardcoded SVG strings — never user-generated content.
+ */
+export interface Props {
+  items: TrustItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="trust-bar" aria-label="Trust indicators">
+  <div class="trust-bar__container">
+    {items.map((item, index) => (
+      <>
+        {index > 0 && <span class="trust-bar__separator" aria-hidden="true">&middot;</span>}
+        <div class="trust-bar__item">
+          {item.icon && (
+            <span class="trust-bar__icon" aria-hidden="true">
+              <Fragment set:html={item.icon} />
+            </span>
+          )}
+          <span class="trust-bar__text">{item.text}</span>
+        </div>
+      </>
+    ))}
+  </div>
+</section>
+
+<style>
+  .trust-bar {
+    background: var(--color-primary, #0a0f1a);
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1rem 1.5rem;
+  }
+
+  .trust-bar__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+
+  .trust-bar__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: text-shadow 0.3s ease;
+  }
+
+  .trust-bar__item:hover {
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+  }
+
+  .trust-bar__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent, #00d4ff);
+    flex-shrink: 0;
+  }
+
+  .trust-bar__icon :global(svg) {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .trust-bar__text {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .trust-bar__separator {
+    color: var(--color-accent, #00d4ff);
+    font-size: 1.25rem;
+    font-weight: 700;
+    user-select: none;
+    line-height: 1;
+  }
+
+  @media (max-width: 639px) {
+    .trust-bar__separator {
+      display: none;
+    }
+
+    .trust-bar__container {
+      justify-content: center;
+      gap: 0.5rem 1.5rem;
+    }
+
+    .trust-bar__text {
+      font-size: 0.75rem;
+    }
+  }
+</style>

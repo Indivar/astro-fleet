@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.astro/
+.output/
+
+# Turborepo
+.turbo/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Package tarballs
+*.tgz
+
+# Hosting platforms
+.vercel/
+.wrangler/
+.netlify/
+
+# Claude Code session artifacts
+.remember/

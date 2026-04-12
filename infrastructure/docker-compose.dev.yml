@@ -1,0 +1,36 @@
+# Astro Fleet — Development Docker Compose Configuration
+# Lightweight PostgreSQL for local development (no Traefik/Caddy)
+#
+# USAGE:
+# docker-compose -f docker-compose.dev.yml up -d
+#
+# Then run `bun run dev` in your site package to develop locally with HMR.
+
+version: "3.8"
+
+services:
+  # ============================================================================
+  # POSTGRESQL — Development Database
+  # ============================================================================
+  # Lightweight PostgreSQL for local CMS development.
+  # Exposed on localhost:5432 for local tooling (psql, pgAdmin, etc.)
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fleet
+      POSTGRES_PASSWORD: fleet_dev
+      POSTGRES_DB: fleet
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fleet -d fleet"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata_dev:
+    driver: local

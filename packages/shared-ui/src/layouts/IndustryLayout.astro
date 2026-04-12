@@ -1,0 +1,106 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import CTABlock from '../components/CTABlock.astro';
+import type { Props as BaseLayoutProps } from './BaseLayout.astro';
+import type { BreadcrumbItem } from '../components/Breadcrumb.astro';
+
+export interface Props extends BaseLayoutProps {
+  /** Breadcrumb items for the page */
+  breadcrumbs?: BreadcrumbItem[];
+  /** Industry name */
+  industryName?: string;
+  /** Show CTA at bottom of page */
+  showCTA?: boolean;
+  /** CTA heading text */
+  ctaHeading?: string;
+  /** CTA description text */
+  ctaDescription?: string;
+  /** CTA primary button */
+  ctaPrimaryButton?: { text: string; href: string };
+  /** CTA secondary button */
+  ctaSecondaryButton?: { text: string; href: string };
+}
+
+const {
+  breadcrumbs,
+  industryName,
+  showCTA = true,
+  ctaHeading = 'Ready to Optimize Your Operations?',
+  ctaDescription = 'Discover how our solutions can transform your business.',
+  ctaPrimaryButton = { text: 'Get in Touch', href: '/contact' },
+  ctaSecondaryButton = { text: 'Explore All Industries', href: '/industries' },
+  ...baseProps
+} = Astro.props;
+---
+
+<BaseLayout {...baseProps}>
+  <slot name="head" slot="head" />
+
+  <!-- Breadcrumb Navigation -->
+  {breadcrumbs && breadcrumbs.length > 0 && (
+    <div class="industry-layout__breadcrumb">
+      <div class="industry-layout__container">
+        <Breadcrumb items={breadcrumbs} />
+      </div>
+    </div>
+  )}
+
+  <!-- Industry Hero Section -->
+  <slot name="hero" />
+
+  <!-- Industry Overview / Key Content -->
+  <div class="industry-layout__content">
+    <div class="industry-layout__container">
+      <slot />
+    </div>
+  </div>
+
+  <!-- Products for this Industry -->
+  <slot name="products" />
+
+  <!-- Case Studies / Success Stories -->
+  <slot name="case-studies" />
+
+  <!-- Testimonials specific to this Industry -->
+  <slot name="testimonials" />
+
+  <!-- Related Services -->
+  <slot name="services" />
+
+  <!-- Bottom CTA -->
+  {showCTA && (
+    <CTABlock
+      heading={ctaHeading}
+      description={ctaDescription}
+      primaryButton={ctaPrimaryButton}
+      secondaryButton={ctaSecondaryButton}
+      variant="dark"
+    />
+  )}
+
+  <slot name="footer-scripts" slot="footer-scripts" />
+</BaseLayout>
+
+<style>
+  .industry-layout__breadcrumb {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .industry-layout__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .industry-layout__content {
+    padding: 2rem 0 4rem;
+  }
+
+  @media (min-width: 768px) {
+    .industry-layout__content {
+      padding: 3rem 0 5rem;
+    }
+  }
+</style>

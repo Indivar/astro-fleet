@@ -1,0 +1,391 @@
+---
+/**
+ * Static HTML form — no built-in CSRF or server-side validation.
+ * Your receiving endpoint (formAction) must implement:
+ * - Input validation and sanitization
+ * - CSRF protection
+ * - Rate limiting / spam prevention
+ */
+export interface Props {
+  formAction?: string;
+  machineName?: string;
+  machineSlug?: string;
+  showWhatsApp?: boolean;
+  whatsAppNumber?: string;
+  whatsAppMessage?: string;
+  heading?: string;
+  description?: string;
+  industries?: string[];
+}
+
+const {
+  formAction = '/api/enquiry',
+  machineName = '',
+  machineSlug = '',
+  showWhatsApp = false,
+  whatsAppNumber = '',
+  whatsAppMessage = 'Hello, I would like to enquire about your products.',
+  heading = 'Send Us an Enquiry',
+  description = 'Fill in the form below and our team will get back to you within 24 hours.',
+  industries,
+} = Astro.props;
+---
+
+<section class="contact-form" id="enquiry-form">
+  <div class="contact-form__container">
+    <div class="contact-form__header">
+      <h2 class="contact-form__heading">{heading}</h2>
+      <p class="contact-form__description">{description}</p>
+    </div>
+
+    <form
+      action={formAction}
+      method="POST"
+      class="contact-form__form"
+      novalidate
+    >
+      {machineSlug && (
+        <input type="hidden" name="machineSlug" value={machineSlug} />
+      )}
+
+      <div class="contact-form__grid">
+        <!-- Name -->
+        <div class="contact-form__field">
+          <label for="cf-name" class="contact-form__label">
+            Full Name <span class="contact-form__required" aria-label="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="cf-name"
+            name="name"
+            required
+            autocomplete="name"
+            placeholder="John Smith"
+            class="contact-form__input"
+          />
+        </div>
+
+        <!-- Company -->
+        <div class="contact-form__field">
+          <label for="cf-company" class="contact-form__label">Company</label>
+          <input
+            type="text"
+            id="cf-company"
+            name="company"
+            autocomplete="organization"
+            placeholder="Your Company Ltd."
+            class="contact-form__input"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="contact-form__field">
+          <label for="cf-email" class="contact-form__label">
+            Email Address <span class="contact-form__required" aria-label="required">*</span>
+          </label>
+          <input
+            type="email"
+            id="cf-email"
+            name="email"
+            required
+            autocomplete="email"
+            placeholder="john@company.com"
+            class="contact-form__input"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="contact-form__field">
+          <label for="cf-phone" class="contact-form__label">Phone Number</label>
+          <input
+            type="tel"
+            id="cf-phone"
+            name="phone"
+            autocomplete="tel"
+            placeholder="+1 555 000 0000"
+            class="contact-form__input"
+          />
+        </div>
+
+        <!-- Industry (only rendered when industries prop is provided) -->
+        {industries && industries.length > 0 && (
+          <div class="contact-form__field">
+            <label for="cf-industry" class="contact-form__label">Industry</label>
+            <select id="cf-industry" name="industry" class="contact-form__select">
+              <option value="">Select your industry</option>
+              {industries.map((industry) => (
+                <option value={industry.toLowerCase().replace(/\s+/g, '-')}>{industry}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <!-- Machine / Product Interest -->
+        <div class="contact-form__field">
+          <label for="cf-machine" class="contact-form__label">Product Interest</label>
+          <input
+            type="text"
+            id="cf-machine"
+            name="machineInterest"
+            value={machineName}
+            placeholder="e.g., Product name or model"
+            class="contact-form__input"
+          />
+        </div>
+
+        <!-- Message -->
+        <div class="contact-form__field contact-form__field--full">
+          <label for="cf-message" class="contact-form__label">Message</label>
+          <textarea
+            id="cf-message"
+            name="message"
+            rows="4"
+            placeholder="Tell us about your requirements..."
+            class="contact-form__textarea"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="contact-form__submit-row">
+        <button type="submit" class="contact-form__submit">
+          Send Enquiry
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m22 2-7 20-4-9-9-4z"/>
+            <path d="m22 2-11 11"/>
+          </svg>
+        </button>
+      </div>
+    </form>
+
+    {showWhatsApp && whatsAppNumber && (
+      <div class="contact-form__whatsapp">
+        <span class="contact-form__whatsapp-divider">or</span>
+        <a
+          href={`https://wa.me/${whatsAppNumber.replace(/\D/g, '')}?text=${encodeURIComponent(whatsAppMessage)}`}
+          class="contact-form__whatsapp-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .contact-form {
+    padding: 4rem 1.5rem;
+    background: #ffffff;
+  }
+
+  .contact-form__container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .contact-form__header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .contact-form__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-form__description {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .contact-form__label {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #334155;
+  }
+
+  .contact-form__required {
+    color: #dc2626;
+  }
+
+  .contact-form__input,
+  .contact-form__select,
+  .contact-form__textarea {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    color: #1e293b;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 0.6875rem 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+    outline: none;
+  }
+
+  .contact-form__input::placeholder,
+  .contact-form__textarea::placeholder {
+    color: #94a3b8;
+  }
+
+  .contact-form__input:focus,
+  .contact-form__select:focus,
+  .contact-form__textarea:focus {
+    border-color: var(--color-accent, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .contact-form__input:invalid:not(:placeholder-shown),
+  .contact-form__select:invalid:not(:placeholder-shown) {
+    border-color: #dc2626;
+  }
+
+  .contact-form__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    padding-right: 2.5rem;
+  }
+
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .contact-form__submit-row {
+    margin-top: 1.5rem;
+  }
+
+  .contact-form__submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.8125rem 2rem;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--color-cta, #2563eb);
+    border: none;
+    border-radius: var(--cta-radius, 0.5rem);
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .contact-form__submit:hover {
+    background-color: var(--color-primary, #1e3a5f);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .contact-form__submit:active {
+    transform: translateY(1px);
+  }
+
+  /* WhatsApp */
+  .contact-form__whatsapp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .contact-form__whatsapp-divider {
+    font-size: 0.8125rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    padding: 0 1rem;
+  }
+
+  .contact-form__whatsapp-divider::before,
+  .contact-form__whatsapp-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 60px;
+    height: 1px;
+    background: #e2e8f0;
+  }
+
+  .contact-form__whatsapp-divider::before {
+    right: 100%;
+  }
+
+  .contact-form__whatsapp-divider::after {
+    left: 100%;
+  }
+
+  .contact-form__whatsapp-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #25d366;
+    border-radius: var(--cta-radius, 0.5rem);
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+  }
+
+  .contact-form__whatsapp-link:hover {
+    background-color: #1da851;
+  }
+
+  /* ===== Responsive ===== */
+  @media (min-width: 640px) {
+    .contact-form__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .contact-form__field--full {
+      grid-column: span 2;
+    }
+
+    .contact-form__submit {
+      width: auto;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .contact-form {
+      padding: 5rem 2rem;
+    }
+
+    .contact-form__heading {
+      font-size: 2.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../lib/site-config';
+---
+
+<BaseLayout
+  title={`Contact Us — ${SITE_NAME}`}
+  description="Get in touch with our team. Fill in the form and we'll get back to you within 24 hours."
+  keywords={['contact', 'enquiry', 'get in touch', 'support']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Get Started"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <div class="container">
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Contact' },
+      ]}
+    />
+  </div>
+
+  <!-- Page hero -->
+  <section class="contact-hero section">
+    <div class="container">
+      <h1 class="contact-hero__title">Get in Touch</h1>
+      <p class="contact-hero__sub">
+        Have a question or ready to start a project? Fill in the form below and
+        we'll get back to you within one business day.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact form -->
+  <ContactForm
+    formAction="#"
+    heading="Send Us a Message"
+    description="Tell us about your project and we'll get back to you within 24 hours."
+  />
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
+    padding-bottom: 0;
+  }
+
+  .contact-hero__title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    color: var(--color-primary, #1e3a5f);
+    margin-bottom: 1rem;
+  }
+
+  .contact-hero__sub {
+    font-size: 1.125rem;
+    color: #475569;
+    line-height: 1.7;
+    max-width: 520px;
+  }
+</style>

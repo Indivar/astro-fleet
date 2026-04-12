@@ -1,0 +1,10 @@
+{
+  "name": "@astro-fleet/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./tokens": "./src/tokens.ts",
+    "./css": "./src/css.ts"
+  }
+}

@@ -1,0 +1,217 @@
+---
+export interface CTAButton {
+  text: string;
+  href: string;
+}
+
+export interface Props {
+  heading: string;
+  description?: string;
+  primaryButton: CTAButton;
+  secondaryButton?: CTAButton;
+  variant?: 'light' | 'dark';
+}
+
+const {
+  heading,
+  description,
+  primaryButton,
+  secondaryButton,
+  variant = 'dark',
+} = Astro.props;
+---
+
+<section class:list={['cta-block', `cta-block--${variant}`]}>
+  <div class="cta-block__container">
+    <h2 class="cta-block__heading">{heading}</h2>
+    {description && <p class="cta-block__description">{description}</p>}
+    <div class="cta-block__buttons">
+      <a href={primaryButton.href} class="cta-block__btn cta-block__btn--primary">
+        {primaryButton.text}
+      </a>
+      {secondaryButton && (
+        <a href={secondaryButton.href} class="cta-block__btn cta-block__btn--secondary">
+          {secondaryButton.text}
+        </a>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-block {
+    padding: 4rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-block--dark {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+      var(--color-primary, #0a0f1a);
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 100%, 100%, 40px 40px, 40px 40px;
+    background-color: var(--color-primary, #0a0f1a);
+    color: #ffffff;
+  }
+
+  .cta-block--light {
+    background-color: #f8fafc;
+    color: var(--color-text-dark, #0f172a);
+  }
+
+  .cta-block__container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-block__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.875rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .cta-block--dark .cta-block__heading {
+    color: #ffffff;
+  }
+
+  .cta-block--light .cta-block__heading {
+    color: var(--color-text-dark, #0f172a);
+  }
+
+  .cta-block__description {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin: 0 0 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-block--dark .cta-block__description {
+    color: #94a3b8;
+  }
+
+  .cta-block--light .cta-block__description {
+    color: var(--color-text-muted, #64748b);
+  }
+
+  .cta-block__buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .cta-block__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8125rem 2rem;
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: var(--cta-radius, 0.5rem);
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    min-width: 200px;
+  }
+
+  /* Primary button — Dark variant */
+  .cta-block--dark .cta-block__btn--primary {
+    background: linear-gradient(135deg, var(--color-accent, #00d4ff), var(--color-accent-hover, #00b8d9));
+    color: var(--color-primary, #0a0f1a);
+    box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-block--dark .cta-block__btn--primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  .cta-block--dark .cta-block__btn--primary:hover {
+    box-shadow: 0 6px 24px rgba(0, 212, 255, 0.45);
+    transform: translateY(-2px);
+  }
+
+  /* Primary button — Light variant */
+  .cta-block--light .cta-block__btn--primary {
+    background: linear-gradient(135deg, var(--color-accent, #00d4ff), var(--color-accent-hover, #00b8d9));
+    color: var(--color-primary, #0a0f1a);
+    box-shadow: 0 2px 12px rgba(0, 212, 255, 0.2);
+  }
+
+  .cta-block--light .cta-block__btn--primary:hover {
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.35);
+    transform: translateY(-2px);
+  }
+
+  /* Secondary button — Dark variant (glassmorphism) */
+  .cta-block--dark .cta-block__btn--secondary {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .cta-block--dark .cta-block__btn--secondary:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  /* Secondary button — Light variant */
+  .cta-block--light .cta-block__btn--secondary {
+    background-color: transparent;
+    color: var(--color-primary, #0a0f1a);
+    border: 2px solid var(--color-accent, #00d4ff);
+  }
+
+  .cta-block--light .cta-block__btn--secondary:hover {
+    background-color: var(--color-accent-glow, rgba(0, 212, 255, 0.15));
+    color: var(--color-accent, #00d4ff);
+    transform: translateY(-1px);
+  }
+
+  @media (min-width: 640px) {
+    .cta-block {
+      padding: 5rem 2rem;
+    }
+
+    .cta-block__heading {
+      font-size: 2.75rem;
+    }
+
+    .cta-block__buttons {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+</style>

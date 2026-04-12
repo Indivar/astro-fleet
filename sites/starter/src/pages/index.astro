@@ -1,0 +1,225 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import ServiceCard from '@astro-fleet/shared-ui/src/components/ServiceCard.astro';
+import TrustBar from '@astro-fleet/shared-ui/src/components/TrustBar.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../lib/site-config';
+
+const trustItems = [
+  { text: 'Open Source & MIT Licensed' },
+  { text: 'Zero JS by Default' },
+  { text: 'Tailwind CSS v4' },
+  { text: 'Type-Safe Config' },
+];
+
+const features = [
+  {
+    title: 'Shared Components',
+    description:
+      'A battle-tested library of Astro components — Header, Footer, ServiceCard, CTABlock and more — shared across every site in your fleet.',
+    href: '/services/',
+    linkText: 'See all components',
+  },
+  {
+    title: 'Design Tokens',
+    description:
+      'Three ready-made presets (Corporate, SaaS, Warm) powered by a typed DesignTokens interface. Reskin any site by changing a single config value.',
+    href: '/services/',
+    linkText: 'Explore tokens',
+  },
+  {
+    title: 'One-Command Deploy',
+    description:
+      'Each site builds independently via Turborepo. Deploy to Cloudflare Pages, Netlify, or any static host with a single wrangler command.',
+    href: '/services/',
+    linkText: 'Deployment guide',
+  },
+];
+---
+
+<BaseLayout
+  title={`${SITE_NAME} — Build Multiple Sites, One Codebase`}
+  description="Astro Fleet is an open-source multi-site monorepo starter. Shared components, design tokens, and one-command deploys for agencies and multi-brand teams."
+  keywords={['astro', 'monorepo', 'multi-site', 'starter', 'design tokens', 'tailwind']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Get Started"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__container">
+      <div class="hero__badge">Open Source Monorepo Starter</div>
+      <h1 class="hero__headline">
+        Build Multiple Sites,<br />
+        <span class="hero__headline--accent">One Codebase</span>
+      </h1>
+      <p class="hero__sub">
+        Astro Fleet gives your team a shared component library, typed design tokens,
+        and a Turborepo pipeline — so spinning up a new brand site takes minutes,
+        not weeks.
+      </p>
+      <div class="hero__actions">
+        <a href="/contact/" class="hero__cta-primary">Get Started</a>
+        <a href="/about/" class="hero__cta-secondary">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust bar -->
+  <TrustBar items={trustItems} />
+
+  <!-- Features -->
+  <section class="section features">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-header__title">Everything You Need Out of the Box</h2>
+        <p class="section-header__description">
+          Astro Fleet bundles the patterns that every multi-site project needs —
+          so you can focus on content and conversion, not boilerplate.
+        </p>
+      </div>
+      <div class="features__grid">
+        {features.map((f) => (
+          <ServiceCard
+            title={f.title}
+            description={f.description}
+            href={f.href}
+            linkText={f.linkText}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <CTABlock
+    heading="Ready to Launch Your Fleet?"
+    description="Clone the repo, run bun install, and have your first site live in under 10 minutes."
+    primaryButton={{ text: 'Get Started', href: '/contact/' }}
+    secondaryButton={{ text: 'View Services', href: '/services/' }}
+  />
+</BaseLayout>
+
+<style>
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+  }
+
+  .hero__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero__badge {
+    display: inline-block;
+    padding: 0.375rem 1rem;
+    background: #eff6ff;
+    color: var(--color-accent, #2563eb);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    border: 1px solid #bfdbfe;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__headline {
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--color-primary, #1e3a5f);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero__headline--accent {
+    color: var(--color-accent, #2563eb);
+  }
+
+  .hero__sub {
+    font-size: 1.125rem;
+    color: #475569;
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .hero__cta-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem 2.25rem;
+    background: var(--color-accent, #2563eb);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  }
+
+  .hero__cta-primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    opacity: 1;
+  }
+
+  .hero__cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem 2.25rem;
+    border: 2px solid #cbd5e1;
+    color: #334155;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .hero__cta-secondary:hover {
+    border-color: var(--color-accent, #2563eb);
+    color: var(--color-accent, #2563eb);
+    opacity: 1;
+  }
+
+  /* ===== Features grid ===== */
+  .features__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .features__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

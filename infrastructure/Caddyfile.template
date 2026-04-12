@@ -1,0 +1,87 @@
+# Caddyfile Template — Astro Fleet
+#
+# This template shows the pattern for serving a static Astro site with Caddy.
+# Caddy runs behind Traefik (which handles TLS), so it listens on :80.
+#
+# USAGE:
+# 1. Copy this to Caddyfile.template
+# 2. For each site, create a block by replacing {{DOMAIN}} and {{DOMAIN_SLUG}}
+#    Example for example.com:
+#      - Replace {{DOMAIN}} with "example.com"
+#      - Replace {{DOMAIN_SLUG}} with "example" (slugified domain name)
+# 3. Or use scripts/setup-infra.sh to generate Caddyfile from a config file
+#
+# SECURITY HEADERS EXPLAINED:
+# - Cache-Control: Immutable assets (JS/CSS hashes) cached forever; HTML revalidated hourly
+# - X-Content-Type-Options: Prevents MIME-type sniffing attacks
+# - X-Frame-Options: Prevents clickjacking (site cannot be framed)
+# - Referrer-Policy: Limits referrer info sent to external sites
+
+:80 {
+  # ============================================================================
+  # SITE: {{DOMAIN}}
+  # ============================================================================
+  @{{DOMAIN_SLUG}} host {{DOMAIN}} www.{{DOMAIN}}
+  handle @{{DOMAIN_SLUG}} {
+    # Root directory for this site (mounted via Docker)
+    root * /srv/{{DOMAIN}}
+
+    # Enable gzip compression for text assets
+    encode gzip
+
+    # Serve precompressed assets (.br, .gzip) if available
+    file_server {
+      precompressed gzip br
+    }
+
+    # Security and cache control headers
+    header {
+      # Immutable assets (JS/CSS with content hashes) can be cached forever
+      Cache-Control "public, max-age=31536000, immutable"
+      # Prevent MIME-type sniffing
+      X-Content-Type-Options "nosniff"
+      # Prevent clickjacking
+      X-Frame-Options "DENY"
+      # Limit referrer info
+      Referrer-Policy "strict-origin-when-cross-origin"
+    }
+
+    # HTML pages: shorter cache with revalidation
+    # (This ensures page updates are seen within 1 hour)
+    @html path *.html /
+    header @html Cache-Control "public, max-age=3600, must-revalidate"
+
+    # SPA/routing: try path, then path/index.html, else 404
+    try_files {path} {path}/index.html =404
+  }
+
+  # ============================================================================
+  # ADD MORE SITES BY DUPLICATING THE BLOCK ABOVE
+  # ============================================================================
+  # Example for a second site (another.com):
+  #
+  # @another host another.com www.another.com
+  # handle @another {
+  #   root * /srv/another.com
+  #   encode gzip
+  #   file_server {
+  #     precompressed gzip br
+  #   }
+  #   header {
+  #     Cache-Control "public, max-age=31536000, immutable"
+  #     X-Content-Type-Options "nosniff"
+  #     X-Frame-Options "DENY"
+  #     Referrer-Policy "strict-origin-when-cross-origin"
+  #   }
+  #   @html path *.html /
+  #   header @html Cache-Control "public, max-age=3600, must-revalidate"
+  #   try_files {path} {path}/index.html =404
+  # }
+
+  # ============================================================================
+  # FALLBACK — No site matched
+  # ============================================================================
+  handle {
+    respond "Not Found" 404
+  }
+}

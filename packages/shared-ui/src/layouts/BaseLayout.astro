@@ -1,0 +1,269 @@
+---
+import SEOHead from '../components/SEOHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { MenuItem } from '../components/Header.astro';
+import type { FooterColumn, ContactInfo, SocialLink } from '../components/Footer.astro';
+import type { DesignTokens } from '@astro-fleet/config';
+import { tokensToCSSVars } from '../utils/tokens.js';
+
+export interface Props {
+  /** Page title for SEO */
+  title: string;
+  /** Meta description for SEO */
+  description: string;
+  /** SEO keywords */
+  keywords?: string[];
+  /** JSON-LD structured data */
+  structuredData?: Record<string, unknown>;
+  /** Canonical URL for the page */
+  canonicalUrl?: string;
+  /** Open Graph image URL */
+  ogImage?: string;
+  /** Navigation menu items */
+  navigation: MenuItem[];
+  /** Footer link columns */
+  footerColumns: FooterColumn[];
+  /** Contact information for footer */
+  contactInfo?: ContactInfo;
+  /** Social media links */
+  socialLinks?: SocialLink[];
+  /** Site name used in titles, header, footer */
+  siteName: string;
+  /** Design tokens for CSS custom properties */
+  designTokens?: DesignTokens;
+  /** Logo image source */
+  logoSrc?: string;
+  /** Logo alt text */
+  logoAlt?: string;
+  /** Footer tagline */
+  tagline?: string;
+  /** Header CTA text */
+  ctaText?: string;
+  /** Header CTA link */
+  ctaHref?: string;
+  /** Extra head content */
+  headSlot?: boolean;
+  /** Body class */
+  bodyClass?: string;
+  /** Theme preference */
+  theme?: 'light' | 'dark';
+}
+
+const {
+  title,
+  description,
+  keywords,
+  structuredData,
+  canonicalUrl,
+  ogImage,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+  siteName,
+  designTokens,
+  logoSrc,
+  logoAlt,
+  tagline,
+  ctaText,
+  ctaHref,
+  bodyClass = '',
+} = Astro.props;
+
+const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SEOHead
+      title={title}
+      description={description}
+      keywords={keywords}
+      structuredData={structuredData}
+      canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
+      siteName={siteName}
+    />
+    {/* CSS vars from tokensToCSSVars() — safe because source is static TypeScript config, not user input */}
+    {cssVars && (
+      <style set:html={`:root { ${cssVars} }`} />
+    )}
+    <style is:global>
+      @layer base {
+        /* ===== CSS Reset & Base ===== */
+        *,
+        *::before,
+        *::after {
+          box-sizing: border-box;
+        }
+
+        * {
+          margin: 0;
+        }
+
+        html {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          text-rendering: optimizeLegibility;
+          scroll-behavior: smooth;
+        }
+
+        body {
+          font-family: var(--font-body, system-ui, -apple-system, sans-serif);
+          color: var(--color-text, #1e293b);
+          background-color: var(--color-background, #ffffff);
+          line-height: 1.6;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+        }
+
+        img,
+        picture,
+        video,
+        canvas,
+        svg {
+          display: block;
+          max-width: 100%;
+        }
+
+        input,
+        button,
+        textarea,
+        select {
+          font: inherit;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          overflow-wrap: break-word;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-family: var(--font-heading, 'Inter', sans-serif);
+          line-height: 1.2;
+        }
+
+        a {
+          color: inherit;
+        }
+
+        /* ===== Focus Visible ===== */
+        :focus-visible {
+          outline: 2px solid var(--color-accent, #00d4ff);
+          outline-offset: 2px;
+        }
+
+        /* ===== Main Content ===== */
+        main {
+          flex: 1;
+        }
+      }
+
+      @layer components {
+        /* ===== Skip Link ===== */
+        .skip-link {
+          position: absolute;
+          top: -100%;
+          left: 1rem;
+          padding: 0.75rem 1.5rem;
+          background: var(--color-accent, #00d4ff);
+          color: var(--color-primary, #0a0f1a);
+          font-weight: 600;
+          border-radius: 0 0 0.5rem 0.5rem;
+          z-index: 9999;
+          text-decoration: none;
+          transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+          top: 0;
+        }
+
+        /* ===== Utility: Container ===== */
+        .container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+        }
+
+        /* ===== Utility: Section Spacing ===== */
+        .section {
+          padding: 4rem 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+          .section {
+            padding: 5rem 2rem;
+          }
+        }
+
+        /* ===== Utility: Section Header ===== */
+        .section-header {
+          text-align: center;
+          max-width: 680px;
+          margin: 0 auto 3rem;
+        }
+
+        .section-header__title {
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--color-text-dark, #0f172a);
+          margin-bottom: 0.75rem;
+          letter-spacing: -0.02em;
+        }
+
+        .section-header__description {
+          font-size: 1.0625rem;
+          color: var(--color-text-muted, #64748b);
+          line-height: 1.6;
+        }
+
+        @media (min-width: 768px) {
+          .section-header__title {
+            font-size: 2.75rem;
+          }
+        }
+      }
+    </style>
+    <slot name="head" />
+  </head>
+  <body class={`theme-${Astro.props.theme || 'light'} ${bodyClass}`}>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <Header
+      navigation={navigation}
+      siteName={siteName}
+      logoSrc={logoSrc}
+      logoAlt={logoAlt}
+      ctaText={ctaText}
+      ctaHref={ctaHref}
+    />
+
+    <main id="main-content">
+      <slot />
+    </main>
+
+    <Footer
+      columns={footerColumns}
+      contactInfo={contactInfo}
+      socialLinks={socialLinks}
+      siteName={siteName}
+      tagline={tagline}
+    />
+
+    <slot name="footer-scripts" />
+  </body>
+</html>
