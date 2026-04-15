@@ -1,0 +1,128 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro';
+import { SAAS } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+const benefits = [
+  { h: '30-minute live demo', p: 'A senior engineer walks you through your actual use case, not a scripted sales pitch.' },
+  { h: 'Custom data model review', p: 'Bring your schema — we\'ll map it to Flux events before you write a single line of SDK code.' },
+  { h: 'Free 90-day proof of value', p: 'Team plan on us for ninety days so you can benchmark Flux against whatever you\'re using now.' },
+  { h: 'Migration playbook', p: 'Step-by-step migration guides from Amplitude, Mixpanel, Heap, and PostHog — with code codemods.' },
+];
+---
+
+<BaseLayout
+  title={`Book a demo — ${SITE_NAME}`}
+  description="See Flux in action. Book a 30-minute demo with a senior engineer and walk away with a migration plan for your stack."
+  keywords={['flux demo','product analytics demo','book a demo']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Start free"
+  ctaHref="/contact/"
+  designTokens={SAAS}
+>
+  <div class="container"><Breadcrumb items={[{label:'Home',href:'/'},{label:'Book a demo'}]} /></div>
+
+  <section class="f-demo">
+    <div class="f-demo__grid">
+      <div class="f-demo__left">
+        <div class="f-eyebrow">Book a demo</div>
+        <h1>See Flux running on your actual events.</h1>
+        <p class="f-demo__lede">
+          Every demo is led by a senior engineer from our team. Thirty minutes,
+          your real data model, zero sales theatre.
+        </p>
+
+        <ul class="f-benefits">
+          {benefits.map((b) => (
+            <li>
+              <div class="f-benefits__check">✓</div>
+              <div>
+                <div class="f-benefits__h">{b.h}</div>
+                <div class="f-benefits__p">{b.p}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="f-demo__right">
+        <ContactForm
+          formAction="#"
+          heading="Tell us about your stack"
+          description="Share a few details and we'll send back three calendar slots within two hours."
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .f-demo {
+    background:
+      radial-gradient(ellipse at top left, rgba(16,185,129,0.08), transparent 50%),
+      #0a0f14;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .f-demo__grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  @media (min-width: 960px) { .f-demo__grid { grid-template-columns: 1fr 1.05fr; gap: 4rem; align-items: start; } }
+
+  .f-eyebrow {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--color-accent, #34d399);
+  }
+  .f-demo__left h1 {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: clamp(1.875rem, 4.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0.75rem 0 1rem;
+  }
+  .f-demo__lede {
+    font-size: 1.0625rem;
+    color: #8b949e;
+    line-height: 1.65;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .f-benefits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .f-benefits li { display: flex; gap: 1rem; }
+  .f-benefits__check {
+    flex: 0 0 auto;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(52,211,153,0.12);
+    border: 1px solid rgba(52,211,153,0.35);
+    border-radius: 999px;
+    color: #34d399;
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+  .f-benefits__h { font-weight: 700; color: #e6edf3; margin-bottom: 0.25rem; }
+  .f-benefits__p { font-size: 0.9375rem; color: #8b949e; line-height: 1.55; }
+</style>

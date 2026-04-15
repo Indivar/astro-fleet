@@ -1,0 +1,217 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { SAAS } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+const features = [
+  {
+    icon: '⚡',
+    name: 'Event Pipeline',
+    tag: 'Core',
+    description: 'Warehouse-native event streaming with schema enforcement, automatic PII scrubbing, and end-to-end typed SDKs for TypeScript, Swift, Kotlin, Go, and Python.',
+    bullets: ['Zero data loss', 'Schema registry', 'Typed SDKs for 8 languages'],
+  },
+  {
+    icon: '◎',
+    name: 'Session Replay',
+    tag: 'New',
+    description: 'Record and replay real user sessions with full console, network, and React component tree capture — privacy-first, with automatic input masking.',
+    bullets: ['Console + network', 'Privacy-first masking', 'Linked to events'],
+  },
+  {
+    icon: '↗',
+    name: 'Funnels & Cohorts',
+    tag: 'Core',
+    description: 'Build multi-step funnels and behavioural cohorts in seconds. Real-time retention curves, breakdown by any property, and shareable permalinks for the team.',
+    bullets: ['Multi-step funnels', 'Retention cohorts', 'Team permalinks'],
+  },
+  {
+    icon: '$',
+    name: 'SQL Workbench',
+    tag: 'Power users',
+    description: 'A notebook-style SQL editor over raw events. Save queries as dashboards, schedule them to Slack, and alert on any threshold.',
+    bullets: ['Notebook editor', 'Scheduled reports', 'Slack alerts'],
+  },
+  {
+    icon: '⇄',
+    name: 'Warehouse Sync',
+    tag: 'Core',
+    description: 'One-click sync to Snowflake, BigQuery, Redshift, or Databricks. Reverse ETL back to Segment, Hightouch, or Census in under a minute.',
+    bullets: ['All major warehouses', 'Reverse ETL', 'Under 60s sync'],
+  },
+  {
+    icon: '⌘',
+    name: 'Feature Flags',
+    tag: 'Beta',
+    description: 'Ship features behind flags and see the impact on conversion instantly. Automatic A/B testing with statistical significance baked in.',
+    bullets: ['Targeted rollouts', 'Auto A/B testing', 'Stat-sig built-in'],
+  },
+];
+---
+
+<BaseLayout
+  title={`Product — ${SITE_NAME}`}
+  description="Everything in the Flux product — event pipeline, session replay, funnels, SQL workbench, warehouse sync, and feature flags."
+  keywords={['flux features','product analytics','session replay','sql']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Start free"
+  ctaHref="/contact/"
+  designTokens={SAAS}
+>
+  <div class="container"><Breadcrumb items={[{label:'Home',href:'/'},{label:'Product'}]} /></div>
+
+  <section class="f-page-hero">
+    <div class="container">
+      <div class="f-eyebrow">Product</div>
+      <h1>One platform. Six surfaces.<br/><span>Zero stitching together tools.</span></h1>
+      <p>Flux replaces the tangle of analytics, replay, SQL, and flag tools with a single, typed, warehouse-native stack.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="f-grid">
+        {features.map((f) => (
+          <article class="f-card">
+            <div class="f-card__head">
+              <div class="f-card__icon">{f.icon}</div>
+              <div class="f-card__tag">{f.tag}</div>
+            </div>
+            <h2 class="f-card__name">{f.name}</h2>
+            <p class="f-card__desc">{f.description}</p>
+            <ul class="f-card__bullets">
+              {f.bullets.map((b) => <li>{b}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Ready to replace your stack?"
+    description="Spin up a free workspace, install the SDK, and see your first events in under five minutes."
+    primaryButton={{ text: 'Start free', href: '/contact/' }}
+    secondaryButton={{ text: 'Read the docs', href: '#' }}
+  />
+</BaseLayout>
+
+<style>
+  .f-page-hero {
+    background:
+      radial-gradient(ellipse at top, rgba(16,185,129,0.1), transparent 50%),
+      #0a0f14;
+    padding: 3.5rem 1.5rem 4rem;
+    border-bottom: 1px solid #161b22;
+  }
+  .f-page-hero h1 {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0.75rem 0 1.25rem;
+  }
+  .f-page-hero h1 span {
+    background: linear-gradient(135deg, #34d399, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .f-page-hero p { font-size: 1.125rem; color: #8b949e; max-width: 620px; line-height: 1.65; }
+  .f-eyebrow {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--color-accent, #34d399);
+  }
+
+  .f-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  @media (min-width: 768px) { .f-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .f-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .f-card {
+    background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .f-card:hover {
+    border-color: rgba(52,211,153,0.4);
+    transform: translateY(-2px);
+  }
+  .f-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .f-card__icon {
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.25);
+    border-radius: 10px;
+    color: #34d399;
+    font-size: 1.125rem;
+  }
+  .f-card__tag {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8b949e;
+    padding: 0.25rem 0.625rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
+    border: 1px solid #30363d;
+  }
+  .f-card__name {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #e6edf3;
+    margin-bottom: 0.625rem;
+  }
+  .f-card__desc {
+    font-size: 0.9375rem;
+    color: #8b949e;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .f-card__bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+  .f-card__bullets li {
+    font-size: 0.8125rem;
+    color: #6e7681;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+  .f-card__bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #34d399;
+  }
+</style>

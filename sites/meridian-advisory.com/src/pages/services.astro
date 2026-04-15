@@ -1,0 +1,172 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../lib/site-config';
+
+const practices = [
+  {
+    number: '01',
+    name: 'Strategy & Transformation',
+    summary: 'Corporate strategy, operating model design, and large-scale transformation programmes for institutions navigating structural change.',
+    offerings: ['Corporate strategy review', 'Operating model redesign', 'Programme assurance', 'Post-merger integration'],
+  },
+  {
+    number: '02',
+    name: 'Mergers & Acquisitions',
+    summary: 'Independent counsel across the deal lifecycle — from target screening and commercial due diligence through to synergy realisation.',
+    offerings: ['Commercial due diligence', 'Target screening', 'Synergy assessment', 'Carve-out advisory'],
+  },
+  {
+    number: '03',
+    name: 'Risk & Regulatory',
+    summary: 'Regulatory strategy, operational resilience, and enterprise risk — helping regulated firms meet supervisory expectations with confidence.',
+    offerings: ['DORA & operational resilience', 'Regulatory remediation', 'Financial crime', 'Third-party risk'],
+  },
+  {
+    number: '04',
+    name: 'Operations & Technology',
+    summary: 'Operational excellence, cost transformation, and technology strategy for organisations modernising their core.',
+    offerings: ['Cost transformation', 'Target operating model', 'Technology strategy', 'Sourcing & shared services'],
+  },
+];
+---
+
+<BaseLayout
+  title={`Expertise — ${SITE_NAME}`}
+  description="Four practice areas spanning strategy, M&A, risk, and operations — delivered by senior partners with deep sector experience."
+  keywords={['consulting practices', 'strategy consulting', 'm&a advisory', 'risk advisory']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Request a briefing"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <div class="container"><Breadcrumb items={[{label:'Home',href:'/'},{label:'Expertise'}]} /></div>
+
+  <section class="m-page-hero">
+    <div class="container">
+      <div class="m-eyebrow">Practice areas</div>
+      <h1>Four practices. One standard of rigour.</h1>
+      <p class="m-page-hero__lede">
+        Every Meridian engagement is led by a partner with at least fifteen years
+        of sector experience. We decline roughly four in ten prospective mandates
+        to protect independence and concentration of expertise.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="m-practices">
+        {practices.map((p) => (
+          <article class="m-practice">
+            <div class="m-practice__number">{p.number}</div>
+            <div class="m-practice__body">
+              <h2 class="m-practice__name">{p.name}</h2>
+              <p class="m-practice__summary">{p.summary}</p>
+              <ul class="m-practice__offerings">
+                {p.offerings.map((o) => <li>{o}</li>)}
+              </ul>
+              <a href="/contact/" class="m-practice__link">Speak to the practice lead →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Not sure which practice fits?"
+    description="Our intake partner will triage your question and introduce you to the right team within 48 hours."
+    primaryButton={{ text: 'Request a briefing', href: '/contact/' }}
+  />
+</BaseLayout>
+
+<style>
+  .m-page-hero {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    padding: 3.5rem 1.5rem 4rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .m-page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-primary, #0f172a);
+    margin: 0.75rem 0 1.25rem;
+  }
+  .m-page-hero__lede { font-size: 1.125rem; color: #475569; max-width: 680px; line-height: 1.65; }
+  .m-eyebrow {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--color-accent, #2563eb);
+  }
+
+  .m-practices { display: grid; gap: 2.5rem; }
+
+  .m-practice {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid #e2e8f0;
+  }
+  .m-practice:first-child { border-top: none; padding-top: 0; }
+  .m-practice__number {
+    font-family: Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-accent, #2563eb);
+    line-height: 1;
+  }
+  .m-practice__name {
+    font-size: 1.625rem;
+    font-weight: 800;
+    color: var(--color-primary, #0f172a);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+  }
+  .m-practice__summary { font-size: 1.0625rem; color: #475569; line-height: 1.65; margin-bottom: 1.25rem; max-width: 680px; }
+  .m-practice__offerings {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  @media (min-width: 600px) { .m-practice__offerings { grid-template-columns: repeat(2, 1fr); } }
+  .m-practice__offerings li {
+    font-size: 0.9375rem;
+    color: #334155;
+    padding-left: 1.25rem;
+    position: relative;
+  }
+  .m-practice__offerings li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent, #2563eb);
+  }
+  .m-practice__link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-accent, #2563eb);
+    text-decoration: none;
+  }
+</style>

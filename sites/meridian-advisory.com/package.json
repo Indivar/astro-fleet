@@ -1,0 +1,24 @@
+{
+  "name": "meridian-advisory.com",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "astro check"
+  },
+  "dependencies": {
+    "astro": "^5",
+    "@astro-fleet/shared-ui": "workspace:*",
+    "@astro-fleet/config": "workspace:*"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9",
+    "@astrojs/sitemap": "^3",
+    "@tailwindcss/vite": "^4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

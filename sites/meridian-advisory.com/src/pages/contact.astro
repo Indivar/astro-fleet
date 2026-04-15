@@ -1,0 +1,119 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+const offices = [
+  { city: 'London',    address: 'One Canada Square, Canary Wharf',  phone: '+44 20 7946 0958' },
+  { city: 'Frankfurt', address: 'Taunusanlage 18',                  phone: '+49 69 9999 1200' },
+  { city: 'Dubai',     address: 'Emirates Towers, Sheikh Zayed Rd', phone: '+971 4 330 0770'  },
+  { city: 'Singapore', address: 'Marina Bay Financial Centre T2',   phone: '+65 6438 1100'    },
+];
+---
+
+<BaseLayout
+  title={`Request a Briefing — ${SITE_NAME}`}
+  description="Contact Meridian Advisory to request a confidential briefing with one of our practice partners."
+  keywords={['contact', 'briefing', 'consulting enquiry']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Request a briefing"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <div class="container"><Breadcrumb items={[{label:'Home',href:'/'},{label:'Contact'}]} /></div>
+
+  <section class="m-page-hero">
+    <div class="container">
+      <div class="m-eyebrow">Contact</div>
+      <h1>Request a confidential briefing.</h1>
+      <p>
+        All enquiries are handled by our intake partner and acknowledged within
+        one business day. Briefings are non-obligation and held under strict
+        confidentiality.
+      </p>
+    </div>
+  </section>
+
+  <ContactForm
+    formAction="#"
+    heading="Enquiry details"
+    description="Share a brief outline of the question you're working through. We'll match you with the right practice lead."
+  />
+
+  <section class="section m-offices-section">
+    <div class="container">
+      <div class="m-eyebrow">Global offices</div>
+      <h2>Where we work.</h2>
+      <div class="m-offices">
+        {offices.map((o) => (
+          <div class="m-office">
+            <div class="m-office__city">{o.city}</div>
+            <div class="m-office__address">{o.address}</div>
+            <div class="m-office__phone">{o.phone}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .m-page-hero {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    padding: 3.5rem 1.5rem 4rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .m-page-hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-primary, #0f172a);
+    margin: 0.75rem 0 1.25rem;
+  }
+  .m-page-hero p { font-size: 1.0625rem; color: #475569; max-width: 620px; line-height: 1.65; }
+  .m-eyebrow {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--color-accent, #2563eb);
+  }
+
+  .m-offices-section { background: #f8fafc; }
+  .m-offices-section h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-primary, #0f172a);
+    margin: 0.5rem 0 2rem;
+  }
+  .m-offices {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 640px) { .m-offices { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 960px) { .m-offices { grid-template-columns: repeat(4, 1fr); } }
+  .m-office {
+    background: #fff;
+    padding: 1.75rem;
+    border-top: 3px solid var(--color-accent, #2563eb);
+  }
+  .m-office__city {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary, #0f172a);
+    margin-bottom: 0.5rem;
+  }
+  .m-office__address { font-size: 0.875rem; color: #475569; margin-bottom: 0.375rem; line-height: 1.5; }
+  .m-office__phone   { font-size: 0.875rem; color: #64748b; font-variant-numeric: tabular-nums; }
+</style>

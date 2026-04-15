@@ -1,0 +1,226 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { WARM } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+type Dish = { name: string; desc: string; price: string };
+type Course = { title: string; subtitle: string; dishes: Dish[] };
+
+const menu: Course[] = [
+  {
+    title: 'To Begin',
+    subtitle: 'Small plates, crudo, and things from the wood oven.',
+    dishes: [
+      { name: 'Burrata di Puglia',        desc: 'heirloom tomato · basil oil · grilled sourdough',               price: '18' },
+      { name: 'Hamachi Crudo',            desc: 'blood orange · castelvetrano olive · fennel pollen',            price: '22' },
+      { name: 'Wood-Oven Focaccia',       desc: 'rosemary · maldon · cultured butter',                           price: '9'  },
+      { name: 'Grilled Octopus',          desc: 'white bean · salsa verde · preserved lemon',                    price: '24' },
+    ],
+  },
+  {
+    title: 'Pasta',
+    subtitle: 'Rolled by hand each morning in small batches.',
+    dishes: [
+      { name: 'Hand-Torn Pappardelle',    desc: 'slow-braised lamb ragù · mint gremolata · aged pecorino',       price: '26' },
+      { name: 'Squid Ink Tagliolini',     desc: 'half moon bay dungeness · chilli · garlic · white wine',        price: '29' },
+      { name: 'Ricotta Gnudi',            desc: 'brown butter · crispy sage · parmigiano 36-month',              price: '24' },
+      { name: 'Cacio e Pepe',             desc: 'tonnarelli · pecorino romano · tellicherry pepper',             price: '22' },
+    ],
+  },
+  {
+    title: 'From the Wood Oven',
+    subtitle: 'Centrepieces for sharing. Fish and fowl change with the season.',
+    dishes: [
+      { name: 'Whole Branzino',           desc: 'preserved lemon · salsa verde · charred fennel',                price: '38' },
+      { name: 'Heritage Pork Chop',       desc: 'stone fruit mostarda · farro · bitter greens',                  price: '36' },
+      { name: 'Half Chicken al Mattone',  desc: 'rosemary · lemon · pan jus · roasted potatoes',                 price: '32' },
+      { name: 'Day Boat Fish',            desc: 'ask your server · caper berry · brown butter',                  price: 'MP' },
+    ],
+  },
+  {
+    title: 'Dolci',
+    subtitle: 'Made each afternoon by our pastry team.',
+    dishes: [
+      { name: 'Olive Oil Cake',           desc: 'mascarpone · candied orange · rosemary syrup',                   price: '12' },
+      { name: 'Affogato',                 desc: 'stumptown espresso · house vanilla · amaretto',                   price: '11' },
+      { name: 'Panna Cotta',              desc: 'buttermilk · macerated stone fruit · almond brittle',             price: '12' },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={`Menu — ${SITE_NAME}`}
+  description="The current menu at Olive & Vine. Wood-fired fish, hand-rolled pasta, and an all-Italian wine list. Menu changes weekly."
+  keywords={['restaurant menu','mediterranean menu','san francisco restaurant']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Book a Table"
+  ctaHref="/contact/"
+  designTokens={WARM}
+>
+  <div class="container"><Breadcrumb items={[{label:'Home',href:'/'},{label:'Menu'}]} /></div>
+
+  <section class="o-page-hero">
+    <div class="container">
+      <div class="o-eyebrow">The Menu · Week of April 14</div>
+      <h1>Tonight's Table</h1>
+      <p>
+        Our menu changes each Monday with what's arriving fresh from the coast
+        and the farms. These are the dishes on the wall this week. A four-course
+        tasting is available for the table at $82 per person.
+      </p>
+    </div>
+  </section>
+
+  <section class="section o-menu-section">
+    <div class="container o-menu">
+      {menu.map((course) => (
+        <div class="o-course">
+          <header class="o-course__head">
+            <h2 class="o-course__title">{course.title}</h2>
+            <p class="o-course__subtitle">{course.subtitle}</p>
+          </header>
+          <div class="o-course__items">
+            {course.dishes.map((d) => (
+              <div class="o-item">
+                <div class="o-item__row">
+                  <div class="o-item__name">{d.name}</div>
+                  <div class="o-item__dots" aria-hidden="true"></div>
+                  <div class="o-item__price">{d.price}</div>
+                </div>
+                <div class="o-item__desc">{d.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div class="o-menu__note">
+        Please inform your server of any allergies or dietary needs. A 20% service
+        charge is added to parties of six or more. We gladly split checks, but
+        only up to four ways.
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Shall we hold you a table?"
+    description="Reservations open thirty days in advance. Weekend tables fill quickly — the bar is always first-come, first-served."
+    primaryButton={{ text: 'Reserve a Table', href: '/contact/' }}
+  />
+</BaseLayout>
+
+<style>
+  .o-page-hero {
+    background: linear-gradient(180deg, #faf7f2 0%, #fdfbf6 100%);
+    padding: 4rem 1.5rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid #e7e5e4;
+  }
+  .o-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #d97706;
+    margin-bottom: 1rem;
+  }
+  .o-page-hero h1 {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(2.75rem, 6vw, 4.25rem);
+    font-weight: 700;
+    color: #1c1917;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+  .o-page-hero p {
+    font-size: 1.0625rem;
+    color: #57534e;
+    max-width: 620px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  .o-menu-section { background: #fdfbf6; padding: 5rem 1.5rem; }
+  .o-menu {
+    max-width: 780px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+  .o-course__head {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #e7e5e4;
+  }
+  .o-course__title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 2rem;
+    font-weight: 700;
+    font-style: italic;
+    color: #1c1917;
+    margin-bottom: 0.5rem;
+  }
+  .o-course__subtitle {
+    font-size: 0.9375rem;
+    color: #78716c;
+    font-style: italic;
+  }
+  .o-course__items { display: flex; flex-direction: column; gap: 1.5rem; }
+  .o-item {}
+  .o-item__row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+  .o-item__name {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.1875rem;
+    font-weight: 600;
+    color: #1c1917;
+    white-space: nowrap;
+  }
+  .o-item__dots {
+    flex: 1;
+    border-bottom: 1px dotted #a8a29e;
+    transform: translateY(-4px);
+    min-width: 1rem;
+  }
+  .o-item__price {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #d97706;
+    font-variant-numeric: tabular-nums;
+  }
+  .o-item__desc {
+    font-size: 0.9375rem;
+    color: #78716c;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .o-menu__note {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e7e5e4;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #78716c;
+    font-style: italic;
+    line-height: 1.6;
+  }
+</style>

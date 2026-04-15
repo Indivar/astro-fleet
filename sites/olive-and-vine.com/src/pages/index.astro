@@ -1,0 +1,380 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { WARM } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+const awards = [
+  'Michelin Bib Gourmand · 2024',
+  'SF Chronicle Top 100 · 2023',
+  'James Beard Nominee · 2022',
+  'Eater SF Best New · 2021',
+];
+
+const dishes = [
+  {
+    name: 'Wood-Fired Branzino',
+    price: '38',
+    desc: 'Whole Mediterranean sea bass, preserved lemon, salsa verde, charred fennel. Serves one generously.',
+    tag: "Chef's Pick",
+  },
+  {
+    name: 'Hand-Torn Pappardelle',
+    price: '26',
+    desc: 'Slow-braised lamb ragù, mint gremolata, aged pecorino. Pasta rolled each morning.',
+    tag: 'House Favourite',
+  },
+  {
+    name: 'Burrata di Puglia',
+    price: '18',
+    desc: 'Flown in weekly, served with heirloom tomatoes, basil oil, and grilled sourdough.',
+    tag: 'Seasonal',
+  },
+];
+---
+
+<BaseLayout
+  title={`${SITE_NAME} — Wood-Fired Mediterranean in the Mission`}
+  description="Olive & Vine is a neighbourhood Mediterranean restaurant on Valencia Street, serving wood-fired fish, hand-rolled pasta, and an all-Italian wine list since 2014."
+  keywords={['restaurant','mediterranean','mission district','san francisco','italian','wood-fired']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Book a Table"
+  ctaHref="/contact/"
+  designTokens={WARM}
+>
+  <!-- Editorial hero -->
+  <section class="o-hero">
+    <div class="o-hero__bg"></div>
+    <div class="o-hero__content">
+      <div class="o-hero__eyebrow">Est. 2014 · Valencia Street, SF</div>
+      <h1 class="o-hero__title">
+        Fire, flour,<br/>
+        <em>and the sea.</em>
+      </h1>
+      <p class="o-hero__lede">
+        A tiny Mediterranean room in the Mission, serving wood-fired fish,
+        hand-rolled pasta, and an all-Italian wine list. Ten years, one menu
+        that still changes every week.
+      </p>
+      <div class="o-hero__actions">
+        <a href="/contact/" class="o-btn o-btn--primary">Reserve a Table</a>
+        <a href="/services/" class="o-btn o-btn--ghost">View Tonight's Menu</a>
+      </div>
+      <div class="o-hero__open">
+        <span class="o-hero__open-dot"></span>
+        Open tonight · 5:30 – 10:30 pm · Walk-ins welcome at the bar
+      </div>
+    </div>
+  </section>
+
+  <!-- Awards strip -->
+  <section class="o-awards">
+    <div class="container o-awards__row">
+      {awards.map((a) => <div class="o-awards__item">{a}</div>)}
+    </div>
+  </section>
+
+  <!-- Chef quote -->
+  <section class="section o-quote-section">
+    <div class="container o-quote">
+      <div class="o-quote__mark">"</div>
+      <blockquote>
+        We only serve what we'd eat ourselves — and only from people we know
+        by name. The fish comes from a single boat out of Half Moon Bay.
+        The flour is milled forty miles north. Everything else is on the wall.
+      </blockquote>
+      <div class="o-quote__attrib">
+        <strong>Elena Marchetti</strong><br/>
+        <span>Chef & Proprietor</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured dishes -->
+  <section class="section o-dishes-section">
+    <div class="container">
+      <div class="o-section-head">
+        <div class="o-eyebrow">This week's table</div>
+        <h2>A few things we're proud of.</h2>
+        <p>The menu shifts each Monday. These three have earned their place on it week after week — though even they take a rest now and then.</p>
+      </div>
+      <div class="o-dishes">
+        {dishes.map((d) => (
+          <article class="o-dish">
+            <div class="o-dish__tag">{d.tag}</div>
+            <h3 class="o-dish__name">{d.name}</h3>
+            <div class="o-dish__price">${d.price}</div>
+            <p class="o-dish__desc">{d.desc}</p>
+          </article>
+        ))}
+      </div>
+      <div class="o-dishes__foot">
+        <a href="/services/">See the full menu →</a>
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Join us for dinner."
+    description="Reservations open thirty days in advance. Weekends book up within the hour — the bar is always first-come, first-served."
+    primaryButton={{ text: 'Book a Table',    href: '/contact/' }}
+    secondaryButton={{ text: 'Private Events', href: '/about/' }}
+  />
+</BaseLayout>
+
+<style>
+  /* Hero — warm, editorial, with textured gradient (stand-in for photo) */
+  .o-hero {
+    position: relative;
+    min-height: 620px;
+    padding: 6rem 1.5rem 5rem;
+    overflow: hidden;
+    color: #fdfbf6;
+  }
+  .o-hero__bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(217,119,6,0.5), transparent 45%),
+      radial-gradient(ellipse at 80% 70%, rgba(180,83,9,0.55), transparent 40%),
+      linear-gradient(145deg, #3d2817 0%, #1c1917 55%, #0f0c09 100%);
+  }
+  .o-hero__bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(253,251,246,0.04) 1px, transparent 0);
+    background-size: 14px 14px;
+    opacity: 0.6;
+  }
+  .o-hero__content {
+    position: relative;
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .o-hero__eyebrow {
+    display: inline-block;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fbbf24;
+    margin-bottom: 2rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid rgba(251,191,36,0.4);
+  }
+  .o-hero__title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: #fdfbf6;
+    margin-bottom: 2rem;
+  }
+  .o-hero__title em {
+    font-style: italic;
+    color: #fbbf24;
+    font-weight: 600;
+  }
+  .o-hero__lede {
+    font-size: 1.1875rem;
+    line-height: 1.75;
+    color: rgba(253,251,246,0.85);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+  }
+  .o-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .o-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    font-family: var(--font-body, 'Source Sans 3', sans-serif);
+    font-weight: 600;
+    font-size: 0.9375rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    border-radius: 0;
+  }
+  .o-btn--primary {
+    background: #fbbf24;
+    color: #1c1917;
+    border: 1px solid #fbbf24;
+  }
+  .o-btn--primary:hover { background: #fcd34d; color: #1c1917; opacity: 1; }
+  .o-btn--ghost {
+    background: transparent;
+    color: #fdfbf6;
+    border: 1px solid rgba(253,251,246,0.4);
+  }
+  .o-btn--ghost:hover { border-color: #fbbf24; color: #fbbf24; opacity: 1; }
+  .o-hero__open {
+    font-size: 0.875rem;
+    color: rgba(253,251,246,0.7);
+    font-style: italic;
+  }
+  .o-hero__open-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.25);
+  }
+
+  /* Awards strip */
+  .o-awards {
+    background: #1c1917;
+    padding: 1.75rem 1.5rem;
+    color: #fdfbf6;
+  }
+  .o-awards__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem 3rem;
+  }
+  .o-awards__item {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 0.9375rem;
+    font-style: italic;
+    letter-spacing: 0.02em;
+    color: #d6d3d1;
+  }
+
+  /* Chef quote */
+  .o-quote-section { background: #faf7f2; padding: 6rem 1.5rem; }
+  .o-quote {
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+  .o-quote__mark {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 8rem;
+    line-height: 0.7;
+    color: #d97706;
+    opacity: 0.35;
+    margin-bottom: -1rem;
+  }
+  .o-quote blockquote {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #1c1917;
+    margin: 0 0 2rem;
+  }
+  .o-quote__attrib {
+    font-size: 0.9375rem;
+    color: #57534e;
+    line-height: 1.5;
+  }
+  .o-quote__attrib strong {
+    color: #1c1917;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+  }
+  .o-quote__attrib span { font-style: italic; }
+
+  /* Dishes */
+  .o-dishes-section { background: #fdfbf6; padding: 5rem 1.5rem; }
+  .o-section-head {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 3.5rem;
+  }
+  .o-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #d97706;
+    margin-bottom: 1rem;
+  }
+  .o-section-head h2 {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+    font-weight: 700;
+    color: #1c1917;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .o-section-head p { color: #57534e; font-size: 1.0625rem; line-height: 1.7; }
+
+  .o-dishes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  @media (min-width: 768px) { .o-dishes { grid-template-columns: repeat(3, 1fr); gap: 2.5rem; } }
+
+  .o-dish {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: #fff;
+    border: 1px solid #e7e5e4;
+    position: relative;
+  }
+  .o-dish__tag {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1c1917;
+    color: #fbbf24;
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-style: italic;
+    font-size: 0.8125rem;
+    padding: 0.25rem 1rem;
+    white-space: nowrap;
+  }
+  .o-dish__name {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1c1917;
+    margin: 0.75rem 0 0.5rem;
+  }
+  .o-dish__price {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: #d97706;
+    margin-bottom: 1rem;
+  }
+  .o-dish__desc { font-size: 0.9375rem; color: #57534e; line-height: 1.65; }
+
+  .o-dishes__foot { text-align: center; margin-top: 3rem; }
+  .o-dishes__foot a {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.0625rem;
+    font-style: italic;
+    color: #d97706;
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+</style>

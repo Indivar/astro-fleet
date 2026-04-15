@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0a0f14;
+  --color-secondary: #1a1f2e;
+  --color-accent: #34d399;
+  --color-bg: #0d1117;
+  --color-text: #e6edf3;
+  --color-cta: #10b981;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #6e7681;
+  --color-border: #30363d;
+  --color-elevated: #161b22;
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  line-height: 1.15;
+  color: var(--color-text);
+}
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--color-accent); }

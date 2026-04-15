@@ -6,6 +6,51 @@ Astro Fleet gives you a production-ready monorepo with shared components, per-si
 
 **Built for AI-driven development.** Astro Fleet's project structure, typed component props, and clear configuration patterns are optimized for AI coding assistants. Tested extensively with [Claude Code](https://claude.ai/claude-code). Also works with Gemini CLI and other AI coding tools. [See the AI Workflow Guide →](docs/ai-workflow.md)
 
+## Live Demos
+
+Three fully-built sites — same monorepo, same shared components, three completely different looks and feels. Each demo is a separate site under `sites/` with its own navigation, content, and design preset.
+
+| Preset | Demo | Use Case | Live |
+|---|---|---|---|
+| **Corporate** | [Meridian Advisory](sites/meridian-advisory.com) | Management consulting firm | [astro-fleet-meridian.pages.dev](https://astro-fleet-meridian.pages.dev) |
+| **SaaS** | [Flux Analytics](sites/flux-analytics.com) | Developer-tool product site | [astro-fleet-flux.pages.dev](https://astro-fleet-flux.pages.dev) |
+| **Warm** | [Olive & Vine](sites/olive-and-vine.com) | Neighbourhood restaurant | [astro-fleet-olive.pages.dev](https://astro-fleet-olive.pages.dev) |
+
+<table>
+  <tr>
+    <td align="center"><strong>Corporate → Meridian Advisory</strong></td>
+    <td align="center"><strong>SaaS → Flux Analytics</strong></td>
+    <td align="center"><strong>Warm → Olive & Vine</strong></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/meridian-home.png" alt="Meridian Advisory home page — corporate consulting firm with editorial hero, dark stat strip, and navy/blue palette" /></td>
+    <td><img src="docs/screenshots/flux-home.png" alt="Flux Analytics home page — SaaS product with dark hero, code mockup, and emerald accents" /></td>
+    <td><img src="docs/screenshots/olive-home.png" alt="Olive & Vine home page — restaurant with warm editorial hero, serif display type, and amber accents" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/meridian-services.png" alt="Meridian Advisory expertise page — numbered practice areas in editorial layout" /></td>
+    <td><img src="docs/screenshots/flux-services.png" alt="Flux Analytics product page — dark six-card feature grid with icons and tags" /></td>
+    <td><img src="docs/screenshots/olive-services.png" alt="Olive & Vine menu page — dotted-line typography grouped by course" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/meridian-contact.png" alt="Meridian Advisory contact page — briefing request form with global office grid" /></td>
+    <td><img src="docs/screenshots/flux-contact.png" alt="Flux Analytics book-a-demo page — split layout with benefits list and form" /></td>
+    <td><img src="docs/screenshots/olive-contact.png" alt="Olive & Vine reservations page — address, hours, and reservation form" /></td>
+  </tr>
+</table>
+
+Each demo composes the **same shared components** (`Header`, `Footer`, `ServiceCard`, `ContactForm`, `CTABlock`, `Breadcrumb`) — but the navigation, section structure, hero layouts, and typography are all unique to the brand. The presets aren't colour-swap reskins; they're complete site personalities.
+
+## Built with Astro Fleet
+
+Real sites running in production on the same codebase as the demos above:
+
+- **[vairi.com](https://www.vairi.com)** — AI-enhanced software development and business automation consultancy (Auckland, NZ)
+- **[claspt.app](https://www.claspt.app)** — Encrypted markdown notes and password vault, available on the Microsoft Store, macOS, and Linux
+- **[stakteck.com](https://www.stakteck.com)** — IT staffing, contract hiring, and staff augmentation across India
+
+_More coming soon._ If you ship a site with Astro Fleet, open a PR adding it here — we'd love to feature it.
+
 ## Quick Start
 
 ```bash
