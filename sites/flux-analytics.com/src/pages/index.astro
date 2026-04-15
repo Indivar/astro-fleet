@@ -1,0 +1,416 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import ServiceCard from '@astro-fleet/shared-ui/src/components/ServiceCard.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { SAAS } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+const logos = ['Linear', 'Retool', 'Vercel', 'Supabase', 'Railway', 'Tailscale'];
+
+const features = [
+  {
+    title: 'Event pipeline',
+    description: 'Stream billions of product events a day through a warehouse-native pipeline. Schema-enforced, zero data loss, and typed SDKs for every language.',
+    href: '/services/',
+    linkText: 'Read the docs',
+  },
+  {
+    title: 'Funnels & cohorts',
+    description: 'Build retention cohorts and conversion funnels in seconds. No PRs, no pipeline changes — your PM and your staff engineer work from the same numbers.',
+    href: '/services/',
+    linkText: 'See funnels',
+  },
+  {
+    title: 'SQL workbench',
+    description: 'Drop into SQL when the UI runs out. Query raw events with a notebook-style editor, share results as dashboards, and alert on thresholds.',
+    href: '/services/',
+    linkText: 'Open workbench',
+  },
+];
+---
+
+<BaseLayout
+  title={`${SITE_NAME} — Product analytics for engineering teams`}
+  description="Flux is a warehouse-native product analytics platform built for teams who ship fast. Event pipeline, funnels, session replay, and SQL in one tool."
+  keywords={['product analytics','saas','developer tools','event tracking','funnels']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Start free"
+  ctaHref="/contact/"
+  designTokens={SAAS}
+>
+  <!-- Hero with code mockup -->
+  <section class="f-hero">
+    <div class="f-hero__grid">
+      <div class="f-hero__copy">
+        <a href="/about/" class="f-hero__pill">
+          <span class="f-hero__pill-new">New</span>
+          Session Replay is out of beta →
+        </a>
+        <h1 class="f-hero__title">
+          Product analytics<br/>
+          <span class="f-hero__title--grad">shipped by engineers.</span>
+        </h1>
+        <p class="f-hero__lede">
+          Event pipeline, funnels, cohorts, and session replay — all running on
+          your own warehouse. Install in four lines, query in SQL, no sampling.
+        </p>
+        <div class="f-hero__actions">
+          <a href="/contact/" class="f-btn f-btn--primary">Start free →</a>
+          <a href="/services/" class="f-btn f-btn--ghost">$ npm i @flux/sdk</a>
+        </div>
+        <div class="f-hero__meta">
+          <span class="f-dot"></span> No credit card · 50M events free tier · SOC 2 Type II
+        </div>
+      </div>
+
+      <div class="f-code" aria-hidden="true">
+        <div class="f-code__chrome">
+          <span></span><span></span><span></span>
+          <div class="f-code__file">app/checkout.ts</div>
+        </div>
+        <pre class="f-code__body"><code><span class="t-kw">import</span> <span class="t-var">&#123; flux &#125;</span> <span class="t-kw">from</span> <span class="t-str">'@flux/sdk'</span>;
+
+<span class="t-com">// ⚡ Type-safe, autocompleted events</span>
+<span class="t-fn">flux.track</span>(<span class="t-str">'checkout_completed'</span>, &#123;
+  <span class="t-var">user_id</span>: user.id,
+  <span class="t-var">amount</span>: <span class="t-num">129.00</span>,
+  <span class="t-var">currency</span>: <span class="t-str">'USD'</span>,
+  <span class="t-var">plan</span>: <span class="t-str">'team_annual'</span>,
+&#125;);
+
+<span class="t-com">// → streamed to your warehouse in &lt; 2s</span></code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo strip -->
+  <section class="f-logos">
+    <div class="container">
+      <div class="f-logos__label">Trusted by engineering teams at</div>
+      <div class="f-logos__row">
+        {logos.map((l) => <div class="f-logos__item">{l}</div>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section">
+    <div class="container">
+      <div class="f-section-head">
+        <div class="f-eyebrow">Built for the stack you already run</div>
+        <h2>Everything a staff engineer would build in-house.<br/><span>Without spending six months building it.</span></h2>
+      </div>
+      <div class="f-features">
+        {features.map((f) => (
+          <ServiceCard title={f.title} description={f.description} href={f.href} linkText={f.linkText} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing strip -->
+  <section class="section f-pricing-section">
+    <div class="container">
+      <div class="f-pricing">
+        <div class="f-pricing__left">
+          <div class="f-eyebrow">Pricing</div>
+          <h2>Starts free. Scales with your MRR, not your event volume.</h2>
+          <p>Every plan includes unlimited seats, SQL workbench, and warehouse sync. We bill on monthly tracked users — so you can fire as many events as you like.</p>
+        </div>
+        <div class="f-pricing__tiers">
+          <div class="f-tier">
+            <div class="f-tier__name">Hobby</div>
+            <div class="f-tier__price">$0<span>/mo</span></div>
+            <div class="f-tier__note">50M events · 10k MTUs</div>
+          </div>
+          <div class="f-tier f-tier--hl">
+            <div class="f-tier__name">Team</div>
+            <div class="f-tier__price">$99<span>/mo</span></div>
+            <div class="f-tier__note">1B events · 100k MTUs</div>
+          </div>
+          <div class="f-tier">
+            <div class="f-tier__name">Scale</div>
+            <div class="f-tier__price">Custom</div>
+            <div class="f-tier__note">SSO · Audit logs · DPA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Install in four lines. Ship today."
+    description="Start free, keep your data in your warehouse, and never argue about numbers in a standup again."
+    primaryButton={{ text: 'Start free', href: '/contact/' }}
+    secondaryButton={{ text: 'Read the docs', href: '/services/' }}
+  />
+</BaseLayout>
+
+<style>
+  :root {
+    --f-grid-line: rgba(52, 211, 153, 0.06);
+  }
+  /* Hero */
+  .f-hero {
+    position: relative;
+    padding: 5rem 1.5rem 5rem;
+    background:
+      radial-gradient(ellipse at top right, rgba(16,185,129,0.14), transparent 55%),
+      linear-gradient(180deg, #0d1117 0%, #0a0f14 100%);
+    overflow: hidden;
+  }
+  .f-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--f-grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--f-grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+  .f-hero__grid {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 960px) { .f-hero__grid { grid-template-columns: 1.1fr 1fr; gap: 3.5rem; } }
+  .f-hero__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.375rem 0.875rem 0.375rem 0.375rem;
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 999px;
+    color: #e6edf3;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    margin-bottom: 2rem;
+  }
+  .f-hero__pill-new {
+    padding: 0.1875rem 0.5rem;
+    background: var(--color-accent, #34d399);
+    color: #0a0f14;
+    font-weight: 700;
+    font-size: 0.6875rem;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .f-hero__title {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: clamp(2.5rem, 5.5vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 1.5rem;
+  }
+  .f-hero__title--grad {
+    background: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .f-hero__lede {
+    font-size: 1.1875rem;
+    line-height: 1.65;
+    color: #8b949e;
+    max-width: 540px;
+    margin-bottom: 2rem;
+  }
+  .f-hero__actions { display: flex; flex-wrap: wrap; gap: 0.875rem; margin-bottom: 1.5rem; }
+  .f-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.8125rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 0.625rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .f-btn--primary {
+    background: linear-gradient(180deg, #34d399 0%, #10b981 100%);
+    color: #0a0f14;
+    box-shadow: 0 8px 32px -8px rgba(16,185,129,0.5);
+  }
+  .f-btn--primary:hover { transform: translateY(-1px); opacity: 1; }
+  .f-btn--ghost {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #30363d;
+    color: #e6edf3;
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.875rem;
+  }
+  .f-btn--ghost:hover { border-color: #34d399; color: #34d399; opacity: 1; }
+  .f-hero__meta { font-size: 0.8125rem; color: #6e7681; }
+  .f-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: #34d399; border-radius: 50%;
+    margin-right: 0.5rem;
+    box-shadow: 0 0 0 3px rgba(52,211,153,0.18);
+  }
+
+  /* Code mockup */
+  .f-code {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.5), 0 0 0 1px rgba(52,211,153,0.08);
+  }
+  .f-code__chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.75rem 1rem;
+    background: #161b22;
+    border-bottom: 1px solid #30363d;
+  }
+  .f-code__chrome span {
+    width: 12px; height: 12px; border-radius: 50%; background: #30363d;
+  }
+  .f-code__chrome span:nth-child(1) { background: #ff5f57; }
+  .f-code__chrome span:nth-child(2) { background: #febc2e; }
+  .f-code__chrome span:nth-child(3) { background: #28c840; }
+  .f-code__file {
+    margin-left: auto;
+    font-family: 'SFMono-Regular', Menlo, monospace;
+    font-size: 0.75rem;
+    color: #8b949e;
+  }
+  .f-code__body {
+    margin: 0;
+    padding: 1.5rem;
+    font-family: 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: #e6edf3;
+    overflow-x: auto;
+  }
+  .t-kw  { color: #ff7b72; }
+  .t-str { color: #a5d6ff; }
+  .t-num { color: #79c0ff; }
+  .t-fn  { color: #d2a8ff; }
+  .t-var { color: #ffa657; }
+  .t-com { color: #8b949e; font-style: italic; }
+
+  /* Logo strip */
+  .f-logos { padding: 3rem 1.5rem; background: #0a0f14; border-top: 1px solid #161b22; border-bottom: 1px solid #161b22; }
+  .f-logos__label {
+    text-align: center;
+    font-size: 0.8125rem;
+    color: #6e7681;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+  }
+  .f-logos__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem 3rem;
+  }
+  .f-logos__item {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #6e7681;
+    letter-spacing: -0.01em;
+  }
+
+  /* Section head + features */
+  .f-section-head { max-width: 720px; margin-bottom: 3rem; }
+  .f-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent, #34d399);
+    margin-bottom: 0.875rem;
+  }
+  .f-section-head h2 {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: clamp(1.875rem, 4.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: #e6edf3;
+  }
+  .f-section-head h2 span { color: #8b949e; font-weight: 700; }
+
+  .f-features {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .f-features { grid-template-columns: repeat(3, 1fr); } }
+
+  /* Pricing strip */
+  .f-pricing-section { background: #0d1117; border-top: 1px solid #161b22; }
+  .f-pricing {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) { .f-pricing { grid-template-columns: 1fr 1.2fr; } }
+  .f-pricing__left h2 {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: #e6edf3;
+    margin: 0.5rem 0 1rem;
+  }
+  .f-pricing__left p { color: #8b949e; line-height: 1.65; max-width: 480px; }
+  .f-pricing__tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .f-tier {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+  }
+  .f-tier--hl {
+    border-color: #34d399;
+    background: linear-gradient(180deg, rgba(52,211,153,0.08) 0%, #161b22 100%);
+    box-shadow: 0 0 0 3px rgba(52,211,153,0.08);
+  }
+  .f-tier__name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #8b949e;
+    margin-bottom: 0.75rem;
+  }
+  .f-tier__price {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: #e6edf3;
+    letter-spacing: -0.02em;
+  }
+  .f-tier__price span { font-size: 0.875rem; color: #6e7681; font-weight: 500; }
+  .f-tier__note { font-size: 0.75rem; color: #6e7681; margin-top: 0.5rem; }
+</style>

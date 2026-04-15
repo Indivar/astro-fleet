@@ -1,0 +1,96 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../lib/site-config';
+---
+
+<BaseLayout
+  title={`Page Not Found — ${SITE_NAME}`}
+  description="The page you were looking for could not be found."
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Get Started"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <section class="not-found">
+    <div class="not-found__container">
+      <p class="not-found__code">404</p>
+      <h1 class="not-found__title">Page Not Found</h1>
+      <p class="not-found__message">
+        The page you were looking for doesn't exist or has been moved.
+      </p>
+      <a href="/" class="not-found__link">Go back home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 1.5rem;
+    text-align: center;
+  }
+
+  .not-found__container {
+    max-width: 480px;
+  }
+
+  .not-found__code {
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #e2e8f0;
+    letter-spacing: -0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .not-found__title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-primary, #1e3a5f);
+    margin-bottom: 1rem;
+  }
+
+  .not-found__message {
+    font-size: 1.0625rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .not-found__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    background: var(--color-accent, #2563eb);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .not-found__link:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    opacity: 1;
+  }
+</style>

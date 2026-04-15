@@ -1,0 +1,179 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro';
+import { WARM } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME, TAGLINE, LOGO_SRC,
+  navigation, footerColumns, contactInfo, socialLinks,
+} from '../lib/site-config';
+
+const hours = [
+  { day: 'Monday',             hours: 'Closed'        },
+  { day: 'Tuesday – Thursday', hours: '5:30 – 10:00 pm' },
+  { day: 'Friday – Saturday',  hours: '5:30 – 10:30 pm' },
+  { day: 'Sunday Brunch',      hours: '10:30 am – 2:30 pm' },
+  { day: 'Sunday Dinner',      hours: '5:00 – 9:00 pm' },
+];
+---
+
+<BaseLayout
+  title={`Reservations & Visit — ${SITE_NAME}`}
+  description="Reserve a table at Olive & Vine. Located at 1847 Valencia Street in San Francisco's Mission District. Reservations open thirty days in advance."
+  keywords={['reservations','restaurant booking','valencia street','mission district']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Book a Table"
+  ctaHref="/contact/"
+  designTokens={WARM}
+>
+  <div class="container"><Breadcrumb items={[{label:'Home',href:'/'},{label:'Visit & Reservations'}]} /></div>
+
+  <section class="o-page-hero">
+    <div class="container">
+      <div class="o-eyebrow">Visit</div>
+      <h1>Come join us.</h1>
+      <p>
+        We're a small room on Valencia Street in the Mission — fifty-two seats, a
+        twelve-seat bar, and one wood oven. Reservations open thirty days in advance.
+      </p>
+    </div>
+  </section>
+
+  <section class="section o-visit-section">
+    <div class="container o-visit">
+      <div class="o-visit__info">
+        <div class="o-info-block">
+          <div class="o-info-block__label">Address</div>
+          <div class="o-info-block__value">
+            1847 Valencia Street<br/>
+            San Francisco, CA 94110
+          </div>
+          <a href="#" class="o-info-block__link">Get directions →</a>
+        </div>
+
+        <div class="o-info-block">
+          <div class="o-info-block__label">Hours</div>
+          <ul class="o-hours">
+            {hours.map((h) => (
+              <li>
+                <span class="o-hours__day">{h.day}</span>
+                <span class="o-hours__dots" aria-hidden="true"></span>
+                <span class="o-hours__time">{h.hours}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="o-info-block">
+          <div class="o-info-block__label">Contact</div>
+          <div class="o-info-block__value">
+            <a href="tel:+14155550142">(415) 555-0142</a><br/>
+            <a href="mailto:reservations@oliveandvine.com">reservations@oliveandvine.com</a>
+          </div>
+          <p class="o-info-note">
+            For parties of seven or more, please email our private events team
+            at <a href="mailto:events@oliveandvine.com">events@oliveandvine.com</a>.
+          </p>
+        </div>
+      </div>
+
+      <div class="o-visit__form">
+        <ContactForm
+          formAction="#"
+          heading="Request a Reservation"
+          description="Tell us when you'd like to join us and we'll confirm availability by phone within the hour."
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .o-page-hero {
+    background: linear-gradient(180deg, #faf7f2 0%, #fdfbf6 100%);
+    padding: 4rem 1.5rem 3.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e7e5e4;
+  }
+  .o-eyebrow {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: #d97706; margin-bottom: 1rem;
+  }
+  .o-page-hero h1 {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(2.5rem, 6vw, 3.75rem);
+    font-weight: 700;
+    color: #1c1917;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+  }
+  .o-page-hero p { font-size: 1.0625rem; color: #57534e; max-width: 560px; margin: 0 auto; line-height: 1.75; }
+
+  .o-visit-section { background: #fdfbf6; padding: 5rem 1.5rem; }
+  .o-visit {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+  @media (min-width: 900px) { .o-visit { grid-template-columns: 1fr 1.15fr; gap: 4.5rem; align-items: start; } }
+
+  .o-info-block { margin-bottom: 2.5rem; }
+  .o-info-block__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #d97706;
+    margin-bottom: 0.75rem;
+  }
+  .o-info-block__value {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    color: #1c1917;
+    line-height: 1.55;
+    margin-bottom: 0.5rem;
+  }
+  .o-info-block__value a { color: #1c1917; border-bottom: 1px solid #d97706; }
+  .o-info-block__link {
+    display: inline-block;
+    font-style: italic;
+    color: #d97706;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    margin-top: 0.25rem;
+  }
+  .o-info-note {
+    font-size: 0.875rem;
+    color: #78716c;
+    font-style: italic;
+    line-height: 1.6;
+    margin-top: 0.75rem;
+  }
+  .o-info-note a { color: #d97706; }
+
+  .o-hours {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+  .o-hours li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1rem;
+    color: #1c1917;
+  }
+  .o-hours__day { white-space: nowrap; }
+  .o-hours__dots { flex: 1; border-bottom: 1px dotted #a8a29e; transform: translateY(-4px); min-width: 1rem; }
+  .o-hours__time { font-style: italic; color: #57534e; white-space: nowrap; }
+</style>

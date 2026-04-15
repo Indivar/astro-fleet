@@ -1,0 +1,344 @@
+---
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import ServiceCard from '@astro-fleet/shared-ui/src/components/ServiceCard.astro';
+import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../lib/site-config';
+
+const stats = [
+  { value: '32',   unit: 'Years', label: 'Serving boards across EMEA' },
+  { value: '450+', unit: '',      label: 'Engagements completed' },
+  { value: '14',   unit: '',      label: 'Offices in 9 countries' },
+  { value: '£180B',unit: '',      label: 'Transaction value advised' },
+];
+
+const industries = [
+  {
+    title: 'Financial Services',
+    description: 'Advisory to retail, commercial, and investment banks on regulatory transformation, capital strategy, and post-merger integration.',
+    href: '/services/',
+    linkText: 'View sector work',
+  },
+  {
+    title: 'Healthcare & Life Sciences',
+    description: 'Strategy and operations support for hospital groups, payers, and biopharma — from pipeline prioritisation to market access.',
+    href: '/services/',
+    linkText: 'View sector work',
+  },
+  {
+    title: 'Energy & Utilities',
+    description: 'Guidance on the energy transition: grid modernisation, renewables portfolio strategy, and regulated asset base planning.',
+    href: '/services/',
+    linkText: 'View sector work',
+  },
+  {
+    title: 'Public Sector',
+    description: 'Independent counsel to departments, agencies, and sovereign funds on policy delivery, procurement, and major programmes.',
+    href: '/services/',
+    linkText: 'View sector work',
+  },
+];
+
+const insights = [
+  { tag: 'M&A Outlook', title: 'Cross-border deal flow rebounds in Q1 2026', date: 'April 2026' },
+  { tag: 'Risk',        title: 'Operational resilience under DORA: 90 days in', date: 'March 2026' },
+  { tag: 'Strategy',    title: 'Why mid-market banks are rethinking cloud economics', date: 'March 2026' },
+];
+---
+
+<BaseLayout
+  title={`${SITE_NAME} — Strategic Counsel for Boards and Executives`}
+  description="Meridian Advisory is an independent strategy and transformation firm serving regulated industries across Europe, the Middle East, and Asia."
+  keywords={['management consulting', 'strategy', 'm&a advisory', 'transformation', 'boards']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Request a briefing"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <!-- Editorial hero -->
+  <section class="m-hero">
+    <div class="m-hero__grid">
+      <div class="m-hero__copy">
+        <div class="m-hero__eyebrow">Independent · Since 1994</div>
+        <h1 class="m-hero__title">
+          Counsel you trust when<br/>the stakes are highest.
+        </h1>
+        <p class="m-hero__lede">
+          We advise chief executives, boards, and institutional investors on the
+          decisions that define the next decade — with rigour, discretion, and
+          sector expertise earned over three decades.
+        </p>
+        <div class="m-hero__actions">
+          <a href="/contact/" class="m-btn m-btn--primary">Request a briefing</a>
+          <a href="/services/" class="m-btn m-btn--ghost">Our expertise →</a>
+        </div>
+      </div>
+      <aside class="m-hero__card">
+        <div class="m-hero__card-label">Perspective</div>
+        <blockquote class="m-hero__quote">
+          "Meridian is the firm we call when the problem doesn't have an obvious
+          answer — and the wrong answer has board-level consequences."
+        </blockquote>
+        <div class="m-hero__attrib">
+          <strong>Chair</strong><br/>
+          FTSE 100 financial institution
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Stats strip -->
+  <section class="m-stats">
+    <div class="container m-stats__grid">
+      {stats.map((s) => (
+        <div class="m-stat">
+          <div class="m-stat__value">{s.value}<span>{s.unit}</span></div>
+          <div class="m-stat__label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="section">
+    <div class="container">
+      <div class="m-section-head">
+        <div class="m-eyebrow">Sector practices</div>
+        <h2>Deep expertise in the industries shaping the economy.</h2>
+      </div>
+      <div class="m-industries">
+        {industries.map((i) => (
+          <ServiceCard title={i.title} description={i.description} href={i.href} linkText={i.linkText} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Insights -->
+  <section class="section m-insights-section">
+    <div class="container">
+      <div class="m-section-head">
+        <div class="m-eyebrow">Latest thinking</div>
+        <h2>Insights from the practice.</h2>
+      </div>
+      <div class="m-insights">
+        {insights.map((i) => (
+          <article class="m-insight">
+            <div class="m-insight__tag">{i.tag}</div>
+            <h3 class="m-insight__title">{i.title}</h3>
+            <div class="m-insight__date">{i.date}</div>
+            <a href="/about/" class="m-insight__link">Read the briefing →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTABlock
+    heading="Considering an engagement?"
+    description="Our partners are available for a confidential, no-obligation briefing on the strategic questions on your agenda."
+    primaryButton={{ text: 'Request a briefing', href: '/contact/' }}
+    secondaryButton={{ text: 'View expertise',   href: '/services/' }}
+  />
+</BaseLayout>
+
+<style>
+  /* Hero — editorial split layout */
+  .m-hero {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    padding: 5rem 1.5rem 4rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .m-hero__grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .m-hero__grid { grid-template-columns: 1.4fr 1fr; gap: 4rem; }
+  }
+  .m-hero__eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+    margin-bottom: 1.5rem;
+  }
+  .m-hero__title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    color: var(--color-primary, #0f172a);
+    margin-bottom: 1.5rem;
+  }
+  .m-hero__lede {
+    font-size: 1.1875rem;
+    line-height: 1.65;
+    color: #475569;
+    max-width: 560px;
+    margin-bottom: 2rem;
+  }
+  .m-hero__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+  .m-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .m-btn--primary {
+    background: var(--color-primary, #0f172a);
+    color: #fff;
+  }
+  .m-btn--primary:hover { background: var(--color-accent, #2563eb); color: #fff; opacity: 1; }
+  .m-btn--ghost {
+    color: var(--color-primary, #0f172a);
+    border-bottom: 1px solid currentColor;
+    border-radius: 0;
+    padding: 0.875rem 0;
+  }
+
+  .m-hero__card {
+    background: var(--color-primary, #0f172a);
+    color: #e2e8f0;
+    padding: 2.5rem 2rem;
+    border-left: 3px solid var(--color-accent, #2563eb);
+  }
+  .m-hero__card-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent, #60a5fa);
+    margin-bottom: 1.25rem;
+  }
+  .m-hero__quote {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.55;
+    color: #f1f5f9;
+    margin: 0 0 1.5rem 0;
+  }
+  .m-hero__attrib { font-size: 0.875rem; color: #94a3b8; line-height: 1.5; }
+  .m-hero__attrib strong { color: #e2e8f0; }
+
+  /* Stats strip */
+  .m-stats {
+    background: var(--color-primary, #0f172a);
+    padding: 3rem 1.5rem;
+  }
+  .m-stats__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  @media (min-width: 768px) {
+    .m-stats__grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .m-stat__value {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.03em;
+  }
+  .m-stat__value span {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-left: 0.25rem;
+  }
+  .m-stat__label {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin-top: 0.375rem;
+  }
+
+  /* Section head */
+  .m-section-head { max-width: 720px; margin-bottom: 3rem; }
+  .m-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+    margin-bottom: 0.75rem;
+  }
+  .m-section-head h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--color-primary, #0f172a);
+  }
+
+  .m-industries {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  @media (min-width: 768px) { .m-industries { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Insights */
+  .m-insights-section { background: #f8fafc; }
+  .m-insights {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  @media (min-width: 768px) { .m-insights { grid-template-columns: repeat(3, 1fr); } }
+  .m-insight {
+    background: #fff;
+    padding: 2rem;
+    border-top: 3px solid var(--color-accent, #2563eb);
+  }
+  .m-insight__tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+    margin-bottom: 0.75rem;
+  }
+  .m-insight__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary, #0f172a);
+    line-height: 1.35;
+    margin-bottom: 1rem;
+  }
+  .m-insight__date {
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin-bottom: 1.25rem;
+  }
+  .m-insight__link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-accent, #2563eb);
+    text-decoration: none;
+  }
+</style>
