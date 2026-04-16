@@ -2,6 +2,7 @@
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
 import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
 import { CORPORATE } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME,
@@ -12,6 +13,25 @@ import {
   contactInfo,
   socialLinks,
 } from '../lib/site-config';
+
+const serviceFaqItems = [
+  {
+    question: 'How do you staff an engagement?',
+    answer: 'Every mandate is led by a named partner who remains actively involved throughout — not just at the pitch stage. We supplement with a small team of senior consultants drawn from our sector-specific talent pool, ensuring deep domain expertise at every level.',
+  },
+  {
+    question: 'What is your typical engagement timeline?',
+    answer: 'Most strategy and due diligence mandates run between six and twelve weeks. Transformation programmes are typically phased over six to eighteen months, with clear milestones and decision gates agreed upfront.',
+  },
+  {
+    question: 'Can you work alongside our existing advisors?',
+    answer: 'Yes. We frequently collaborate with legal counsel, investment banks, and internal strategy teams. Our independence and lack of audit or outsourcing conflicts make us a natural complement to incumbent advisors.',
+  },
+  {
+    question: 'How do you measure success?',
+    answer: 'We agree measurable outcomes at the start of every engagement — whether that is a board-ready recommendation, a quantified synergy case, or a regulatory remediation plan with supervisory sign-off. We track progress against these benchmarks throughout.',
+  },
+];
 
 const practices = [
   {
@@ -89,6 +109,13 @@ const practices = [
       </div>
     </div>
   </section>
+
+  <!-- FAQ about consulting approach -->
+  <FAQ
+    heading="Our Consulting Approach"
+    description="How we work with clients across our four practice areas."
+    items={serviceFaqItems}
+  />
 
   <CTABlock
     heading="Not sure which practice fits?"

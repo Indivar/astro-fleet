@@ -2,11 +2,31 @@
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
 import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro';
+import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
 import { SAAS } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME, TAGLINE, LOGO_SRC,
   navigation, footerColumns, contactInfo, socialLinks,
 } from '../lib/site-config';
+
+const demoFaq = [
+  {
+    question: 'What happens during the 30-minute demo?',
+    answer: 'A senior engineer walks you through Flux using your actual data model and use case. No scripted slides — we screen-share, answer questions live, and map your existing events to Flux schemas on the spot.',
+  },
+  {
+    question: 'How quickly can we go live after the demo?',
+    answer: 'Most teams install the SDK and see live events within an hour. The full migration — including historical backfill and dashboard recreation — typically takes under a week with our migration playbooks.',
+  },
+  {
+    question: 'Is the 90-day proof of value really free?',
+    answer: 'Yes. You get a full Team plan at no cost for 90 days so you can benchmark Flux against whatever you are using now. No credit card required, no auto-renewal. You only pay if you choose to stay.',
+  },
+  {
+    question: 'What do I need to prepare before the demo?',
+    answer: 'Nothing is required, but having your current event schema or tracking plan handy helps us make the demo more relevant. If you share it in the form, our engineer will review it before the call.',
+  },
+];
 
 const benefits = [
   { h: '30-minute live demo', p: 'A senior engineer walks you through your actual use case, not a scripted sales pitch.' },
@@ -64,6 +84,12 @@ const benefits = [
       </div>
     </div>
   </section>
+
+  <FAQ
+    items={demoFaq}
+    heading="Demo & onboarding FAQ"
+    description="Common questions about what to expect when you book a demo and get started with Flux."
+  />
 </BaseLayout>
 
 <style>

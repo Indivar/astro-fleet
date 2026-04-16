@@ -1,7 +1,13 @@
 ---
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
-import { CORPORATE } from '@astro-fleet/config/tokens';
+import Timeline from '@astro-fleet/shared-ui/src/components/Timeline.astro';
+import TeamGrid from '@astro-fleet/shared-ui/src/components/TeamGrid.astro';
+import ComparisonTable from '@astro-fleet/shared-ui/src/components/ComparisonTable.astro';
+import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
+import Newsletter from '@astro-fleet/shared-ui/src/components/Newsletter.astro';
+import SectionDivider from '@astro-fleet/shared-ui/src/components/SectionDivider.astro';
+import { SAAS } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME,
   TAGLINE,
@@ -11,12 +17,147 @@ import {
   contactInfo,
   socialLinks,
 } from '../lib/site-config';
+
+const timelineEvents = [
+  {
+    date: 'Jan 2022',
+    title: 'Beta launch',
+    description: 'First public beta with event ingestion, funnels, and a SQL workbench. Onboarded 40 design partners in the first week.',
+    badge: 'Launch',
+  },
+  {
+    date: 'Sep 2022',
+    title: 'Series A — $18M',
+    description: 'Led by Craft Ventures with participation from Y Combinator and angel investors from Datadog, Figma, and Linear.',
+  },
+  {
+    date: 'Mar 2023',
+    title: '1 billion events per day',
+    description: 'Crossed the one-billion-event-per-day mark. Latency stayed under 2 seconds end-to-end, zero data loss.',
+    badge: 'Milestone',
+  },
+  {
+    date: 'Aug 2023',
+    title: 'Session Replay launch',
+    description: 'Pixel-perfect session replay with DOM snapshotting, network waterfall, and console logs. Privacy-first — PII masking on by default.',
+  },
+  {
+    date: 'Jan 2024',
+    title: 'SOC 2 Type II certification',
+    description: 'Completed SOC 2 Type II audit with zero findings. Pentest reports available under NDA for enterprise customers.',
+    badge: 'Security',
+  },
+  {
+    date: 'Nov 2024',
+    title: 'Warehouse-native mode',
+    description: 'Ship events directly to your own Snowflake, BigQuery, or ClickHouse instance. Flux becomes the query and visualization layer — your warehouse stays the source of truth.',
+  },
+];
+
+const teamMembers = [
+  {
+    name: 'Ava Chen',
+    role: 'Co-founder & CEO',
+    bio: 'Previously staff engineer at Datadog. Built the first version of Flux in a weekend hackathon.',
+    socials: [
+      { platform: 'github' as const, url: 'https://github.com/avachen' },
+      { platform: 'twitter' as const, url: 'https://twitter.com/avachen' },
+    ],
+  },
+  {
+    name: 'Marcus Reeves',
+    role: 'Co-founder & CTO',
+    bio: 'Ex-Google, designed large-scale event pipelines processing 10B+ events/day for Ads.',
+    socials: [
+      { platform: 'github' as const, url: 'https://github.com/marcusreeves' },
+      { platform: 'twitter' as const, url: 'https://twitter.com/marcusreeves' },
+    ],
+  },
+  {
+    name: 'Priya Kapoor',
+    role: 'Head of Engineering',
+    bio: 'ClickHouse contributor and distributed systems nerd. Owns the ingestion pipeline.',
+    socials: [
+      { platform: 'github' as const, url: 'https://github.com/priyakapoor' },
+    ],
+  },
+  {
+    name: 'Jonas Lindqvist',
+    role: 'Staff Engineer',
+    bio: 'Wrote the query optimizer that makes Flux fast. Formerly at Timescale.',
+    socials: [
+      { platform: 'github' as const, url: 'https://github.com/jonaslindqvist' },
+      { platform: 'twitter' as const, url: 'https://twitter.com/jonaslindqvist' },
+    ],
+  },
+  {
+    name: 'Sophie Moreau',
+    role: 'Design Lead',
+    bio: 'Obsessed with making data tools feel human. Previously led product design at Linear.',
+    socials: [
+      { platform: 'twitter' as const, url: 'https://twitter.com/sophiemoreau' },
+    ],
+  },
+  {
+    name: 'David Park',
+    role: 'Developer Experience',
+    bio: 'Maintains the SDKs, docs, and CLI. Believes every API call should be autocompleted.',
+    socials: [
+      { platform: 'github' as const, url: 'https://github.com/davidpark' },
+      { platform: 'twitter' as const, url: 'https://twitter.com/davidpark' },
+    ],
+  },
+];
+
+const comparisonColumns = [
+  { name: 'Flux', highlighted: true },
+  { name: 'Amplitude' },
+  { name: 'Mixpanel' },
+];
+
+const comparisonRows = [
+  { feature: 'Warehouse-native architecture', values: [true, false, false] },
+  { feature: 'Unlimited seats on every plan', values: [true, false, false] },
+  { feature: 'Built-in SQL workbench', values: [true, false, 'Add-on'] },
+  { feature: 'Session Replay', values: [true, true, false] },
+  { feature: 'SOC 2 Type II certified', values: [true, true, true] },
+  { feature: 'Self-hosted / on-prem option', values: [true, false, false] },
+  { feature: 'Open API & typed SDKs', values: [true, true, true] },
+  { feature: 'Pricing based on MTUs (not events)', values: [true, false, false] },
+];
+
+const faqItems = [
+  {
+    question: 'Who owns the data I send to Flux?',
+    answer: 'You do — always. In warehouse-native mode your events never leave your infrastructure. On our managed cloud, data is encrypted at rest (AES-256) and in transit (TLS 1.3), stored in your chosen region, and deleted within 30 days of account closure.',
+  },
+  {
+    question: 'How does pricing work?',
+    answer: 'We bill on monthly tracked users (MTUs), not event volume. That means you can fire as many events as your product needs without worrying about overages. The Hobby plan is free forever with up to 10k MTUs. Team starts at $99/mo for up to 100k MTUs.',
+  },
+  {
+    question: 'Can I migrate from Amplitude or Mixpanel?',
+    answer: 'Yes. We provide step-by-step migration playbooks and code codemods for Amplitude, Mixpanel, Heap, and PostHog. Most teams complete the migration in under a week. Book a demo and we will build a custom migration plan for your stack.',
+  },
+  {
+    question: 'What security certifications does Flux hold?',
+    answer: 'Flux is SOC 2 Type II certified with zero findings. We also support SAML/SSO, SCIM provisioning, audit logs, and role-based access control on the Scale plan. Pentest reports are available under NDA.',
+  },
+  {
+    question: 'Is there a self-hosted option?',
+    answer: 'Yes. Flux can run entirely inside your VPC on Kubernetes. You get the same product with full data residency control. Contact our sales team for a license key and deployment guide.',
+  },
+  {
+    question: 'What SDKs and integrations are available?',
+    answer: 'We ship typed SDKs for JavaScript/TypeScript, Python, Go, Ruby, Swift, and Kotlin. Server-side and client-side variants are available. We also integrate with Segment, Rudderstack, and any warehouse that speaks SQL.',
+  },
+];
 ---
 
 <BaseLayout
-  title={`About Us — ${SITE_NAME}`}
-  description="Learn about our team, our mission, and why we built this platform. We're a small team passionate about great software and developer experience."
-  keywords={['about', 'team', 'mission', 'company']}
+  title={`About — ${SITE_NAME}`}
+  description="Learn about the team, the product journey, and how Flux compares to legacy analytics platforms. Warehouse-native product analytics for engineering teams."
+  keywords={['about flux', 'product analytics', 'team', 'changelog', 'comparison']}
   {navigation}
   footerColumns={footerColumns}
   {contactInfo}
@@ -24,9 +165,9 @@ import {
   siteName={SITE_NAME}
   tagline={TAGLINE}
   logoSrc={LOGO_SRC}
-  ctaText="Get Started"
+  ctaText="Start free"
   ctaHref="/contact/"
-  designTokens={CORPORATE}
+  designTokens={SAAS}
 >
   <div class="container">
     <Breadcrumb
@@ -38,174 +179,108 @@ import {
   </div>
 
   <!-- Page hero -->
-  <section class="about-hero section">
+  <section class="f-about-hero section">
     <div class="container">
-      <h1 class="about-hero__title">About Us</h1>
-      <p class="about-hero__sub">
-        We're a small, distributed team that believes great tools should be simple,
-        open, and fast to deploy.
+      <div class="f-about-hero__eyebrow">Our story</div>
+      <h1 class="f-about-hero__title">
+        Built by engineers,<br />
+        <span class="f-about-hero__title--grad">for engineering teams.</span>
+      </h1>
+      <p class="f-about-hero__lede">
+        We got tired of analytics tools that couldn't keep up with the way modern
+        teams ship. So we built Flux — warehouse-native, SQL-first, and designed
+        for people who read diffs before dashboards.
       </p>
     </div>
   </section>
 
-  <!-- Story -->
-  <section class="section about-body">
-    <div class="container about-body__inner">
-      <div class="about-body__prose">
-        <h2>Our Story</h2>
-        <p>
-          This starter began as an internal template we used every time a new
-          client needed a fresh website. After rebuilding the same header, footer,
-          and design-token system for the fifth time, we packaged everything into
-          Astro Fleet — a monorepo starter that ships with shared components,
-          typed design tokens, and a Turborepo build pipeline ready to go.
-        </p>
+  <!-- Product changelog -->
+  <Timeline
+    events={timelineEvents}
+    heading="Product changelog"
+    description="Key milestones from beta to billions of events."
+  />
 
-        <h2>What We Believe</h2>
-        <p>
-          Good infrastructure should be invisible. Your team should spend time
-          crafting content and conversion flows, not wiring up CSS variables or
-          debugging shared dependency versions. Astro Fleet handles the plumbing
-          so you can focus on what matters.
-        </p>
+  <SectionDivider shape="wave" fill="#0a0f14" height={48} />
 
-        <h2>Open Source First</h2>
-        <p>
-          Everything in this repository is MIT-licensed. Fork it, extend it,
-          and make it your own. If you build something useful on top of it, we'd
-          love to hear about it.
-        </p>
-      </div>
+  <!-- Team -->
+  <TeamGrid
+    members={teamMembers}
+    heading="The team behind Flux"
+    description="A small, distributed crew of engineers and designers who believe analytics should be fast, open, and fun to use."
+    columns={3}
+  />
 
-      <!-- Team placeholder -->
-      <aside class="about-body__team">
-        <h2>The Team</h2>
-        <p class="about-body__team-note">
-          Replace this section with your actual team members. A simple grid of
-          name + role cards works well here — or link to a dedicated team page.
-        </p>
-        <div class="team-placeholder">
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">Jane Doe</span>
-            <span class="team-placeholder__role">Founder &amp; CEO</span>
-          </div>
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">John Smith</span>
-            <span class="team-placeholder__role">Lead Engineer</span>
-          </div>
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">Alex Chen</span>
-            <span class="team-placeholder__role">Design Lead</span>
-          </div>
-        </div>
-      </aside>
-    </div>
-  </section>
+  <SectionDivider shape="curve" fill="#0a0f14" height={48} />
+
+  <!-- Comparison -->
+  <ComparisonTable
+    columns={comparisonColumns}
+    rows={comparisonRows}
+    heading="Flux vs. the rest"
+    description="See how Flux stacks up against legacy analytics platforms on the features that matter most to engineering teams."
+  />
+
+  <SectionDivider shape="angle" fill="#0a0f14" height={48} />
+
+  <!-- FAQ -->
+  <FAQ
+    items={faqItems}
+    heading="Frequently asked questions"
+    description="Everything you need to know about data ownership, pricing, migrations, and security."
+  />
+
+  <SectionDivider shape="wave" fill="#0a0f14" height={48} />
+
+  <!-- Newsletter -->
+  <Newsletter
+    heading="The Flux Engineering Blog"
+    description="Deep dives on event pipelines, query optimization, and building developer tools at scale. No spam, unsubscribe anytime."
+    buttonText="Subscribe"
+    placeholder="you@company.com"
+    variant="filled"
+  />
 </BaseLayout>
 
 <style>
-  .about-hero {
-    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
-    padding-bottom: 2rem;
+  /* ===== About hero ===== */
+  .f-about-hero {
+    background:
+      radial-gradient(ellipse at top left, rgba(16, 185, 129, 0.1), transparent 50%),
+      #0a0f14;
+    padding: 3rem 1.5rem 4rem;
   }
 
-  .about-hero__title {
-    font-size: clamp(2rem, 5vw, 3.25rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    color: var(--color-primary, #1e3a5f);
+  .f-about-hero__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent, #34d399);
     margin-bottom: 1rem;
   }
 
-  .about-hero__sub {
-    font-size: 1.125rem;
-    color: #475569;
-    line-height: 1.7;
-    max-width: 560px;
-  }
-
-  /* Body layout: prose + team sidebar */
-  .about-body__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  @media (min-width: 1024px) {
-    .about-body__inner {
-      grid-template-columns: 2fr 1fr;
-      align-items: start;
-    }
-  }
-
-  .about-body__prose h2 {
-    font-size: 1.375rem;
-    font-weight: 700;
-    color: var(--color-primary, #1e3a5f);
-    margin: 2rem 0 0.75rem;
-  }
-
-  .about-body__prose h2:first-child {
-    margin-top: 0;
-  }
-
-  .about-body__prose p {
-    color: #475569;
-    line-height: 1.75;
-    margin-bottom: 1rem;
-  }
-
-  .about-body__team h2 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary, #1e3a5f);
-    margin-bottom: 0.5rem;
-  }
-
-  .about-body__team-note {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    line-height: 1.6;
+  .f-about-hero__title {
+    font-family: var(--font-heading, 'Sora', sans-serif);
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    color: #fff;
     margin-bottom: 1.5rem;
   }
 
-  .team-placeholder {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .f-about-hero__title--grad {
+    background: linear-gradient(135deg, #34d399 0%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
-  .team-placeholder__card {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.875rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    background: #f8fafc;
-  }
-
-  .team-placeholder__avatar {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
-    flex-shrink: 0;
-  }
-
-  .team-placeholder__name {
-    display: block;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    color: #1e293b;
-  }
-
-  .team-placeholder__role {
-    display: block;
-    font-size: 0.8125rem;
-    color: #64748b;
+  .f-about-hero__lede {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: #8b949e;
+    max-width: 600px;
   }
 </style>
