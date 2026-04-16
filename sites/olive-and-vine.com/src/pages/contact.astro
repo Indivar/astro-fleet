@@ -2,11 +2,31 @@
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
 import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro';
+import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
 import { WARM } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME, TAGLINE, LOGO_SRC,
   navigation, footerColumns, contactInfo, socialLinks,
 } from '../lib/site-config';
+
+const contactFaqItems = [
+  {
+    question: 'Where should I park?',
+    answer: 'Street parking is available on Valencia Street and surrounding blocks. The nearest garage is the 21st & Bartlett Municipal Lot, a five-minute walk away. We also recommend BART (16th Street Mission station) or rideshare for a stress-free arrival.',
+  },
+  {
+    question: 'Is the restaurant wheelchair accessible?',
+    answer: 'Yes. The dining room, bar, and restrooms are all fully wheelchair accessible. There is a level entry from the street with no steps. If you need any additional accommodations, please let us know when booking and we will be happy to help.',
+  },
+  {
+    question: 'Can you accommodate large parties?',
+    answer: 'For parties of seven or more, please email our private events team at events@oliveandvine.com. We have a semi-private alcove that seats up to twelve, and we can arrange buyouts of the full dining room for groups of thirty or more.',
+  },
+  {
+    question: 'What is your cancellation policy?',
+    answer: 'We ask for at least 24 hours notice for cancellations. For parties of six or more, we require 48 hours notice. Late cancellations or no-shows may be subject to a $25 per person fee charged to the card on file.',
+  },
+];
 
 const hours = [
   { day: 'Monday',             hours: 'Closed'        },
@@ -92,6 +112,15 @@ const hours = [
       </div>
     </div>
   </section>
+
+  <!-- Practical FAQ -->
+  <section class="o-faq-section">
+    <FAQ
+      heading="Before You Visit"
+      description="Practical details to help you plan your evening."
+      items={contactFaqItems}
+    />
+  </section>
 </BaseLayout>
 
 <style>
@@ -176,4 +205,9 @@ const hours = [
   .o-hours__day { white-space: nowrap; }
   .o-hours__dots { flex: 1; border-bottom: 1px dotted #a8a29e; transform: translateY(-4px); min-width: 1rem; }
   .o-hours__time { font-style: italic; color: #57534e; white-space: nowrap; }
+
+  .o-faq-section {
+    background: #faf7f2;
+    border-top: 1px solid #e7e5e4;
+  }
 </style>

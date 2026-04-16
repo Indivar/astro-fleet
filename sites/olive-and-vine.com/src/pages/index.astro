@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import Banner from '@astro-fleet/shared-ui/src/components/Banner.astro';
+import SectionDivider from '@astro-fleet/shared-ui/src/components/SectionDivider.astro';
+import Newsletter from '@astro-fleet/shared-ui/src/components/Newsletter.astro';
 import { WARM } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME, TAGLINE, LOGO_SRC,
@@ -51,6 +54,13 @@ const dishes = [
   ctaHref="/contact/"
   designTokens={WARM}
 >
+  <Banner
+    text="Now accepting reservations for Mother's Day brunch — May 11"
+    linkText="Reserve now"
+    linkHref="/contact/"
+    variant="warning"
+  />
+
   <!-- Editorial hero -->
   <section class="o-hero">
     <div class="o-hero__bg"></div>
@@ -82,6 +92,8 @@ const dishes = [
       {awards.map((a) => <div class="o-awards__item">{a}</div>)}
     </div>
   </section>
+
+  <SectionDivider shape="curve" fill="#faf7f2" />
 
   <!-- Chef quote -->
   <section class="section o-quote-section">
@@ -122,6 +134,14 @@ const dishes = [
       </div>
     </div>
   </section>
+
+  <Newsletter
+    heading="The Weekly Table"
+    description="Every Monday we send the new menu, seasonal specials, and stories from the kitchen. No spam — just what's cooking."
+    buttonText="Subscribe"
+    placeholder="your@email.com"
+    variant="filled"
+  />
 
   <CTABlock
     heading="Join us for dinner."

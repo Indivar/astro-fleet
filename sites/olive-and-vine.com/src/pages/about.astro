@@ -1,7 +1,13 @@
 ---
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
-import { CORPORATE } from '@astro-fleet/config/tokens';
+import Timeline from '@astro-fleet/shared-ui/src/components/Timeline.astro';
+import TeamGrid from '@astro-fleet/shared-ui/src/components/TeamGrid.astro';
+import FeatureGrid from '@astro-fleet/shared-ui/src/components/FeatureGrid.astro';
+import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
+import Newsletter from '@astro-fleet/shared-ui/src/components/Newsletter.astro';
+import SectionDivider from '@astro-fleet/shared-ui/src/components/SectionDivider.astro';
+import { WARM } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME,
   TAGLINE,
@@ -11,12 +17,107 @@ import {
   contactInfo,
   socialLinks,
 } from '../lib/site-config';
+
+const timelineEvents = [
+  {
+    date: '2008',
+    title: 'Culinary training in Italy',
+    description: 'Elena Marchetti spends two years apprenticing in trattorias across Puglia and Emilia-Romagna, learning wood-fired cookery and handmade pasta from third-generation cooks.',
+  },
+  {
+    date: '2012',
+    title: 'First pop-up in the Mission',
+    description: 'A thirty-seat pop-up at a Valencia Street wine bar — ten-course Mediterranean suppers, every Friday night for a year. Sold out within minutes each week.',
+  },
+  {
+    date: '2014',
+    title: 'Valencia Street location opens',
+    description: 'Olive & Vine finds its permanent home: a fifty-two-seat dining room, a twelve-seat bar, and one wood-fired oven imported from Naples.',
+    badge: 'Milestone',
+  },
+  {
+    date: '2021',
+    title: 'Eater SF Best New Restaurant',
+    description: 'Named one of the best new restaurants in San Francisco by Eater, with praise for the all-Italian wine list and seasonal tasting menus.',
+  },
+  {
+    date: '2024',
+    title: 'Michelin Bib Gourmand',
+    description: 'Awarded the Michelin Bib Gourmand for exceptional food at moderate prices — a recognition of ten years of consistency and craft.',
+    badge: 'Award',
+  },
+];
+
+const teamMembers = [
+  {
+    name: 'Elena Marchetti',
+    role: 'Chef & Proprietor',
+    bio: 'Trained in Puglia and Emilia-Romagna. Elena built Olive & Vine around one idea: cook only what you would eat yourself, from people you know by name.',
+  },
+  {
+    name: 'Marco Reyes',
+    role: 'Sous Chef',
+    bio: 'A Mission District native who spent five years in Barcelona before joining the kitchen. Runs the pasta station and develops the weekly-changing menu alongside Elena.',
+  },
+  {
+    name: 'Lucia Fontaine',
+    role: 'Pastry Chef',
+    bio: 'Classically trained in Lyon, Lucia brings French technique to Italian flavours. Her olive oil cake and seasonal gelati have a devoted following.',
+  },
+  {
+    name: 'Tomás Herrera',
+    role: 'Sommelier & Wine Director',
+    bio: 'Curates an all-Italian wine list with over 120 labels, focusing on natural and biodynamic producers from lesser-known regions.',
+  },
+];
+
+const features = [
+  {
+    title: 'Wood-fired everything',
+    description: 'Our custom-built Naples oven runs at 900 degrees. Fish, bread, vegetables, even dessert — everything passes through the flame for depth and char.',
+  },
+  {
+    title: 'Seasonal menu',
+    description: 'The menu changes every Monday. We cook what the season gives us, sourced from farms within fifty miles and a single fishing boat out of Half Moon Bay.',
+  },
+  {
+    title: 'Single-origin ingredients',
+    description: 'Our flour is milled forty miles north. Olive oil comes from one estate in Puglia. Burrata is flown in weekly. We know every producer by name.',
+  },
+  {
+    title: 'Natural wines',
+    description: 'Over 120 labels, all Italian, with a focus on biodynamic and minimal-intervention producers from Etna, Jura, and the Langhe.',
+  },
+];
+
+const faqItems = [
+  {
+    question: 'Can you accommodate dietary restrictions?',
+    answer: 'Absolutely. Our menu changes weekly, and we are happy to accommodate vegetarian, vegan, gluten-free, and most allergy-related requests. Please mention any dietary needs when you make your reservation, and the kitchen will prepare alternatives.',
+  },
+  {
+    question: 'Is there a dress code?',
+    answer: 'We keep things relaxed — come as you are. Most guests dress smart-casual, but there is no formal dress code. The only requirement is that you arrive hungry.',
+  },
+  {
+    question: 'Do you allow corkage?',
+    answer: 'We do. Corkage is $35 per bottle, with a limit of two bottles per table. We waive corkage if you also order a bottle from our list. Please note we cannot accept bottles that are already on our wine list.',
+  },
+  {
+    question: 'Is the restaurant suitable for children?',
+    answer: 'Children are welcome at all times. We offer a small kids menu with handmade pasta and wood-fired flatbreads. High chairs are available on request. For Sunday brunch, we have a dedicated family seating area.',
+  },
+  {
+    question: 'Where should I park?',
+    answer: 'Street parking is available on Valencia Street and surrounding blocks. The nearest garage is the 21st & Bartlett Municipal Lot, a five-minute walk from the restaurant. We also recommend BART (16th Street Mission station) or rideshare for a stress-free arrival.',
+  },
+];
 ---
 
 <BaseLayout
-  title={`About Us — ${SITE_NAME}`}
-  description="Learn about our team, our mission, and why we built this platform. We're a small team passionate about great software and developer experience."
-  keywords={['about', 'team', 'mission', 'company']}
+  title={`Our Story — ${SITE_NAME}`}
+  description="The story of Olive & Vine — from Elena Marchetti's training in Italy to a Michelin Bib Gourmand on Valencia Street. Meet the kitchen team and learn what makes us different."
+  keywords={['about', 'our story', 'chef elena marchetti', 'mediterranean restaurant', 'mission district']}
   {navigation}
   footerColumns={footerColumns}
   {contactInfo}
@@ -24,15 +125,15 @@ import {
   siteName={SITE_NAME}
   tagline={TAGLINE}
   logoSrc={LOGO_SRC}
-  ctaText="Get Started"
+  ctaText="Book a Table"
   ctaHref="/contact/"
-  designTokens={CORPORATE}
+  designTokens={WARM}
 >
   <div class="container">
     <Breadcrumb
       items={[
         { label: 'Home', href: '/' },
-        { label: 'About' },
+        { label: 'Our Story' },
       ]}
     />
   </div>
@@ -40,172 +141,116 @@ import {
   <!-- Page hero -->
   <section class="about-hero section">
     <div class="container">
-      <h1 class="about-hero__title">About Us</h1>
+      <div class="about-hero__eyebrow">Our Story</div>
+      <h1 class="about-hero__title">
+        From a pop-up<br />
+        <em>to Valencia Street.</em>
+      </h1>
       <p class="about-hero__sub">
-        We're a small, distributed team that believes great tools should be simple,
-        open, and fast to deploy.
+        Olive & Vine started with a simple idea: cook only what you would eat
+        yourself, from people you know by name. Sixteen years later, the
+        kitchen is bigger but the idea hasn't changed.
       </p>
     </div>
   </section>
 
-  <!-- Story -->
-  <section class="section about-body">
-    <div class="container about-body__inner">
-      <div class="about-body__prose">
-        <h2>Our Story</h2>
-        <p>
-          This starter began as an internal template we used every time a new
-          client needed a fresh website. After rebuilding the same header, footer,
-          and design-token system for the fifth time, we packaged everything into
-          Astro Fleet — a monorepo starter that ships with shared components,
-          typed design tokens, and a Turborepo build pipeline ready to go.
-        </p>
+  <!-- Timeline -->
+  <Timeline
+    heading="Our Journey"
+    description="From a two-year apprenticeship in Italian trattorias to a Michelin Bib Gourmand on Valencia Street."
+    events={timelineEvents}
+  />
 
-        <h2>What We Believe</h2>
-        <p>
-          Good infrastructure should be invisible. Your team should spend time
-          crafting content and conversion flows, not wiring up CSS variables or
-          debugging shared dependency versions. Astro Fleet handles the plumbing
-          so you can focus on what matters.
-        </p>
+  <SectionDivider shape="curve" fill="#faf7f2" />
 
-        <h2>Open Source First</h2>
-        <p>
-          Everything in this repository is MIT-licensed. Fork it, extend it,
-          and make it your own. If you build something useful on top of it, we'd
-          love to hear about it.
-        </p>
-      </div>
-
-      <!-- Team placeholder -->
-      <aside class="about-body__team">
-        <h2>The Team</h2>
-        <p class="about-body__team-note">
-          Replace this section with your actual team members. A simple grid of
-          name + role cards works well here — or link to a dedicated team page.
-        </p>
-        <div class="team-placeholder">
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">Jane Doe</span>
-            <span class="team-placeholder__role">Founder &amp; CEO</span>
-          </div>
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">John Smith</span>
-            <span class="team-placeholder__role">Lead Engineer</span>
-          </div>
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">Alex Chen</span>
-            <span class="team-placeholder__role">Design Lead</span>
-          </div>
-        </div>
-      </aside>
-    </div>
+  <!-- Team -->
+  <section class="about-team-section">
+    <TeamGrid
+      heading="The Kitchen"
+      description="A small team that has cooked together for years. No egos, no shortcuts — just good food made by people who care."
+      members={teamMembers}
+      columns={4}
+    />
   </section>
+
+  <SectionDivider shape="curve" flip />
+
+  <!-- What makes us different -->
+  <FeatureGrid
+    heading="What makes us different"
+    description="Four things we will never compromise on."
+    features={features}
+    columns={2}
+    align="left"
+  />
+
+  <SectionDivider shape="curve" fill="#faf7f2" />
+
+  <!-- FAQ -->
+  <section class="about-faq-section">
+    <FAQ
+      heading="Common Questions"
+      description="Everything you need to know before your visit."
+      items={faqItems}
+    />
+  </section>
+
+  <!-- Newsletter -->
+  <Newsletter
+    heading="The Weekly Table"
+    description="Every Monday we publish the new menu, seasonal specials, and the occasional story from the kitchen. Join the list."
+    buttonText="Subscribe"
+    placeholder="your@email.com"
+    variant="filled"
+  />
 </BaseLayout>
 
 <style>
   .about-hero {
-    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
-    padding-bottom: 2rem;
+    background: linear-gradient(180deg, #faf7f2 0%, #fdfbf6 100%);
+    padding: 4rem 1.5rem 3.5rem;
+    text-align: center;
+    border-bottom: 1px solid #e7e5e4;
   }
 
-  .about-hero__title {
-    font-size: clamp(2rem, 5vw, 3.25rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    color: var(--color-primary, #1e3a5f);
-    margin-bottom: 1rem;
-  }
-
-  .about-hero__sub {
-    font-size: 1.125rem;
-    color: #475569;
-    line-height: 1.7;
-    max-width: 560px;
-  }
-
-  /* Body layout: prose + team sidebar */
-  .about-body__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  @media (min-width: 1024px) {
-    .about-body__inner {
-      grid-template-columns: 2fr 1fr;
-      align-items: start;
-    }
-  }
-
-  .about-body__prose h2 {
-    font-size: 1.375rem;
-    font-weight: 700;
-    color: var(--color-primary, #1e3a5f);
-    margin: 2rem 0 0.75rem;
-  }
-
-  .about-body__prose h2:first-child {
-    margin-top: 0;
-  }
-
-  .about-body__prose p {
-    color: #475569;
-    line-height: 1.75;
-    margin-bottom: 1rem;
-  }
-
-  .about-body__team h2 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary, #1e3a5f);
-    margin-bottom: 0.5rem;
-  }
-
-  .about-body__team-note {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    line-height: 1.6;
+  .about-hero__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #d97706;
     margin-bottom: 1.5rem;
   }
 
-  .team-placeholder {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .about-hero__title {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: clamp(2.5rem, 6vw, 3.75rem);
+    font-weight: 700;
+    color: #1c1917;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
   }
 
-  .team-placeholder__card {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.875rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    background: #f8fafc;
-  }
-
-  .team-placeholder__avatar {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
-    flex-shrink: 0;
-  }
-
-  .team-placeholder__name {
-    display: block;
+  .about-hero__title em {
+    font-style: italic;
+    color: #d97706;
     font-weight: 600;
-    font-size: 0.9375rem;
-    color: #1e293b;
   }
 
-  .team-placeholder__role {
-    display: block;
-    font-size: 0.8125rem;
-    color: #64748b;
+  .about-hero__sub {
+    font-size: 1.0625rem;
+    color: #57534e;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  .about-team-section {
+    background: #faf7f2;
+  }
+
+  .about-faq-section {
+    background: #faf7f2;
   }
 </style>

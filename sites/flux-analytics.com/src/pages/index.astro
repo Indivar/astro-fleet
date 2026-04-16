@@ -2,13 +2,76 @@
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import ServiceCard from '@astro-fleet/shared-ui/src/components/ServiceCard.astro';
 import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import Banner from '@astro-fleet/shared-ui/src/components/Banner.astro';
+import LogoCloud from '@astro-fleet/shared-ui/src/components/LogoCloud.astro';
+import PricingTable from '@astro-fleet/shared-ui/src/components/PricingTable.astro';
+import Newsletter from '@astro-fleet/shared-ui/src/components/Newsletter.astro';
 import { SAAS } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME, TAGLINE, LOGO_SRC,
   navigation, footerColumns, contactInfo, socialLinks,
 } from '../lib/site-config';
 
-const logos = ['Linear', 'Retool', 'Vercel', 'Supabase', 'Railway', 'Tailscale'];
+const logos = [
+  { name: 'Linear' },
+  { name: 'Retool' },
+  { name: 'Vercel' },
+  { name: 'Supabase' },
+  { name: 'Railway' },
+  { name: 'Tailscale' },
+];
+
+const pricingTiers = [
+  {
+    name: 'Hobby',
+    price: '$0',
+    period: 'mo',
+    description: '50M events · 10k MTUs',
+    features: [
+      { text: 'Unlimited seats', included: true },
+      { text: 'SQL workbench', included: true },
+      { text: 'Warehouse sync', included: true },
+      { text: 'Session Replay', included: false },
+      { text: 'SSO / SAML', included: false },
+      { text: 'Audit logs', included: false },
+    ],
+    ctaText: 'Start free',
+    ctaHref: '/contact/',
+  },
+  {
+    name: 'Team',
+    price: '$99',
+    period: 'mo',
+    description: '1B events · 100k MTUs',
+    features: [
+      { text: 'Unlimited seats', included: true },
+      { text: 'SQL workbench', included: true },
+      { text: 'Warehouse sync', included: true },
+      { text: 'Session Replay', included: true },
+      { text: 'SSO / SAML', included: false },
+      { text: 'Audit logs', included: false },
+    ],
+    ctaText: 'Start free',
+    ctaHref: '/contact/',
+    highlighted: true,
+    badge: 'Most popular',
+  },
+  {
+    name: 'Scale',
+    price: 'Custom',
+    description: 'SSO · Audit logs · DPA',
+    features: [
+      { text: 'Unlimited seats', included: true },
+      { text: 'SQL workbench', included: true },
+      { text: 'Warehouse sync', included: true },
+      { text: 'Session Replay', included: true },
+      { text: 'SSO / SAML', included: true },
+      { text: 'Audit logs', included: true },
+    ],
+    ctaText: 'Contact sales',
+    ctaHref: '/contact/',
+  },
+];
 
 const features = [
   {
@@ -47,6 +110,15 @@ const features = [
   ctaHref="/contact/"
   designTokens={SAAS}
 >
+  <Banner
+    text="Session Replay is now GA — try it free."
+    linkText="Learn more"
+    linkHref="/services/"
+    variant="accent"
+    dismissible={true}
+    id="banner-session-replay"
+  />
+
   <!-- Hero with code mockup -->
   <section class="f-hero">
     <div class="f-hero__grid">
@@ -93,14 +165,10 @@ const features = [
   </section>
 
   <!-- Logo strip -->
-  <section class="f-logos">
-    <div class="container">
-      <div class="f-logos__label">Trusted by engineering teams at</div>
-      <div class="f-logos__row">
-        {logos.map((l) => <div class="f-logos__item">{l}</div>)}
-      </div>
-    </div>
-  </section>
+  <LogoCloud
+    logos={logos}
+    heading="Trusted by engineering teams at"
+  />
 
   <!-- Features -->
   <section class="section">
@@ -117,35 +185,20 @@ const features = [
     </div>
   </section>
 
-  <!-- Pricing strip -->
-  <section class="section f-pricing-section">
-    <div class="container">
-      <div class="f-pricing">
-        <div class="f-pricing__left">
-          <div class="f-eyebrow">Pricing</div>
-          <h2>Starts free. Scales with your MRR, not your event volume.</h2>
-          <p>Every plan includes unlimited seats, SQL workbench, and warehouse sync. We bill on monthly tracked users — so you can fire as many events as you like.</p>
-        </div>
-        <div class="f-pricing__tiers">
-          <div class="f-tier">
-            <div class="f-tier__name">Hobby</div>
-            <div class="f-tier__price">$0<span>/mo</span></div>
-            <div class="f-tier__note">50M events · 10k MTUs</div>
-          </div>
-          <div class="f-tier f-tier--hl">
-            <div class="f-tier__name">Team</div>
-            <div class="f-tier__price">$99<span>/mo</span></div>
-            <div class="f-tier__note">1B events · 100k MTUs</div>
-          </div>
-          <div class="f-tier">
-            <div class="f-tier__name">Scale</div>
-            <div class="f-tier__price">Custom</div>
-            <div class="f-tier__note">SSO · Audit logs · DPA</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Pricing -->
+  <PricingTable
+    tiers={pricingTiers}
+    heading="Starts free. Scales with your MRR."
+    description="Every plan includes unlimited seats, SQL workbench, and warehouse sync. We bill on monthly tracked users — so you can fire as many events as you like."
+  />
+
+  <Newsletter
+    heading="The Flux Engineering Blog"
+    description="Deep dives on event pipelines, query optimization, and building developer tools. No spam."
+    buttonText="Subscribe"
+    placeholder="you@company.com"
+    variant="filled"
+  />
 
   <CTABlock
     heading="Install in four lines. Ship today."
@@ -309,30 +362,6 @@ const features = [
   .t-var { color: #ffa657; }
   .t-com { color: #8b949e; font-style: italic; }
 
-  /* Logo strip */
-  .f-logos { padding: 3rem 1.5rem; background: #0a0f14; border-top: 1px solid #161b22; border-bottom: 1px solid #161b22; }
-  .f-logos__label {
-    text-align: center;
-    font-size: 0.8125rem;
-    color: #6e7681;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 1.5rem;
-  }
-  .f-logos__row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2.5rem 3rem;
-  }
-  .f-logos__item {
-    font-family: var(--font-heading, 'Sora', sans-serif);
-    font-weight: 700;
-    font-size: 1.125rem;
-    color: #6e7681;
-    letter-spacing: -0.01em;
-  }
-
   /* Section head + features */
   .f-section-head { max-width: 720px; margin-bottom: 3rem; }
   .f-eyebrow {
@@ -360,57 +389,4 @@ const features = [
   }
   @media (min-width: 768px) { .f-features { grid-template-columns: repeat(3, 1fr); } }
 
-  /* Pricing strip */
-  .f-pricing-section { background: #0d1117; border-top: 1px solid #161b22; }
-  .f-pricing {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    align-items: center;
-  }
-  @media (min-width: 900px) { .f-pricing { grid-template-columns: 1fr 1.2fr; } }
-  .f-pricing__left h2 {
-    font-family: var(--font-heading, 'Sora', sans-serif);
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    color: #e6edf3;
-    margin: 0.5rem 0 1rem;
-  }
-  .f-pricing__left p { color: #8b949e; line-height: 1.65; max-width: 480px; }
-  .f-pricing__tiers {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-  .f-tier {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 1.5rem 1.25rem;
-    text-align: center;
-  }
-  .f-tier--hl {
-    border-color: #34d399;
-    background: linear-gradient(180deg, rgba(52,211,153,0.08) 0%, #161b22 100%);
-    box-shadow: 0 0 0 3px rgba(52,211,153,0.08);
-  }
-  .f-tier__name {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #8b949e;
-    margin-bottom: 0.75rem;
-  }
-  .f-tier__price {
-    font-family: var(--font-heading, 'Sora', sans-serif);
-    font-size: 1.875rem;
-    font-weight: 800;
-    color: #e6edf3;
-    letter-spacing: -0.02em;
-  }
-  .f-tier__price span { font-size: 0.875rem; color: #6e7681; font-weight: 500; }
-  .f-tier__note { font-size: 0.75rem; color: #6e7681; margin-top: 0.5rem; }
 </style>

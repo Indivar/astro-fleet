@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import Timeline from '@astro-fleet/shared-ui/src/components/Timeline.astro';
+import TeamGrid from '@astro-fleet/shared-ui/src/components/TeamGrid.astro';
+import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
+import Newsletter from '@astro-fleet/shared-ui/src/components/Newsletter.astro';
+import SectionDivider from '@astro-fleet/shared-ui/src/components/SectionDivider.astro';
 import { CORPORATE } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME,
@@ -11,12 +16,102 @@ import {
   contactInfo,
   socialLinks,
 } from '../lib/site-config';
+
+const milestones = [
+  {
+    date: '1994',
+    title: 'Firm Founded',
+    description: 'Meridian Advisory established in London by three former McKinsey partners to provide independent counsel to FTSE boards.',
+    badge: 'Origin',
+  },
+  {
+    date: '1999',
+    title: 'First 100 Engagements',
+    description: 'Reached our hundredth client engagement, spanning financial services, energy, and the public sector across the UK and Europe.',
+  },
+  {
+    date: '2005',
+    title: 'EMEA Expansion',
+    description: 'Opened offices in Frankfurt, Dubai, and Singapore, extending our reach to nine countries and broadening sector coverage.',
+  },
+  {
+    date: '2012',
+    title: 'Risk & Regulatory Practice Launched',
+    description: 'Established a dedicated practice to help regulated institutions navigate post-crisis supervisory expectations and operational resilience.',
+  },
+  {
+    date: '2019',
+    title: '450+ Engagements Completed',
+    description: 'Surpassed 450 completed mandates, with cumulative transaction value advised exceeding £180 billion.',
+    badge: 'Milestone',
+  },
+  {
+    date: '2024',
+    title: 'Three Decades of Independence',
+    description: 'Celebrating 30 years of partner-led, conflict-free advisory — still privately held, still focused on the decisions that matter most.',
+    badge: '30 Years',
+  },
+];
+
+const partners = [
+  {
+    name: 'Eleanor Hartwell',
+    role: 'Managing Partner',
+    bio: 'Former McKinsey director with 28 years advising FTSE 100 boards on corporate strategy and post-merger integration. Leads the firm\'s Strategy & Transformation practice.',
+    socials: [{ platform: 'linkedin' as const, url: 'https://linkedin.com' }],
+  },
+  {
+    name: 'James Ashworth',
+    role: 'Senior Partner, M&A Advisory',
+    bio: 'Spent 15 years at Lazard before joining Meridian. Specialises in cross-border deal origination, commercial due diligence, and synergy realisation for institutional investors.',
+    socials: [{ platform: 'linkedin' as const, url: 'https://linkedin.com' }],
+  },
+  {
+    name: 'Priya Narayanan',
+    role: 'Partner, Risk & Regulatory',
+    bio: 'Former PRA supervisor turned advisor. Leads Meridian\'s regulatory strategy practice, helping banks and insurers meet DORA, operational resilience, and financial crime obligations.',
+    socials: [{ platform: 'linkedin' as const, url: 'https://linkedin.com' }],
+  },
+  {
+    name: 'Marcus Engström',
+    role: 'Partner, Operations & Technology',
+    bio: 'Two decades of experience in cost transformation and technology strategy for energy and utilities. Previously a senior principal at Bain & Company in Stockholm.',
+    socials: [{ platform: 'linkedin' as const, url: 'https://linkedin.com' }],
+  },
+];
+
+const faqItems = [
+  {
+    question: 'How does a typical Meridian engagement begin?',
+    answer: 'Every engagement starts with a confidential scoping conversation led by a senior partner. We invest time upfront to understand the strategic context, stakeholder landscape, and desired outcomes before proposing a workstream structure and resourcing plan.',
+  },
+  {
+    question: 'What is your fee structure?',
+    answer: 'We work on a fixed-fee or capped-fee basis for the majority of our mandates. This gives clients cost certainty and aligns our incentives with delivering value within an agreed timeframe. We do not charge by the hour.',
+  },
+  {
+    question: 'How do you ensure confidentiality?',
+    answer: 'Confidentiality is foundational to our practice. Every engagement is governed by a non-disclosure agreement, and our conflict-clearance process ensures we never advise competing parties on related matters. Information barriers are maintained across practice areas.',
+  },
+  {
+    question: 'What sectors do you specialise in?',
+    answer: 'Our four primary sectors are Financial Services, Healthcare & Life Sciences, Energy & Utilities, and the Public Sector. Within each, our partners bring at least fifteen years of hands-on sector experience.',
+  },
+  {
+    question: 'Do you work with mid-market companies or only large institutions?',
+    answer: 'While much of our work is with FTSE 250 and equivalent institutions, we selectively take on mid-market mandates where the strategic complexity warrants senior-partner involvement — particularly in M&A, regulatory remediation, and transformation programmes.',
+  },
+  {
+    question: 'What makes Meridian different from the large consultancies?',
+    answer: 'Independence, seniority, and focus. We are privately held with no audit or outsourcing conflicts. Every engagement is led — not just sold — by a partner. And we decline roughly four in ten prospective mandates to protect the concentration of expertise our clients expect.',
+  },
+];
 ---
 
 <BaseLayout
-  title={`About Us — ${SITE_NAME}`}
-  description="Learn about our team, our mission, and why we built this platform. We're a small team passionate about great software and developer experience."
-  keywords={['about', 'team', 'mission', 'company']}
+  title={`About the Firm — ${SITE_NAME}`}
+  description="Learn about Meridian Advisory's history, leadership team, and approach to independent strategic counsel for boards and executives across EMEA."
+  keywords={['about', 'leadership', 'firm history', 'consulting partners', 'meridian advisory']}
   {navigation}
   footerColumns={footerColumns}
   {contactInfo}
@@ -24,7 +119,7 @@ import {
   siteName={SITE_NAME}
   tagline={TAGLINE}
   logoSrc={LOGO_SRC}
-  ctaText="Get Started"
+  ctaText="Request a briefing"
   ctaHref="/contact/"
   designTokens={CORPORATE}
 >
@@ -32,180 +127,91 @@ import {
     <Breadcrumb
       items={[
         { label: 'Home', href: '/' },
-        { label: 'About' },
+        { label: 'About the Firm' },
       ]}
     />
   </div>
 
   <!-- Page hero -->
-  <section class="about-hero section">
+  <section class="m-about-hero section">
     <div class="container">
-      <h1 class="about-hero__title">About Us</h1>
-      <p class="about-hero__sub">
-        We're a small, distributed team that believes great tools should be simple,
-        open, and fast to deploy.
+      <div class="m-about-hero__eyebrow">About the firm</div>
+      <h1 class="m-about-hero__title">About the Firm</h1>
+      <p class="m-about-hero__lede">
+        Meridian Advisory is an independent strategy and transformation firm
+        serving regulated industries across Europe, the Middle East, and Asia.
+        For three decades, we have provided discreet, senior-partner-led counsel
+        on the decisions that shape institutions.
       </p>
     </div>
   </section>
 
-  <!-- Story -->
-  <section class="section about-body">
-    <div class="container about-body__inner">
-      <div class="about-body__prose">
-        <h2>Our Story</h2>
-        <p>
-          This starter began as an internal template we used every time a new
-          client needed a fresh website. After rebuilding the same header, footer,
-          and design-token system for the fifth time, we packaged everything into
-          Astro Fleet — a monorepo starter that ships with shared components,
-          typed design tokens, and a Turborepo build pipeline ready to go.
-        </p>
+  <!-- Firm history timeline -->
+  <Timeline
+    heading="Our Journey"
+    description="Three decades of independent counsel — from a London founding to a practice spanning nine countries."
+    events={milestones}
+  />
 
-        <h2>What We Believe</h2>
-        <p>
-          Good infrastructure should be invisible. Your team should spend time
-          crafting content and conversion flows, not wiring up CSS variables or
-          debugging shared dependency versions. Astro Fleet handles the plumbing
-          so you can focus on what matters.
-        </p>
+  <SectionDivider shape="wave" fill="#f8fafc" />
 
-        <h2>Open Source First</h2>
-        <p>
-          Everything in this repository is MIT-licensed. Fork it, extend it,
-          and make it your own. If you build something useful on top of it, we'd
-          love to hear about it.
-        </p>
-      </div>
+  <!-- Leadership team -->
+  <TeamGrid
+    heading="Leadership Partners"
+    description="Every Meridian engagement is led by a partner with deep sector expertise. Our leadership team brings a combined 80+ years of advisory experience."
+    members={partners}
+    columns={4}
+  />
 
-      <!-- Team placeholder -->
-      <aside class="about-body__team">
-        <h2>The Team</h2>
-        <p class="about-body__team-note">
-          Replace this section with your actual team members. A simple grid of
-          name + role cards works well here — or link to a dedicated team page.
-        </p>
-        <div class="team-placeholder">
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">Jane Doe</span>
-            <span class="team-placeholder__role">Founder &amp; CEO</span>
-          </div>
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">John Smith</span>
-            <span class="team-placeholder__role">Lead Engineer</span>
-          </div>
-          <div class="team-placeholder__card">
-            <div class="team-placeholder__avatar"></div>
-            <span class="team-placeholder__name">Alex Chen</span>
-            <span class="team-placeholder__role">Design Lead</span>
-          </div>
-        </div>
-      </aside>
-    </div>
-  </section>
+  <SectionDivider shape="wave" />
+
+  <!-- FAQ -->
+  <FAQ
+    heading="Working with Meridian"
+    description="Common questions about our engagement approach, fees, and areas of expertise."
+    items={faqItems}
+  />
+
+  <!-- Newsletter -->
+  <Newsletter
+    heading="Meridian Perspectives"
+    description="Our quarterly briefing on strategy, regulation, and market outlook — written by partners, for boards. No spam, unsubscribe anytime."
+    buttonText="Subscribe"
+    placeholder="you@company.com"
+    variant="filled"
+  />
 </BaseLayout>
 
 <style>
-  .about-hero {
-    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
-    padding-bottom: 2rem;
+  /* Hero */
+  .m-about-hero {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    padding: 3.5rem 1.5rem 4rem;
+    border-bottom: 1px solid #e2e8f0;
   }
 
-  .about-hero__title {
+  .m-about-hero__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+    margin-bottom: 0.75rem;
+  }
+
+  .m-about-hero__title {
     font-size: clamp(2rem, 5vw, 3.25rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    color: var(--color-primary, #1e3a5f);
-    margin-bottom: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-primary, #0f172a);
+    margin-bottom: 1.25rem;
   }
 
-  .about-hero__sub {
+  .m-about-hero__lede {
     font-size: 1.125rem;
     color: #475569;
-    line-height: 1.7;
-    max-width: 560px;
-  }
-
-  /* Body layout: prose + team sidebar */
-  .about-body__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  @media (min-width: 1024px) {
-    .about-body__inner {
-      grid-template-columns: 2fr 1fr;
-      align-items: start;
-    }
-  }
-
-  .about-body__prose h2 {
-    font-size: 1.375rem;
-    font-weight: 700;
-    color: var(--color-primary, #1e3a5f);
-    margin: 2rem 0 0.75rem;
-  }
-
-  .about-body__prose h2:first-child {
-    margin-top: 0;
-  }
-
-  .about-body__prose p {
-    color: #475569;
-    line-height: 1.75;
-    margin-bottom: 1rem;
-  }
-
-  .about-body__team h2 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-primary, #1e3a5f);
-    margin-bottom: 0.5rem;
-  }
-
-  .about-body__team-note {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  .team-placeholder {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .team-placeholder__card {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    padding: 0.875rem;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.625rem;
-    background: #f8fafc;
-  }
-
-  .team-placeholder__avatar {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
-    flex-shrink: 0;
-  }
-
-  .team-placeholder__name {
-    display: block;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    color: #1e293b;
-  }
-
-  .team-placeholder__role {
-    display: block;
-    font-size: 0.8125rem;
-    color: #64748b;
+    max-width: 680px;
+    line-height: 1.65;
   }
 </style>

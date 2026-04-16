@@ -2,6 +2,9 @@
 import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
 import ServiceCard from '@astro-fleet/shared-ui/src/components/ServiceCard.astro';
 import CTABlock from '@astro-fleet/shared-ui/src/components/CTABlock.astro';
+import StatsBar from '@astro-fleet/shared-ui/src/components/StatsBar.astro';
+import SectionDivider from '@astro-fleet/shared-ui/src/components/SectionDivider.astro';
+import Newsletter from '@astro-fleet/shared-ui/src/components/Newsletter.astro';
 import { CORPORATE } from '@astro-fleet/config/tokens';
 import {
   SITE_NAME,
@@ -101,17 +104,11 @@ const insights = [
     </div>
   </section>
 
+  <!-- Section divider between hero and stats -->
+  <SectionDivider shape="wave" fill="var(--color-primary, #0f172a)" />
+
   <!-- Stats strip -->
-  <section class="m-stats">
-    <div class="container m-stats__grid">
-      {stats.map((s) => (
-        <div class="m-stat">
-          <div class="m-stat__value">{s.value}<span>{s.unit}</span></div>
-          <div class="m-stat__label">{s.label}</div>
-        </div>
-      ))}
-    </div>
-  </section>
+  <StatsBar items={stats} dark={true} />
 
   <!-- Industries -->
   <section class="section">
@@ -147,6 +144,15 @@ const insights = [
       </div>
     </div>
   </section>
+
+  <!-- Newsletter signup -->
+  <Newsletter
+    heading="Meridian Perspectives"
+    description="Our quarterly briefing on strategy, regulation, and market outlook — written by partners, for boards. No spam, unsubscribe anytime."
+    buttonText="Subscribe"
+    placeholder="you@company.com"
+    variant="filled"
+  />
 
   <CTABlock
     heading="Considering an engagement?"
@@ -244,38 +250,6 @@ const insights = [
   }
   .m-hero__attrib { font-size: 0.875rem; color: #94a3b8; line-height: 1.5; }
   .m-hero__attrib strong { color: #e2e8f0; }
-
-  /* Stats strip */
-  .m-stats {
-    background: var(--color-primary, #0f172a);
-    padding: 3rem 1.5rem;
-  }
-  .m-stats__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    text-align: center;
-  }
-  @media (min-width: 768px) {
-    .m-stats__grid { grid-template-columns: repeat(4, 1fr); }
-  }
-  .m-stat__value {
-    font-size: clamp(2rem, 4vw, 2.75rem);
-    font-weight: 800;
-    color: #fff;
-    letter-spacing: -0.03em;
-  }
-  .m-stat__value span {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #94a3b8;
-    margin-left: 0.25rem;
-  }
-  .m-stat__label {
-    font-size: 0.875rem;
-    color: #94a3b8;
-    margin-top: 0.375rem;
-  }
 
   /* Section head */
   .m-section-head { max-width: 720px; margin-bottom: 3rem; }
