@@ -89,7 +89,7 @@ bun run dev --filter=yourdomain.com
 
 ## Stack
 
-Astro 5 · Bun · Turborepo 2 · Tailwind CSS 4 · TypeScript · Static-first (zero JS by default)
+Astro 6 · Bun · Turborepo 2 · Tailwind CSS 4 · TypeScript · Static-first (zero JS by default)
 
 ## License
 

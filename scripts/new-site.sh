@@ -62,10 +62,9 @@ SITE_TITLE=$(echo "$DOMAIN" | sed 's/\..*//' | sed 's/./\U&/')
 sed -i'' -e "s|'Starter Site'|'$SITE_TITLE'|g" "$ROOT_DIR/sites/$DOMAIN/src/lib/site-config.ts"
 sed -i'' -e "s|'Built with Astro Fleet'|'Powered by $SITE_TITLE'|g" "$ROOT_DIR/sites/$DOMAIN/src/lib/site-config.ts"
 
-# 5. Apply design preset if not corporate (corporate is the default in starter)
+# 5. Apply design preset — update CSS and astro.config.mjs fonts
 if [ "$PRESET" = "saas" ]; then
   cat > "$ROOT_DIR/sites/$DOMAIN/src/styles/global.css" << 'CSSEOF'
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -100,9 +99,35 @@ a { color: inherit; text-decoration: none; }
 a:hover { color: var(--color-accent); }
 CSSEOF
 
+  cat > "$ROOT_DIR/sites/$DOMAIN/astro.config.mjs" << CONFEOF
+import { defineConfig, fontProviders } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://www.$DOMAIN',
+  integrations: [sitemap()],
+  vite: { plugins: [tailwindcss()] },
+  output: 'static',
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Sora',
+      cssVariable: '--font-heading',
+      weights: [400, 500, 600, 700, 800],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Inter',
+      cssVariable: '--font-body',
+      weights: [400, 500, 600, 700],
+    },
+  ],
+});
+CONFEOF
+
 elif [ "$PRESET" = "warm" ]; then
   cat > "$ROOT_DIR/sites/$DOMAIN/src/styles/global.css" << 'CSSEOF'
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -136,6 +161,33 @@ h1, h2, h3, h4, h5, h6 {
 a { color: inherit; text-decoration: none; }
 a:hover { color: var(--color-accent); }
 CSSEOF
+
+  cat > "$ROOT_DIR/sites/$DOMAIN/astro.config.mjs" << CONFEOF
+import { defineConfig, fontProviders } from 'astro/config';
+import tailwindcss from '@tailwindcss/vite';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://www.$DOMAIN',
+  integrations: [sitemap()],
+  vite: { plugins: [tailwindcss()] },
+  output: 'static',
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Playfair Display',
+      cssVariable: '--font-heading',
+      weights: [400, 600, 700, 800],
+    },
+    {
+      provider: fontProviders.google(),
+      name: 'Source Sans 3',
+      cssVariable: '--font-body',
+      weights: [400, 500, 600, 700],
+    },
+  ],
+});
+CONFEOF
 fi
 
 # 6. Clean up sed backup files (macOS sed creates .bak files with -i'')
