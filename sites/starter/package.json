@@ -10,7 +10,7 @@
     "lint": "astro check"
   },
   "dependencies": {
-    "astro": "^5",
+    "astro": "^6",
     "@astro-fleet/shared-ui": "workspace:*",
     "@astro-fleet/config": "workspace:*"
   },
