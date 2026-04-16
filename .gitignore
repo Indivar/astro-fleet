@@ -38,3 +38,6 @@ Thumbs.db
 
 # Claude Code session artifacts
 .remember/
+
+# Internal docs (not published to the repo)
+.internal/
