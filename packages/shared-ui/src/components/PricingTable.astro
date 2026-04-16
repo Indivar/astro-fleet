@@ -1,0 +1,267 @@
+---
+/**
+ * PricingTable — a responsive row of pricing tier cards.
+ * Supports highlighting a recommended plan and toggling monthly/annual.
+ */
+
+export interface PricingFeature {
+  text: string;
+  included: boolean;
+}
+
+export interface PricingTier {
+  name: string;
+  price: string;
+  period?: string;
+  description?: string;
+  features: PricingFeature[];
+  ctaText?: string;
+  ctaHref?: string;
+  highlighted?: boolean;
+  badge?: string;
+}
+
+export interface Props {
+  tiers: PricingTier[];
+  heading?: string;
+  description?: string;
+}
+
+const {
+  tiers,
+  heading = 'Simple, transparent pricing',
+  description,
+} = Astro.props;
+---
+
+<section class="pricing" aria-label="Pricing plans">
+  <div class="pricing__container">
+    <div class="pricing__header">
+      <h2 class="pricing__heading">{heading}</h2>
+      {description && <p class="pricing__description">{description}</p>}
+    </div>
+
+    <div class="pricing__grid">
+      {tiers.map((tier) => (
+        <article class={`pricing__card ${tier.highlighted ? 'pricing__card--highlighted' : ''}`}>
+          {tier.badge && <div class="pricing__badge">{tier.badge}</div>}
+          <div class="pricing__card-header">
+            <h3 class="pricing__tier-name">{tier.name}</h3>
+            <div class="pricing__price">
+              {tier.price}
+              {tier.period && <span class="pricing__period">/{tier.period}</span>}
+            </div>
+            {tier.description && <p class="pricing__tier-desc">{tier.description}</p>}
+          </div>
+          <ul class="pricing__features">
+            {tier.features.map((f) => (
+              <li class={`pricing__feature ${f.included ? '' : 'pricing__feature--excluded'}`}>
+                <span class="pricing__feature-icon" aria-hidden="true">
+                  {f.included ? '✓' : '—'}
+                </span>
+                {f.text}
+              </li>
+            ))}
+          </ul>
+          {tier.ctaHref && (
+            <a
+              href={tier.ctaHref}
+              class={`pricing__cta ${tier.highlighted ? 'pricing__cta--primary' : ''}`}
+            >
+              {tier.ctaText || 'Get started'}
+            </a>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Pricing Section ===== */
+  .pricing {
+    padding: 5rem 1.5rem;
+  }
+
+  .pricing__container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ===== Header ===== */
+  .pricing__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 3rem;
+  }
+
+  .pricing__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 1rem;
+  }
+
+  .pricing__description {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.65;
+  }
+
+  /* ===== Grid ===== */
+  .pricing__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 768px) {
+    .pricing__grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+  }
+
+  /* ===== Card ===== */
+  .pricing__card {
+    position: relative;
+    background: var(--color-background, #ffffff);
+    border: 1.5px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 2rem 1.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .pricing__card:hover {
+    border-color: var(--color-accent, #2563eb);
+  }
+
+  .pricing__card--highlighted {
+    border-color: var(--color-accent, #2563eb);
+    box-shadow: 0 8px 32px -8px rgba(37, 99, 235, 0.18);
+  }
+
+  .pricing__badge {
+    position: absolute;
+    top: -0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-accent, #2563eb);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.875rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* ===== Card Header ===== */
+  .pricing__tier-name {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 0.75rem;
+  }
+
+  .pricing__price {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary, #0a0f1a);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .pricing__period {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-muted, #64748b);
+  }
+
+  .pricing__tier-desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.5;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .pricing__card-header {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  /* ===== Features ===== */
+  .pricing__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .pricing__feature {
+    font-size: 0.9375rem;
+    color: var(--color-text, #1e293b);
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .pricing__feature--excluded {
+    color: var(--color-text-muted, #94a3b8);
+    text-decoration: line-through;
+  }
+
+  .pricing__feature-icon {
+    flex: 0 0 auto;
+    width: 20px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--color-accent, #2563eb);
+  }
+
+  .pricing__feature--excluded .pricing__feature-icon {
+    color: #cbd5e1;
+  }
+
+  /* ===== CTA ===== */
+  .pricing__cta {
+    display: block;
+    text-align: center;
+    padding: 0.8125rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--cta-radius, 0.5rem);
+    color: var(--color-primary, #0a0f1a);
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .pricing__cta:hover {
+    border-color: var(--color-accent, #2563eb);
+    color: var(--color-accent, #2563eb);
+  }
+
+  .pricing__cta--primary {
+    background: var(--color-cta, #2563eb);
+    color: #ffffff;
+    border-color: var(--color-cta, #2563eb);
+  }
+
+  .pricing__cta--primary:hover {
+    background: var(--color-primary, #0a0f1a);
+    border-color: var(--color-primary, #0a0f1a);
+    color: #ffffff;
+    opacity: 1;
+  }
+</style>

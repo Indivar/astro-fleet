@@ -1,0 +1,99 @@
+---
+/**
+ * StatsBar — a horizontal strip of key metrics or numbers.
+ * Commonly placed below the hero or above the CTA to build credibility.
+ */
+
+export interface StatItem {
+  value: string;
+  label: string;
+  unit?: string;
+}
+
+export interface Props {
+  items: StatItem[];
+  /** Render on a dark background. Default: true */
+  dark?: boolean;
+}
+
+const { items, dark = true } = Astro.props;
+---
+
+<section class={`stats-bar ${dark ? 'stats-bar--dark' : 'stats-bar--light'}`} aria-label="Key statistics">
+  <div class="stats-bar__container">
+    {items.map((item) => (
+      <div class="stats-bar__item">
+        <div class="stats-bar__value">
+          {item.value}
+          {item.unit && <span class="stats-bar__unit">{item.unit}</span>}
+        </div>
+        <div class="stats-bar__label">{item.label}</div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  /* ===== Stats Bar ===== */
+  .stats-bar {
+    padding: 3rem 1.5rem;
+  }
+
+  .stats-bar--dark {
+    background: var(--color-primary, #0a0f1a);
+    color: #ffffff;
+  }
+
+  .stats-bar--light {
+    background: var(--color-background, #ffffff);
+    color: var(--color-text, #1e293b);
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .stats-bar__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .stats-bar__container {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  /* ===== Item ===== */
+  .stats-bar__value {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .stats-bar--light .stats-bar__value {
+    color: var(--color-primary, #0a0f1a);
+  }
+
+  .stats-bar__unit {
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.6;
+    margin-left: 0.25rem;
+  }
+
+  .stats-bar__label {
+    font-size: 0.875rem;
+    opacity: 0.7;
+    margin-top: 0.375rem;
+  }
+
+  .stats-bar--light .stats-bar__label {
+    color: var(--color-text-muted, #64748b);
+    opacity: 1;
+  }
+</style>

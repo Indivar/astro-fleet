@@ -70,7 +70,7 @@ bun run dev --filter=yourdomain.com
 
 ## What's Included
 
-- **10 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, and more. All accept content via typed props, all use CSS variables for theming.
+- **22 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, pricing tables, FAQ accordions, team grids, timelines, hero sliders, section dividers, comparison tables, and more. All accept content via typed props, all use CSS variables for theming.
 - **Design token system** — 3 presets (Corporate, SaaS, Warm) with a TypeScript interface. Create custom presets or modify colors and fonts per site without touching component code.
 - **Site scaffolder** — `./scripts/new-site.sh domain.com [preset]` creates a new site from the starter template with the correct config, styles, and build pipeline wired up.
 - **Infrastructure templates** — Optional Docker Compose + Traefik + Caddy setup for self-hosting on a VPS. Run `./scripts/setup-infra.sh` to generate configs for your domains.

@@ -40,7 +40,7 @@ wrangler pages deploy sites/<domain>/dist --project-name=<name> --branch=main
 
 ```
 packages/config/       — DesignTokens interface + 3 presets (CORPORATE, SAAS, WARM)
-packages/shared-ui/    — 10 shared components + 3 layouts (BaseLayout, IndustryLayout, ProductLayout)
+packages/shared-ui/    — 22 shared components + 3 layouts (BaseLayout, IndustryLayout, ProductLayout)
 sites/<domain>/        — individual sites, each with its own astro.config, package.json, and pages
 scripts/               — new-site.sh (scaffolder), setup-infra.sh (Docker/Traefik)
 infrastructure/        — Docker Compose + Traefik + Caddy templates

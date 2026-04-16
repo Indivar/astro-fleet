@@ -1,0 +1,330 @@
+---
+/**
+ * HeroSlider — a content carousel with smooth CSS transitions,
+ * dot navigation, and optional auto-advance.
+ * Uses minimal vanilla JS for slide control (same pattern as TestimonialSlider).
+ */
+
+export interface Slide {
+  eyebrow?: string;
+  heading: string;
+  description: string;
+  primaryButton?: { text: string; href: string };
+  secondaryButton?: { text: string; href: string };
+  image?: string;
+  imageAlt?: string;
+}
+
+export interface Props {
+  slides: Slide[];
+  /** Auto-advance interval in milliseconds. 0 = off. Default: 5000 */
+  autoplay?: number;
+  /** Background style applied to the slider section. */
+  variant?: 'light' | 'dark' | 'gradient';
+}
+
+const {
+  slides,
+  autoplay = 5000,
+  variant = 'light',
+} = Astro.props;
+---
+
+<section
+  class={`hero-slider hero-slider--${variant}`}
+  aria-label="Featured content"
+  data-autoplay={autoplay}
+>
+  <div class="hero-slider__viewport">
+    {slides.map((slide, i) => (
+      <div
+        class={`hero-slider__slide ${i === 0 ? 'hero-slider__slide--active' : ''}`}
+        aria-hidden={i !== 0 ? 'true' : undefined}
+      >
+        <div class="hero-slider__grid">
+          <div class="hero-slider__copy">
+            {slide.eyebrow && <div class="hero-slider__eyebrow">{slide.eyebrow}</div>}
+            <h2 class="hero-slider__heading">{slide.heading}</h2>
+            <p class="hero-slider__desc">{slide.description}</p>
+            {(slide.primaryButton || slide.secondaryButton) && (
+              <div class="hero-slider__actions">
+                {slide.primaryButton && (
+                  <a href={slide.primaryButton.href} class="hero-slider__btn hero-slider__btn--primary">
+                    {slide.primaryButton.text}
+                  </a>
+                )}
+                {slide.secondaryButton && (
+                  <a href={slide.secondaryButton.href} class="hero-slider__btn hero-slider__btn--secondary">
+                    {slide.secondaryButton.text}
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+          {slide.image && (
+            <div class="hero-slider__media">
+              <img
+                src={slide.image}
+                alt={slide.imageAlt || ''}
+                class="hero-slider__img"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {slides.length > 1 && (
+    <div class="hero-slider__dots" role="tablist" aria-label="Slides">
+      {slides.map((_, i) => (
+        <button
+          class={`hero-slider__dot ${i === 0 ? 'hero-slider__dot--active' : ''}`}
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-label={`Slide ${i + 1}`}
+          data-slide={i}
+        />
+      ))}
+    </div>
+  )}
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.hero-slider').forEach((slider) => {
+    const slides = slider.querySelectorAll<HTMLElement>('.hero-slider__slide');
+    const dots = slider.querySelectorAll<HTMLElement>('.hero-slider__dot');
+    const autoplayMs = parseInt(slider.dataset.autoplay || '0', 10);
+    let current = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function goTo(index: number) {
+      slides[current].classList.remove('hero-slider__slide--active');
+      slides[current].setAttribute('aria-hidden', 'true');
+      dots[current]?.classList.remove('hero-slider__dot--active');
+      dots[current]?.setAttribute('aria-selected', 'false');
+
+      current = (index + slides.length) % slides.length;
+
+      slides[current].classList.add('hero-slider__slide--active');
+      slides[current].removeAttribute('aria-hidden');
+      dots[current]?.classList.add('hero-slider__dot--active');
+      dots[current]?.setAttribute('aria-selected', 'true');
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        goTo(parseInt(dot.dataset.slide || '0', 10));
+        resetTimer();
+      });
+    });
+
+    function resetTimer() {
+      if (timer) clearInterval(timer);
+      if (autoplayMs > 0) {
+        timer = setInterval(() => goTo(current + 1), autoplayMs);
+      }
+    }
+
+    resetTimer();
+  });
+</script>
+
+<style>
+  /* ===== Hero Slider ===== */
+  .hero-slider {
+    position: relative;
+    padding: 5rem 1.5rem 4rem;
+    overflow: hidden;
+  }
+
+  .hero-slider--light {
+    background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
+  }
+
+  .hero-slider--dark {
+    background: var(--color-primary, #0a0f14);
+    color: #ffffff;
+  }
+
+  .hero-slider--gradient {
+    background: linear-gradient(135deg, var(--color-primary, #0a0f14) 0%, var(--color-secondary, #1a1f2e) 100%);
+    color: #ffffff;
+  }
+
+  /* ===== Viewport ===== */
+  .hero-slider__viewport {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* ===== Slide ===== */
+  .hero-slider__slide {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .hero-slider__slide--active {
+    display: block;
+    opacity: 1;
+  }
+
+  .hero-slider__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .hero-slider__grid {
+      grid-template-columns: 1.2fr 1fr;
+      gap: 4rem;
+    }
+  }
+
+  /* ===== Copy ===== */
+  .hero-slider__eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-slider__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-slider--light .hero-slider__heading {
+    color: var(--color-primary, #0a0f1a);
+  }
+
+  .hero-slider__desc {
+    font-size: 1.125rem;
+    line-height: 1.65;
+    max-width: 540px;
+    margin-bottom: 2rem;
+  }
+
+  .hero-slider--light .hero-slider__desc {
+    color: #475569;
+  }
+
+  .hero-slider--dark .hero-slider__desc,
+  .hero-slider--gradient .hero-slider__desc {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* ===== Buttons ===== */
+  .hero-slider__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.875rem;
+  }
+
+  .hero-slider__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: var(--cta-radius, 0.5rem);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .hero-slider__btn--primary {
+    background: var(--color-cta, #2563eb);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+  }
+
+  .hero-slider__btn--primary:hover {
+    transform: translateY(-1px);
+    opacity: 1;
+  }
+
+  .hero-slider--dark .hero-slider__btn--primary,
+  .hero-slider--gradient .hero-slider__btn--primary {
+    background: var(--color-accent, #2563eb);
+  }
+
+  .hero-slider__btn--secondary {
+    border: 1.5px solid #cbd5e1;
+    color: #334155;
+  }
+
+  .hero-slider--dark .hero-slider__btn--secondary,
+  .hero-slider--gradient .hero-slider__btn--secondary {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .hero-slider__btn--secondary:hover {
+    border-color: var(--color-accent, #2563eb);
+    color: var(--color-accent, #2563eb);
+    opacity: 1;
+  }
+
+  /* ===== Media ===== */
+  .hero-slider__media {
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero-slider__img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+  }
+
+  .hero-slider--dark .hero-slider__img,
+  .hero-slider--gradient .hero-slider__img {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ===== Dots ===== */
+  .hero-slider__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2.5rem;
+  }
+
+  .hero-slider__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    background: #cbd5e1;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .hero-slider--dark .hero-slider__dot,
+  .hero-slider--gradient .hero-slider__dot {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .hero-slider__dot--active {
+    background: var(--color-accent, #2563eb);
+    transform: scale(1.25);
+  }
+
+  .hero-slider__dot:hover:not(.hero-slider__dot--active) {
+    background: #94a3b8;
+  }
+</style>

@@ -1,0 +1,146 @@
+---
+/**
+ * Banner — a top-of-page announcement or notification bar.
+ * Supports info, success, warning, and cookie-consent variants.
+ * Dismissible via a CSS checkbox hack — no JavaScript required.
+ */
+
+export interface Props {
+  text: string;
+  linkText?: string;
+  linkHref?: string;
+  variant?: 'info' | 'success' | 'warning' | 'accent';
+  /** Allow the user to dismiss the banner. */
+  dismissible?: boolean;
+  /** Unique ID for the dismiss checkbox (must be unique per page). */
+  id?: string;
+}
+
+const {
+  text,
+  linkText,
+  linkHref,
+  variant = 'info',
+  dismissible = true,
+  id = 'banner-dismiss',
+} = Astro.props;
+---
+
+<div class={`banner banner--${variant}`} role="status">
+  {dismissible && (
+    <input type="checkbox" id={id} class="banner__dismiss-input" aria-hidden="true" />
+  )}
+  <div class="banner__container">
+    <p class="banner__text">
+      {text}
+      {linkText && linkHref && (
+        <a href={linkHref} class="banner__link">{linkText} →</a>
+      )}
+    </p>
+    {dismissible && (
+      <label for={id} class="banner__close" aria-label="Dismiss banner">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+        </svg>
+      </label>
+    )}
+  </div>
+</div>
+
+<style>
+  /* ===== Banner ===== */
+  .banner {
+    position: relative;
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .banner--info {
+    background: #eff6ff;
+    color: #1e40af;
+    border-bottom: 1px solid #bfdbfe;
+  }
+
+  .banner--success {
+    background: #f0fdf4;
+    color: #166534;
+    border-bottom: 1px solid #bbf7d0;
+  }
+
+  .banner--warning {
+    background: #fffbeb;
+    color: #92400e;
+    border-bottom: 1px solid #fde68a;
+  }
+
+  .banner--accent {
+    background: var(--color-accent, #2563eb);
+    color: #ffffff;
+    border-bottom: none;
+  }
+
+  /* ===== Container ===== */
+  .banner__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .banner__text {
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .banner__link {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    color: inherit;
+    margin-left: 0.375rem;
+  }
+
+  .banner__link:hover {
+    opacity: 0.8;
+  }
+
+  /* ===== Dismiss ===== */
+  .banner__dismiss-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .banner__dismiss-input:checked ~ .banner__container {
+    display: none;
+  }
+
+  .banner__dismiss-input:checked + .banner__container {
+    display: none;
+  }
+
+  .banner__close {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    opacity: 0.6;
+  }
+
+  .banner__close:hover {
+    background: rgba(0, 0, 0, 0.06);
+    opacity: 1;
+  }
+
+  .banner--accent .banner__close:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+</style>
