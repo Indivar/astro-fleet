@@ -74,15 +74,32 @@ All shared components in `packages/shared-ui/src/components/`:
 - `loading="lazy"` on images, `aria-*` on interactive elements
 - Import path: `@astro-fleet/shared-ui/src/components/<Name>.astro`
 
-## Commit Messages
+## Workflow
 
-Use conventional commits: `feat:`, `fix:`, `docs:`, `chore:`
+- **Branch protection:** `main` is protected. All changes go through feature branches and PRs.
+- **Commit messages:** conventional commits — `feat:`, `fix:`, `docs:`, `chore:`
+- **CI:** GitHub Actions runs `bun install --frozen-lockfile` + `bun run build` on every PR.
+- **Deploys:** after merging, deploy individual sites with `wrangler pages deploy sites/<domain>/dist --project-name=<name> --branch=main`
 
 ## Key Files to Know
 
 - `packages/config/src/tokens.ts` — DesignTokens interface + CORPORATE/SAAS/WARM presets
 - `packages/config/src/css.ts` — `tokensToCSSVars()` utility
 - `packages/shared-ui/src/layouts/BaseLayout.astro` — main page shell (composes SEOHead, Header, Footer)
-- `sites/<domain>/src/lib/site-config.ts` — site identity config
+- `packages/shared-ui/src/components/` — all 22 shared components
+- `sites/<domain>/src/lib/site-config.ts` — site identity config (single file controls entire site brand)
 - `sites/<domain>/src/styles/global.css` — Tailwind imports + `@theme` layer with token values
 - `sites/<domain>/astro.config.mjs` — per-site Astro config (update `site` URL for each domain)
+- `.github/workflows/ci.yml` — CI pipeline
+- `.github/pull_request_template.md` — PR template
+
+## Detailed Documentation
+
+For in-depth guidance beyond what's in this file, refer to:
+
+- [docs/components.md](docs/components.md) — Props interfaces, usage examples, CSS variables, and recipes for all 22 components and 3 layouts
+- [docs/getting-started.md](docs/getting-started.md) — Clone to first deploy in 15 minutes
+- [docs/adding-a-site.md](docs/adding-a-site.md) — Scaffold, configure, and deploy a new site
+- [docs/design-tokens.md](docs/design-tokens.md) — How presets work, creating custom palettes
+- [docs/deployment.md](docs/deployment.md) — Cloudflare Pages, Vercel, Netlify, or self-hosted
+- [docs/ai-workflow.md](docs/ai-workflow.md) — Sample prompts and AI-driven development patterns
