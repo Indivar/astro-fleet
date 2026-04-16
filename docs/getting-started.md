@@ -6,7 +6,7 @@ Get Astro Fleet running locally in under five minutes.
 
 - **[Bun](https://bun.sh)** — install with `curl -fsSL https://bun.sh/install | bash`
 - **Git**
-- **Node.js 18+** (Bun bundles its own Node-compatible runtime, but some Astro tooling needs it)
+- **Node.js 22.12+** (required by Astro 6 — check with `node --version`)
 
 ## 1. Clone the repository
 
