@@ -1,5 +1,7 @@
 # Astro Fleet
 
+[![CI](https://github.com/Indivar/astro-fleet/actions/workflows/ci.yml/badge.svg)](https://github.com/Indivar/astro-fleet/actions/workflows/ci.yml) [![GitHub release](https://img.shields.io/github/v/release/Indivar/astro-fleet)](https://github.com/Indivar/astro-fleet/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 One codebase, many sites. A multi-site Astro monorepo starter for agencies and multi-brand companies.
 
 Astro Fleet gives you a production-ready monorepo with shared components, per-site design tokens, Turborepo build orchestration, and deployment to Cloudflare Pages, Vercel, or a self-hosted VPS. Create a new site in one command. Brand it with a design preset. Deploy it independently.
