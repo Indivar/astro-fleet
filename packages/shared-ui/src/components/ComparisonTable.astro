@@ -1,0 +1,185 @@
+---
+/**
+ * ComparisonTable — a feature comparison grid with checkmarks.
+ * Use for pricing tiers, product vs. competitor, or feature matrices.
+ */
+
+export interface ComparisonColumn {
+  name: string;
+  highlighted?: boolean;
+}
+
+export interface ComparisonRow {
+  feature: string;
+  /** One value per column: true = ✓, false = ✗, or a string for custom text. */
+  values: (boolean | string)[];
+}
+
+export interface Props {
+  columns: ComparisonColumn[];
+  rows: ComparisonRow[];
+  heading?: string;
+  description?: string;
+}
+
+const { columns, rows, heading, description } = Astro.props;
+---
+
+<section class="comparison" aria-label="Feature comparison">
+  <div class="comparison__container">
+    {heading && (
+      <div class="comparison__header">
+        <h2 class="comparison__heading">{heading}</h2>
+        {description && <p class="comparison__description">{description}</p>}
+      </div>
+    )}
+
+    <div class="comparison__wrapper">
+      <table class="comparison__table" role="grid">
+        <thead>
+          <tr>
+            <th class="comparison__feature-header" scope="col">Feature</th>
+            {columns.map((col) => (
+              <th
+                class={`comparison__col-header ${col.highlighted ? 'comparison__col-header--hl' : ''}`}
+                scope="col"
+              >
+                {col.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              <td class="comparison__feature-name">{row.feature}</td>
+              {row.values.map((val, i) => (
+                <td class={`comparison__cell ${columns[i]?.highlighted ? 'comparison__cell--hl' : ''}`}>
+                  {typeof val === 'boolean' ? (
+                    val ? (
+                      <span class="comparison__check" aria-label="Included">✓</span>
+                    ) : (
+                      <span class="comparison__cross" aria-label="Not included">—</span>
+                    )
+                  ) : (
+                    <span class="comparison__text">{val}</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Comparison Section ===== */
+  .comparison {
+    padding: 5rem 1.5rem;
+  }
+
+  .comparison__container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  /* ===== Header ===== */
+  .comparison__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 3rem;
+  }
+
+  .comparison__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 1rem;
+  }
+
+  .comparison__description {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.65;
+  }
+
+  /* ===== Table wrapper ===== */
+  .comparison__wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ===== Table ===== */
+  .comparison__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+
+  .comparison__feature-header {
+    text-align: left;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted, #94a3b8);
+    padding: 1rem 1rem 1rem 0;
+    border-bottom: 2px solid #e2e8f0;
+  }
+
+  .comparison__col-header {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary, #0a0f1a);
+    padding: 1rem;
+    border-bottom: 2px solid #e2e8f0;
+    min-width: 120px;
+  }
+
+  .comparison__col-header--hl {
+    color: var(--color-accent, #2563eb);
+    background: rgba(37, 99, 235, 0.04);
+    border-bottom-color: var(--color-accent, #2563eb);
+  }
+
+  /* ===== Rows ===== */
+  .comparison__feature-name {
+    text-align: left;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text, #1e293b);
+    padding: 0.875rem 1rem 0.875rem 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .comparison__cell {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.9375rem;
+  }
+
+  .comparison__cell--hl {
+    background: rgba(37, 99, 235, 0.04);
+  }
+
+  .comparison__check {
+    color: var(--color-accent, #2563eb);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .comparison__cross {
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+
+  .comparison__text {
+    color: var(--color-text, #1e293b);
+    font-weight: 500;
+  }
+</style>

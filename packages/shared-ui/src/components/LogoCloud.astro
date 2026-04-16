@@ -1,0 +1,130 @@
+---
+/**
+ * LogoCloud — a strip of partner/client logos for social proof.
+ * Accepts image URLs or renders text fallbacks when images aren't available.
+ */
+
+export interface LogoItem {
+  name: string;
+  image?: string;
+  url?: string;
+}
+
+export interface Props {
+  logos: LogoItem[];
+  heading?: string;
+  /** Grayscale logos by default for a clean look. */
+  grayscale?: boolean;
+}
+
+const {
+  logos,
+  heading = 'Trusted by',
+  grayscale = true,
+} = Astro.props;
+---
+
+<section class="logo-cloud" aria-label={heading}>
+  <div class="logo-cloud__container">
+    {heading && <div class="logo-cloud__heading">{heading}</div>}
+    <div class="logo-cloud__grid">
+      {logos.map((logo) => {
+        const inner = logo.image ? (
+          <img
+            src={logo.image}
+            alt={logo.name}
+            class={`logo-cloud__img ${grayscale ? 'logo-cloud__img--gray' : ''}`}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span class="logo-cloud__text">{logo.name}</span>
+        );
+
+        return logo.url ? (
+          <a href={logo.url} class="logo-cloud__item" target="_blank" rel="noopener noreferrer">
+            {inner}
+          </a>
+        ) : (
+          <div class="logo-cloud__item">{inner}</div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Logo Cloud ===== */
+  .logo-cloud {
+    padding: 3rem 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .logo-cloud__container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .logo-cloud__heading {
+    text-align: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-muted, #94a3b8);
+    margin-bottom: 1.75rem;
+  }
+
+  .logo-cloud__grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem 3rem;
+  }
+
+  /* ===== Logo Item ===== */
+  .logo-cloud__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .logo-cloud__item:hover {
+    opacity: 1;
+  }
+
+  .logo-cloud__img {
+    height: 32px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+  }
+
+  .logo-cloud__img--gray {
+    filter: grayscale(100%);
+  }
+
+  .logo-cloud__item:hover .logo-cloud__img {
+    opacity: 1;
+    filter: none;
+  }
+
+  .logo-cloud__text {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-muted, #94a3b8);
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+
+  .logo-cloud__item:hover .logo-cloud__text {
+    color: var(--color-primary, #0a0f1a);
+  }
+</style>

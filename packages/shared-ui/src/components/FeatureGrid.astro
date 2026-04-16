@@ -1,0 +1,161 @@
+---
+/**
+ * FeatureGrid — a flexible icon + title + description grid.
+ * More flexible than ServiceCard: supports 2, 3, or 4 columns,
+ * centred or left-aligned, and optional icon slots.
+ */
+
+export interface Feature {
+  icon?: string;
+  title: string;
+  description: string;
+}
+
+export interface Props {
+  features: Feature[];
+  heading?: string;
+  description?: string;
+  columns?: 2 | 3 | 4;
+  align?: 'left' | 'center';
+}
+
+const {
+  features,
+  heading,
+  description,
+  columns = 3,
+  align = 'left',
+} = Astro.props;
+---
+
+<section class="feature-grid" aria-label="Features">
+  <div class="feature-grid__container">
+    {heading && (
+      <div class="feature-grid__header">
+        <h2 class="feature-grid__heading">{heading}</h2>
+        {description && <p class="feature-grid__description">{description}</p>}
+      </div>
+    )}
+
+    <div class={`feature-grid__grid feature-grid__grid--cols-${columns}`}>
+      {features.map((f) => (
+        <div class={`feature-grid__item feature-grid__item--${align}`}>
+          {f.icon && (
+            <div class="feature-grid__icon" set:html={f.icon} />
+          )}
+          <h3 class="feature-grid__title">{f.title}</h3>
+          <p class="feature-grid__desc">{f.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Feature Grid Section ===== */
+  .feature-grid {
+    padding: 5rem 1.5rem;
+  }
+
+  .feature-grid__container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ===== Header ===== */
+  .feature-grid__header {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 3rem;
+  }
+
+  .feature-grid__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 1rem;
+  }
+
+  .feature-grid__description {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.65;
+  }
+
+  /* ===== Grid ===== */
+  .feature-grid__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .feature-grid__grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .feature-grid__grid--cols-3 { grid-template-columns: repeat(2, 1fr); }
+    .feature-grid__grid--cols-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .feature-grid__grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .feature-grid__grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* ===== Item ===== */
+  .feature-grid__item {
+    padding: 1.75rem;
+    background: var(--color-background, #ffffff);
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .feature-grid__item:hover {
+    border-color: var(--color-accent, #2563eb);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .feature-grid__item--center {
+    text-align: center;
+  }
+
+  /* ===== Icon ===== */
+  .feature-grid__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f5f9;
+    border-radius: 0.625rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-accent, #2563eb);
+  }
+
+  .feature-grid__item--center .feature-grid__icon {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-grid__icon :global(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* ===== Text ===== */
+  .feature-grid__title {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-grid__desc {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.6;
+    margin: 0;
+  }
+</style>

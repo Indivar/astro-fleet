@@ -1,0 +1,68 @@
+---
+/**
+ * SectionDivider — decorative SVG wave/curve between page sections.
+ * Six shape presets: wave, curve, angle, zigzag, rounded, and arrow.
+ * Flip vertically to use as a section footer instead of a header.
+ */
+
+export interface Props {
+  shape?: 'wave' | 'curve' | 'angle' | 'zigzag' | 'rounded' | 'arrow';
+  /** Flip the divider vertically. */
+  flip?: boolean;
+  /** Fill colour. Defaults to current section background. */
+  fill?: string;
+  /** Height of the divider in pixels. Default: 64 */
+  height?: number;
+}
+
+const {
+  shape = 'wave',
+  flip = false,
+  fill = 'var(--color-background, #ffffff)',
+  height = 64,
+} = Astro.props;
+
+const paths: Record<string, string> = {
+  wave: 'M0,32 C320,96 640,0 960,32 C1280,64 1440,16 1440,16 L1440,64 L0,64 Z',
+  curve: 'M0,64 Q720,0 1440,64 L1440,64 L0,64 Z',
+  angle: 'M0,64 L720,0 L1440,64 L1440,64 L0,64 Z',
+  zigzag: 'M0,48 L180,16 L360,48 L540,16 L720,48 L900,16 L1080,48 L1260,16 L1440,48 L1440,64 L0,64 Z',
+  rounded: 'M0,64 C0,64 0,0 720,0 C1440,0 1440,64 1440,64 L1440,64 L0,64 Z',
+  arrow: 'M0,64 L720,0 L1440,64 L1440,64 L0,64 Z',
+};
+---
+
+<div
+  class={`section-divider ${flip ? 'section-divider--flip' : ''}`}
+  style={`height: ${height}px`}
+  aria-hidden="true"
+>
+  <svg
+    class="section-divider__svg"
+    viewBox="0 0 1440 64"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d={paths[shape] || paths.wave} fill={fill} />
+  </svg>
+</div>
+
+<style>
+  /* ===== Section Divider ===== */
+  .section-divider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .section-divider--flip {
+    transform: scaleY(-1);
+  }
+
+  .section-divider__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>

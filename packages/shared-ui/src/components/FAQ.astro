@@ -1,0 +1,143 @@
+---
+/**
+ * FAQ — an accessible accordion built with <details>/<summary>.
+ * Pure CSS, zero JavaScript, progressive enhancement by default.
+ */
+
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: FAQItem[];
+  heading?: string;
+  description?: string;
+}
+
+const {
+  items,
+  heading = 'Frequently Asked Questions',
+  description,
+} = Astro.props;
+---
+
+<section class="faq" aria-label="Frequently asked questions">
+  <div class="faq__container">
+    <div class="faq__header">
+      <h2 class="faq__heading">{heading}</h2>
+      {description && <p class="faq__description">{description}</p>}
+    </div>
+
+    <div class="faq__list">
+      {items.map((item) => (
+        <details class="faq__item">
+          <summary class="faq__question">
+            <span class="faq__question-text">{item.question}</span>
+            <span class="faq__icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </span>
+          </summary>
+          <div class="faq__answer">
+            <p>{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== FAQ Section ===== */
+  .faq {
+    padding: 5rem 1.5rem;
+  }
+
+  .faq__container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* ===== Header ===== */
+  .faq__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .faq__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 1rem;
+  }
+
+  .faq__description {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.65;
+  }
+
+  /* ===== Accordion ===== */
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .faq__item {
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__question-text {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--color-primary, #0a0f1a);
+    line-height: 1.4;
+  }
+
+  .faq__icon {
+    flex: 0 0 auto;
+    color: var(--color-text-muted, #94a3b8);
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(180deg);
+    color: var(--color-accent, #2563eb);
+  }
+
+  .faq__question:hover .faq__question-text {
+    color: var(--color-accent, #2563eb);
+  }
+
+  /* ===== Answer ===== */
+  .faq__answer {
+    padding: 0 0 1.5rem;
+  }
+
+  .faq__answer p {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.7;
+    margin: 0;
+  }
+</style>

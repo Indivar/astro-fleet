@@ -1,0 +1,159 @@
+---
+/**
+ * Newsletter — an email capture form for lead generation.
+ * Provider-agnostic: set formAction to your Mailchimp, ConvertKit,
+ * Buttondown, or custom endpoint.
+ */
+
+export interface Props {
+  heading?: string;
+  description?: string;
+  formAction?: string;
+  buttonText?: string;
+  placeholder?: string;
+  /** Render with a coloured background. */
+  variant?: 'default' | 'filled';
+}
+
+const {
+  heading = 'Stay in the loop',
+  description = 'Get product updates and engineering insights. No spam, unsubscribe anytime.',
+  formAction = '#',
+  buttonText = 'Subscribe',
+  placeholder = 'you@company.com',
+  variant = 'default',
+} = Astro.props;
+---
+
+<section class={`newsletter newsletter--${variant}`} aria-label="Newsletter signup">
+  <div class="newsletter__container">
+    <div class="newsletter__copy">
+      <h2 class="newsletter__heading">{heading}</h2>
+      <p class="newsletter__description">{description}</p>
+    </div>
+    <form class="newsletter__form" action={formAction} method="POST">
+      <div class="newsletter__field">
+        <label for="newsletter-email" class="sr-only">Email address</label>
+        <input
+          type="email"
+          id="newsletter-email"
+          name="email"
+          placeholder={placeholder}
+          required
+          class="newsletter__input"
+          autocomplete="email"
+        />
+        <button type="submit" class="newsletter__btn">{buttonText}</button>
+      </div>
+      <p class="newsletter__privacy">
+        We respect your privacy. Unsubscribe at any time.
+      </p>
+    </form>
+  </div>
+</section>
+
+<style>
+  /* ===== Newsletter Section ===== */
+  .newsletter {
+    padding: 4rem 1.5rem;
+  }
+
+  .newsletter--filled {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .newsletter__container {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* ===== Copy ===== */
+  .newsletter__heading {
+    font-family: var(--font-heading, 'Inter', sans-serif);
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-primary, #0a0f1a);
+    margin-bottom: 0.75rem;
+  }
+
+  .newsletter__description {
+    font-size: 1rem;
+    color: var(--color-text-muted, #64748b);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  /* ===== Form ===== */
+  .newsletter__field {
+    display: flex;
+    gap: 0.5rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    .newsletter__field {
+      flex-direction: column;
+    }
+  }
+
+  .newsletter__input {
+    flex: 1;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    color: #1e293b;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--cta-radius, 0.5rem);
+    padding: 0.75rem 1rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    width: 100%;
+  }
+
+  .newsletter__input:focus {
+    outline: none;
+    border-color: var(--color-accent, #2563eb);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .newsletter__btn {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-cta, #2563eb);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--cta-radius, 0.5rem);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+  }
+
+  .newsletter__btn:hover {
+    background: var(--color-primary, #0a0f1a);
+  }
+
+  .newsletter__privacy {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted, #94a3b8);
+    margin-top: 0.75rem;
+  }
+
+  /* ===== Utility ===== */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
