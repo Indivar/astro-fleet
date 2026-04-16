@@ -76,6 +76,8 @@ bun run dev --filter=yourdomain.com
 - **Design token system** — 3 presets (Corporate, SaaS, Warm) with a TypeScript interface. Create custom presets or modify colors and fonts per site without touching component code.
 - **Site scaffolder** — `./scripts/new-site.sh domain.com [preset]` creates a new site from the starter template with the correct config, styles, and build pipeline wired up.
 - **Infrastructure templates** — Optional Docker Compose + Traefik + Caddy setup for self-hosting on a VPS. Run `./scripts/setup-infra.sh` to generate configs for your domains.
+- **Framework-agnostic** — All components are native `.astro` files (zero JS by default). Need interactivity? Add React, Vue, Svelte, Solid, or Preact to any site — Astro's [Islands Architecture](https://docs.astro.build/en/concepts/islands/) hydrates only the interactive parts.
+- **Self-hosted fonts** — Astro 6 Fonts API downloads Google Fonts at build time and serves them from your domain. No runtime requests to third-party servers, better privacy, optimized fallbacks.
 - **AI-first workflow** — Designed to be developed with Claude Code, Gemini CLI, or any AI coding assistant. Sample prompts and patterns in the [AI Workflow Guide](docs/ai-workflow.md).
 
 ## Documentation
@@ -84,12 +86,13 @@ bun run dev --filter=yourdomain.com
 - [Adding a Site](docs/adding-a-site.md) — Create and configure additional sites
 - [Components Reference](docs/components.md) — Props, usage examples, CSS variables for every component
 - [Design Tokens](docs/design-tokens.md) — Branding system, presets, custom palettes
+- [Framework Integrations](docs/framework-integrations.md) — Add React/Vue/Svelte, Islands Architecture, View Transitions, Content Collections, and more
 - [Deployment](docs/deployment.md) — Cloudflare Pages, Vercel, Netlify, or self-hosted
 - [AI Workflow](docs/ai-workflow.md) — Sample prompts, tool setup, AI-driven development patterns
 
 ## Stack
 
-Astro 6 · Bun · Turborepo 2 · Tailwind CSS 4 · TypeScript · Static-first (zero JS by default)
+Astro 6 · Bun · Turborepo 2 · Tailwind CSS 4 · TypeScript · Static-first (zero JS by default) · Works with React, Vue, Svelte, Solid, Preact
 
 ## License
 
