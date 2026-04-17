@@ -100,6 +100,7 @@ bun install
 - [Getting Started](docs/getting-started.md) — Clone to first deploy in 15 minutes
 - [Adding a Site](docs/adding-a-site.md) — Create and configure additional sites
 - [Adding a CMS](docs/adding-a-cms.md) — Keystatic pattern used in Meridian, plus when to pick a different CMS
+- [SEO Recipes](docs/seo-recipes.md) — Optional SEO add-ons (per-page OG images, git-based lastmod, llms.txt, IndexNow, view transitions, and more)
 - [Components Reference](docs/components.md) — Props, usage examples, CSS variables for every component
 - [Design Tokens](docs/design-tokens.md) — Branding system, presets, custom palettes
 - [Framework Integrations](docs/framework-integrations.md) — Add React/Vue/Svelte, Islands Architecture, View Transitions, Content Collections, and more

@@ -101,6 +101,7 @@ For in-depth guidance beyond what's in this file, refer to:
 - [docs/getting-started.md](docs/getting-started.md) — Clone to first deploy in 15 minutes
 - [docs/adding-a-site.md](docs/adding-a-site.md) — Scaffold, configure, and deploy a new site
 - [docs/adding-a-cms.md](docs/adding-a-cms.md) — Keystatic pattern used in Meridian, access-control caveats, and alternatives
+- [docs/seo-recipes.md](docs/seo-recipes.md) — Optional SEO add-ons not baked into the starter (per-page OG images, git-based lastmod, llms.txt, markdown alternates, IndexNow, FuzzyRedirect, view transitions)
 - [docs/design-tokens.md](docs/design-tokens.md) — How presets work, creating custom palettes
 - [docs/framework-integrations.md](docs/framework-integrations.md) — Adding React/Vue/Svelte, Islands Architecture, View Transitions, Content Collections, and other Astro 6 capabilities
 - [docs/deployment.md](docs/deployment.md) — Cloudflare Pages, Vercel, Netlify, or self-hosted

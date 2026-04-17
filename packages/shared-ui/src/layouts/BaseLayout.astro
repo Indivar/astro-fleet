@@ -20,6 +20,18 @@ export interface Props {
   canonicalUrl?: string;
   /** Open Graph image URL */
   ogImage?: string;
+  /** Alt text for og:image (defaults to page title) */
+  ogImageAlt?: string;
+  /** og:type — 'website' (default), 'article', etc. */
+  ogType?: string;
+  /** Twitter handle, with or without @ */
+  twitterHandle?: string;
+  /** Emits noindex and suppresses canonical */
+  noindex?: boolean;
+  /** RSS feed URL to advertise via <link rel="alternate"> */
+  rssUrl?: string;
+  /** Skip auto-generated WebSite/Organization JSON-LD (for pages that emit a full custom graph) */
+  skipAutoJsonLd?: boolean;
   /** Navigation menu items */
   navigation: MenuItem[];
   /** Footer link columns */
@@ -57,6 +69,12 @@ const {
   structuredData,
   canonicalUrl,
   ogImage,
+  ogImageAlt,
+  ogType,
+  twitterHandle,
+  noindex,
+  rssUrl,
+  skipAutoJsonLd,
   navigation,
   footerColumns,
   contactInfo,
@@ -71,6 +89,8 @@ const {
   bodyClass = '',
 } = Astro.props;
 
+const sameAs = socialLinks?.map((s) => s.url).filter(Boolean);
+
 const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
 ---
 
@@ -84,7 +104,15 @@ const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
       structuredData={structuredData}
       canonicalUrl={canonicalUrl}
       ogImage={ogImage}
+      ogImageAlt={ogImageAlt}
+      ogType={ogType}
+      twitterHandle={twitterHandle}
+      noindex={noindex}
+      rssUrl={rssUrl}
       siteName={siteName}
+      logoUrl={logoSrc}
+      sameAs={sameAs}
+      skipAutoJsonLd={skipAutoJsonLd}
     />
     {/* CSS vars from tokensToCSSVars() — safe because source is static TypeScript config, not user input */}
     {cssVars && (
