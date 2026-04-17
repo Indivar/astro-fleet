@@ -55,6 +55,19 @@ _More coming soon._ If you ship a site with Astro Fleet, open a PR adding it her
 
 ## Quick Start
 
+**The fastest way — scaffold a new fleet with the CLI:**
+
+```bash
+bunx create-astro-fleet         # or: npm create astro-fleet
+cd my-astro-fleet
+bun install
+bun run dev
+```
+
+The CLI prompts for a target directory, first-site domain, and design preset. Use `--domain` / `--preset` flags to skip prompts.
+
+**Or clone this repo directly:**
+
 ```bash
 git clone https://github.com/indivar/astro-fleet.git
 cd astro-fleet
@@ -62,19 +75,21 @@ bun install
 bun run dev          # → starter site at localhost:4321
 ```
 
-Create your first site:
+Add more sites to an existing fleet:
 
 ```bash
+bunx create-astro-fleet add yourdomain.com saas
+# or the equivalent bash:
 ./scripts/new-site.sh yourdomain.com saas
 bun install
-bun run dev --filter=yourdomain.com
 ```
 
 ## What's Included
 
 - **22 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, pricing tables, FAQ accordions, team grids, timelines, hero sliders, section dividers, comparison tables, and more. All accept content via typed props, all use CSS variables for theming.
 - **Design token system** — 3 presets (Corporate, SaaS, Warm) with a TypeScript interface. Create custom presets or modify colors and fonts per site without touching component code.
-- **Site scaffolder** — `./scripts/new-site.sh domain.com [preset]` creates a new site from the starter template with the correct config, styles, and build pipeline wired up.
+- **Site scaffolder** — Either `bunx create-astro-fleet` (cross-platform, interactive prompts) or `./scripts/new-site.sh domain.com [preset]` (bash) creates a new site from the starter template with the correct config, styles, and build pipeline wired up.
+- **CMS-ready** — Meridian demo ships with [Keystatic](https://keystatic.com) wired up for editable content. Admin at `/keystatic` in dev, content committed as markdown. See [Adding a CMS](docs/adding-a-cms.md) for the pattern and alternatives.
 - **Infrastructure templates** — Optional Docker Compose + Traefik + Caddy setup for self-hosting on a VPS. Run `./scripts/setup-infra.sh` to generate configs for your domains.
 - **Framework-agnostic** — All components are native `.astro` files (zero JS by default). Need interactivity? Add React, Vue, Svelte, Solid, or Preact to any site — Astro's [Islands Architecture](https://docs.astro.build/en/concepts/islands/) hydrates only the interactive parts.
 - **Self-hosted fonts** — Astro 6 Fonts API downloads Google Fonts at build time and serves them from your domain. No runtime requests to third-party servers, better privacy, optimized fallbacks.
@@ -84,6 +99,7 @@ bun run dev --filter=yourdomain.com
 
 - [Getting Started](docs/getting-started.md) — Clone to first deploy in 15 minutes
 - [Adding a Site](docs/adding-a-site.md) — Create and configure additional sites
+- [Adding a CMS](docs/adding-a-cms.md) — Keystatic pattern used in Meridian, plus when to pick a different CMS
 - [Components Reference](docs/components.md) — Props, usage examples, CSS variables for every component
 - [Design Tokens](docs/design-tokens.md) — Branding system, presets, custom palettes
 - [Framework Integrations](docs/framework-integrations.md) — Add React/Vue/Svelte, Islands Architecture, View Transitions, Content Collections, and more
