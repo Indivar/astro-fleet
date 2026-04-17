@@ -1,0 +1,35 @@
+{
+  "name": "create-astro-fleet",
+  "version": "0.1.0",
+  "description": "Scaffold a new Astro Fleet monorepo or add a site to an existing one.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-astro-fleet": "./bin/create-astro-fleet.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "astro",
+    "astro-fleet",
+    "monorepo",
+    "cli",
+    "scaffold"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/indivar/astro-fleet.git",
+    "directory": "packages/create-astro-fleet"
+  },
+  "engines": {
+    "node": ">=18.20.0"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "giget": "^1.2.3",
+    "picocolors": "^1.1.1"
+  }
+}

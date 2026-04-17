@@ -17,7 +17,7 @@ export const navigation: MenuItem[] = [
     { label: 'Public Sector',       href: '/services/' },
   ]},
   { label: 'Expertise', href: '/services/' },
-  { label: 'Insights',  href: '/about/'    },
+  { label: 'Insights',  href: '/insights/' },
   { label: 'About',     href: '/about/'    },
   { label: 'Contact',   href: '/contact/'  },
 ];
