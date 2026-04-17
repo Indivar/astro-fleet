@@ -1,35 +1,70 @@
 ---
 export interface Props {
+  /** Page title (site name appended automatically if provided via siteName). */
   title: string;
+  /** Meta description — 70–200 chars for SERP safety. */
   description: string;
+  /** Additional JSON-LD to emit alongside auto-generated graph. Object or array accepted. */
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  /** @deprecated Accepted for backward compat but not emitted — meta keywords is ignored by all major search engines. */
   keywords?: string[];
-  structuredData?: Record<string, unknown>;
+  /** Override canonical — otherwise derived from Astro.site + pathname. */
   canonicalUrl?: string;
+  /** Absolute or root-relative OG image URL. If omitted, og:image is not emitted. */
   ogImage?: string;
+  /** Alt text for og:image. Falls back to the page title. */
+  ogImageAlt?: string;
+  /** Site name used in title suffix and og:site_name. */
   siteName?: string;
+  /** og:type — default 'website'. Use 'article' for blog posts. */
   ogType?: string;
+  /** Locale — default 'en_US'. */
   locale?: string;
+  /** Twitter handle, with or without @. */
   twitterHandle?: string;
+  /** If true: emits noindex, nofollow and suppresses canonical. */
   noindex?: boolean;
+  /** Favicon path — default '/favicon.svg'. */
+  faviconHref?: string;
+  /** Favicon MIME type — default 'image/svg+xml'. */
+  faviconType?: string;
+  /** Optional RSS feed URL to advertise via <link rel="alternate">. */
+  rssUrl?: string;
+  /** Optional RSS feed title. Defaults to '<siteName> — RSS'. */
+  rssTitle?: string;
 }
 
 const {
   title,
   description,
-  keywords = [],
   structuredData,
+  keywords: _keywords,
   canonicalUrl,
   ogImage,
+  ogImageAlt,
   siteName = '',
   ogType = 'website',
   locale = 'en_US',
   twitterHandle,
   noindex = false,
+  faviconHref = '/favicon.svg',
+  faviconType = 'image/svg+xml',
+  rssUrl,
+  rssTitle,
 } = Astro.props;
 
 const pageTitle = siteName && !title.includes(siteName) ? `${title} | ${siteName}` : title;
-const defaultOgImage = ogImage || `${Astro.url.origin}/images/og-default.png`;
-const resolvedCanonical = canonicalUrl || new URL(Astro.url.pathname, Astro.site || Astro.url.origin).href;
+const resolvedCanonical =
+  canonicalUrl || new URL(Astro.url.pathname, Astro.site || Astro.url.origin).href;
+
+const normalizedTwitter = twitterHandle
+  ? twitterHandle.startsWith('@')
+    ? twitterHandle
+    : `@${twitterHandle}`
+  : undefined;
+
+const resolvedOgImageAlt = ogImageAlt || title;
+const resolvedRssTitle = rssTitle || (siteName ? `${siteName} — RSS` : 'RSS Feed');
 ---
 
 <meta charset="utf-8" />
@@ -38,32 +73,53 @@ const resolvedCanonical = canonicalUrl || new URL(Astro.url.pathname, Astro.site
 <title>{pageTitle}</title>
 <meta name="description" content={description} />
 
-{keywords.length > 0 && (
-  <meta name="keywords" content={keywords.join(',')} />
+<link rel="icon" type={faviconType} href={faviconHref} />
+
+{noindex ? (
+  <meta name="robots" content="noindex, nofollow" />
+) : (
+  <meta
+    name="robots"
+    content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+  />
 )}
 
-{noindex && <meta name="robots" content="noindex, nofollow" />}
+{/* Canonical is suppressed on noindex pages — two contradictory signals hurt rankings. */}
+{!noindex && <link rel="canonical" href={resolvedCanonical} />}
 
 <!-- Open Graph -->
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content={ogType} />
 <meta property="og:locale" content={locale} />
-<meta property="og:image" content={defaultOgImage} />
 <meta property="og:url" content={resolvedCanonical} />
 {siteName && <meta property="og:site_name" content={siteName} />}
+{ogImage && (
+  <>
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={resolvedOgImageAlt} />
+  </>
+)}
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-<meta name="twitter:title" content={pageTitle} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={defaultOgImage} />
-{twitterHandle && <meta name="twitter:site" content={twitterHandle} />}
+{normalizedTwitter && <meta name="twitter:site" content={normalizedTwitter} />}
+{/* Twitter falls back to og:title/description/image; no need to duplicate unless they differ. */}
 
-<!-- Canonical URL -->
-<link rel="canonical" href={resolvedCanonical} />
+<!-- RSS -->
+{rssUrl && (
+  <link rel="alternate" type="application/rss+xml" title={resolvedRssTitle} href={rssUrl} />
+)}
 
 <!-- Structured Data (JSON-LD) -->
 {structuredData && (
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  Array.isArray(structuredData) ? (
+    structuredData.map((node) => (
+      <script type="application/ld+json" set:html={JSON.stringify(node)} />
+    ))
+  ) : (
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  )
 )}
