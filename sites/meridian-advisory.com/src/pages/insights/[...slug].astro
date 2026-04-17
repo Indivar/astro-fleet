@@ -1,0 +1,171 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../../lib/site-config';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('insights');
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const dateFmt = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`${entry.data.title} — ${SITE_NAME}`}
+  description={entry.data.summary}
+  keywords={entry.data.tags}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Request a briefing"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <div class="container">
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Insights', href: '/insights/' },
+        { label: entry.data.title },
+      ]}
+    />
+  </div>
+
+  <article class="m-insight section">
+    <div class="container m-insight__inner">
+      <header class="m-insight__header">
+        <time class="m-insight__date" datetime={entry.data.publishedAt.toISOString()}>
+          {dateFmt.format(entry.data.publishedAt)}
+        </time>
+        <h1 class="m-insight__title">{entry.data.title}</h1>
+        <p class="m-insight__summary">{entry.data.summary}</p>
+        {entry.data.author && (
+          <p class="m-insight__author">By {entry.data.author}</p>
+        )}
+      </header>
+
+      <div class="m-insight__body">
+        <Content />
+      </div>
+
+      {entry.data.tags.length > 0 && (
+        <footer class="m-insight__footer">
+          {entry.data.tags.map((tag) => (
+            <span class="m-insight__tag">{tag}</span>
+          ))}
+        </footer>
+      )}
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .m-insight__inner {
+    max-width: 760px;
+  }
+  .m-insight__header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .m-insight__date {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+  }
+  .m-insight__title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    color: var(--color-primary, #0f172a);
+    margin: 0.75rem 0 1.25rem;
+  }
+  .m-insight__summary {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: #334155;
+    margin: 0 0 1rem;
+  }
+  .m-insight__author {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+  }
+  .m-insight__body :global(h2) {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-primary, #0f172a);
+    margin: 2.25rem 0 1rem;
+  }
+  .m-insight__body :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-primary, #0f172a);
+    margin: 1.75rem 0 0.75rem;
+  }
+  .m-insight__body :global(p) {
+    line-height: 1.75;
+    color: #334155;
+    margin: 0 0 1.25rem;
+    font-size: 1.05rem;
+  }
+  .m-insight__body :global(ul),
+  .m-insight__body :global(ol) {
+    line-height: 1.75;
+    color: #334155;
+    margin: 0 0 1.25rem;
+    padding-left: 1.5rem;
+  }
+  .m-insight__body :global(li) {
+    margin-bottom: 0.5rem;
+  }
+  .m-insight__body :global(strong) {
+    color: var(--color-primary, #0f172a);
+  }
+  .m-insight__footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .m-insight__tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+  }
+</style>

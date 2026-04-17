@@ -1,0 +1,160 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@astro-fleet/shared-ui/src/layouts/BaseLayout.astro';
+import Breadcrumb from '@astro-fleet/shared-ui/src/components/Breadcrumb.astro';
+import { CORPORATE } from '@astro-fleet/config/tokens';
+import {
+  SITE_NAME,
+  TAGLINE,
+  LOGO_SRC,
+  navigation,
+  footerColumns,
+  contactInfo,
+  socialLinks,
+} from '../../lib/site-config';
+
+const entries = (await getCollection('insights')).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+
+const dateFmt = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<BaseLayout
+  title={`Insights — ${SITE_NAME}`}
+  description="Perspectives from Meridian partners on governance, strategy, and the decisions that shape regulated institutions."
+  keywords={['insights', 'strategy', 'governance', 'advisory']}
+  {navigation}
+  footerColumns={footerColumns}
+  {contactInfo}
+  {socialLinks}
+  siteName={SITE_NAME}
+  tagline={TAGLINE}
+  logoSrc={LOGO_SRC}
+  ctaText="Request a briefing"
+  ctaHref="/contact/"
+  designTokens={CORPORATE}
+>
+  <div class="container">
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Insights' },
+      ]}
+    />
+  </div>
+
+  <section class="m-insights-hero section">
+    <div class="container">
+      <div class="m-insights-hero__eyebrow">Insights</div>
+      <h1 class="m-insights-hero__title">Perspectives for the decisions that matter</h1>
+      <p class="m-insights-hero__lede">
+        Written by partners, for boards and executive teams. Short reads, no fluff.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <ul class="m-insights-list">
+        {entries.map((entry) => (
+          <li class="m-insights-card">
+            <a class="m-insights-card__link" href={`/insights/${entry.id}/`}>
+              <time class="m-insights-card__date" datetime={entry.data.publishedAt.toISOString()}>
+                {dateFmt.format(entry.data.publishedAt)}
+              </time>
+              <h2 class="m-insights-card__title">{entry.data.title}</h2>
+              <p class="m-insights-card__summary">{entry.data.summary}</p>
+              {entry.data.author && (
+                <p class="m-insights-card__author">{entry.data.author}</p>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .m-insights-hero {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    padding: 3.5rem 1.5rem 4rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .m-insights-hero__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent, #2563eb);
+    margin-bottom: 0.75rem;
+  }
+  .m-insights-hero__title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-primary, #0f172a);
+    margin-bottom: 1.25rem;
+    max-width: 780px;
+  }
+  .m-insights-hero__lede {
+    font-size: 1.125rem;
+    color: #475569;
+    max-width: 680px;
+    line-height: 1.65;
+  }
+
+  .m-insights-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1.5rem;
+    max-width: 820px;
+  }
+  .m-insights-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .m-insights-card:hover {
+    border-color: var(--color-accent, #2563eb);
+    transform: translateY(-2px);
+  }
+  .m-insights-card__link {
+    display: block;
+    padding: 1.75rem 2rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .m-insights-card__date {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+  }
+  .m-insights-card__title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-primary, #0f172a);
+    margin: 0.5rem 0 0.75rem;
+    line-height: 1.25;
+  }
+  .m-insights-card__summary {
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+  }
+  .m-insights-card__author {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+  }
+</style>

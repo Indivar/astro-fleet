@@ -10,14 +10,22 @@
     "lint": "astro check"
   },
   "dependencies": {
-    "astro": "^6.1.7",
+    "@astro-fleet/config": "workspace:*",
     "@astro-fleet/shared-ui": "workspace:*",
-    "@astro-fleet/config": "workspace:*"
+    "@astrojs/markdoc": "^1.0.3",
+    "@astrojs/react": "^5.0.3",
+    "@keystatic/astro": "^5.0.6",
+    "@keystatic/core": "^0.5.50",
+    "astro": "^6.1.7",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9",
     "@astrojs/sitemap": "^3",
     "@tailwindcss/vite": "^4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
