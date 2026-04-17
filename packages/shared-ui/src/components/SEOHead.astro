@@ -32,6 +32,12 @@ export interface Props {
   rssUrl?: string;
   /** Optional RSS feed title. Defaults to '<siteName> — RSS'. */
   rssTitle?: string;
+  /** Root-relative or absolute URL to site logo. Emitted as Organization.logo in JSON-LD. */
+  logoUrl?: string;
+  /** Social profile URLs for Organization.sameAs. Linkedin, Twitter, etc. */
+  sameAs?: string[];
+  /** Skip auto-generated WebSite + Organization JSON-LD. Use when pages manage their own full graph. */
+  skipAutoJsonLd?: boolean;
 }
 
 const {
@@ -51,6 +57,9 @@ const {
   faviconType = 'image/svg+xml',
   rssUrl,
   rssTitle,
+  logoUrl,
+  sameAs,
+  skipAutoJsonLd = false,
 } = Astro.props;
 
 const pageTitle = siteName && !title.includes(siteName) ? `${title} | ${siteName}` : title;
@@ -65,6 +74,56 @@ const normalizedTwitter = twitterHandle
 
 const resolvedOgImageAlt = ogImageAlt || title;
 const resolvedRssTitle = rssTitle || (siteName ? `${siteName} — RSS` : 'RSS Feed');
+
+// Build a linked JSON-LD @graph from props. Pages can pass additional nodes
+// via structuredData — they're appended to the same graph so @id refs resolve.
+const origin = Astro.site?.origin || Astro.url.origin;
+const siteRootUrl = (Astro.site?.href || `${origin}/`).replace(/\/+$/, '/') ;
+const resolvedLogoUrl = logoUrl
+  ? (logoUrl.startsWith('http') ? logoUrl : new URL(logoUrl, origin).href)
+  : undefined;
+
+const graph: Record<string, unknown>[] = [];
+
+if (!skipAutoJsonLd && siteName) {
+  graph.push({
+    '@type': 'WebSite',
+    '@id': `${origin}/#website`,
+    url: siteRootUrl,
+    name: siteName,
+    inLanguage: locale.replace('_', '-'),
+    publisher: { '@id': `${origin}/#organization` },
+  });
+
+  const organization: Record<string, unknown> = {
+    '@type': 'Organization',
+    '@id': `${origin}/#organization`,
+    name: siteName,
+    url: siteRootUrl,
+  };
+  if (resolvedLogoUrl) {
+    organization.logo = {
+      '@type': 'ImageObject',
+      '@id': `${origin}/#logo`,
+      url: resolvedLogoUrl,
+      contentUrl: resolvedLogoUrl,
+    };
+    organization.image = { '@id': `${origin}/#logo` };
+  }
+  if (sameAs && sameAs.length > 0) {
+    organization.sameAs = sameAs;
+  }
+  graph.push(organization);
+}
+
+// User-supplied nodes — strip @context so they merge cleanly into our graph.
+const userNodes = structuredData
+  ? (Array.isArray(structuredData) ? structuredData : [structuredData])
+  : [];
+for (const node of userNodes) {
+  const { ['@context']: _ctx, ...rest } = node as Record<string, unknown>;
+  graph.push(rest);
+}
 ---
 
 <meta charset="utf-8" />
@@ -114,12 +173,9 @@ const resolvedRssTitle = rssTitle || (siteName ? `${siteName} — RSS` : 'RSS Fe
 )}
 
 <!-- Structured Data (JSON-LD) -->
-{structuredData && (
-  Array.isArray(structuredData) ? (
-    structuredData.map((node) => (
-      <script type="application/ld+json" set:html={JSON.stringify(node)} />
-    ))
-  ) : (
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  )
+{graph.length > 0 && (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph })}
+  />
 )}
