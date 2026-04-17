@@ -1,0 +1,12 @@
+# Cloudflare Pages / Netlify-compatible headers
+# See https://developers.cloudflare.com/pages/configuration/headers/
+
+# Astro emits hashed filenames under /_astro/ (including fonts under /_astro/fonts/).
+# Hashed URLs are safe to cache forever — content changes ⇒ filename changes.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Keep UTM + ad-click tracking params out of the CDN cache key so a single cached
+# response is served regardless of marketing attribution.
+/*
+  No-Vary-Search: params=("utm_source" "utm_medium" "utm_campaign" "utm_term" "utm_content" "gclid" "fbclid" "ref")
