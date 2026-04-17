@@ -22,7 +22,7 @@
       "dependencies": {
         "@astro-fleet/config": "workspace:*",
         "@astro-fleet/shared-ui": "workspace:*",
-        "astro": "^6",
+        "astro": "^6.1.7",
       },
       "devDependencies": {
         "@astrojs/check": "^0.9",
@@ -38,7 +38,7 @@
       "dependencies": {
         "@astro-fleet/config": "workspace:*",
         "@astro-fleet/shared-ui": "workspace:*",
-        "astro": "^6",
+        "astro": "^6.1.7",
       },
       "devDependencies": {
         "@astrojs/check": "^0.9",
@@ -54,7 +54,7 @@
       "dependencies": {
         "@astro-fleet/config": "workspace:*",
         "@astro-fleet/shared-ui": "workspace:*",
-        "astro": "^6",
+        "astro": "^6.1.7",
       },
       "devDependencies": {
         "@astrojs/check": "^0.9",
@@ -70,7 +70,7 @@
       "dependencies": {
         "@astro-fleet/config": "workspace:*",
         "@astro-fleet/shared-ui": "workspace:*",
-        "astro": "^6",
+        "astro": "^6.1.7",
       },
       "devDependencies": {
         "@astrojs/check": "^0.9",
