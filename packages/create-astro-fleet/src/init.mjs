@@ -3,11 +3,18 @@ import pc from 'picocolors';
 import { downloadTemplate } from 'giget';
 import { resolve, join, basename } from 'node:path';
 import { access, rm, readFile, writeFile, readdir } from 'node:fs/promises';
+import { spawn } from 'node:child_process';
 import { parseArgs, validateDomain, validatePreset, PRESETS } from './args.mjs';
 import { scaffoldSite } from './scaffold.mjs';
 
-const DEFAULT_TEMPLATE = 'github:indivar/astro-fleet';
+// The fleet template release this CLI ships with.
+// Bump to match the latest https://github.com/indivar/astro-fleet/releases tag
+// when you cut a new template release.
+const TEMPLATE_VERSION = 'v2.2.0';
+const DEFAULT_TEMPLATE = `github:indivar/astro-fleet#${TEMPLATE_VERSION}`;
+
 const DEMO_SITES = ['flux-analytics.com', 'meridian-advisory.com', 'olive-and-vine.com'];
+const SUPPORTED_PMS = ['bun', 'pnpm', 'yarn', 'npm'];
 
 async function pathExists(p) {
   try {
@@ -25,6 +32,34 @@ async function isEmpty(dir) {
   } catch {
     return true;
   }
+}
+
+function detectPackageManager() {
+  const ua = process.env.npm_config_user_agent || '';
+  const name = ua.split(' ')[0]?.split('/')[0];
+  if (SUPPORTED_PMS.includes(name)) return name;
+  return 'bun';
+}
+
+function devCommand(pm) {
+  return pm === 'npm' ? 'npm run dev' : `${pm} dev`;
+}
+
+function runInstall(pm, cwd) {
+  return new Promise((resolvePromise, rejectPromise) => {
+    const child = spawn(pm, ['install'], { cwd, stdio: ['ignore', 'pipe', 'pipe'] });
+    let stderr = '';
+    child.stderr.on('data', (chunk) => {
+      stderr += chunk.toString();
+    });
+    child.on('error', rejectPromise);
+    child.on('close', (code) => {
+      if (code === 0) return resolvePromise();
+      const err = new Error(`${pm} install exited with code ${code}`);
+      err.stderr = stderr;
+      rejectPromise(err);
+    });
+  });
 }
 
 export async function init(argv) {
@@ -102,6 +137,22 @@ export async function init(argv) {
     keepDemos = choice;
   }
 
+  const pm = detectPackageManager();
+
+  let doInstall;
+  if (flags['no-install']) {
+    doInstall = false;
+  } else if (flags.install) {
+    doInstall = true;
+  } else {
+    const choice = await p.confirm({
+      message: `Install dependencies with ${pm} now?`,
+      initialValue: true,
+    });
+    if (p.isCancel(choice)) throw new Error('User cancelled.');
+    doInstall = choice;
+  }
+
   const template = flags.template || DEFAULT_TEMPLATE;
 
   const spin = p.spinner();
@@ -142,12 +193,33 @@ export async function init(argv) {
     throw err;
   }
 
-  p.outro(
-    `${pc.green('✓')} Fleet ready. Next:\n` +
-      `  ${pc.cyan(`cd ${targetArg}`)}\n` +
-      `  ${pc.cyan('bun install')}\n` +
-      `  ${pc.cyan(`bun run dev --filter=${domain}`)}`
-  );
+  let installed = false;
+  if (doInstall) {
+    const installSpin = p.spinner();
+    installSpin.start(`Installing dependencies with ${pm}`);
+    try {
+      await runInstall(pm, targetDir);
+      installSpin.stop('Installed dependencies');
+      installed = true;
+    } catch (err) {
+      installSpin.stop(pc.red(`${pm} install failed`));
+      if (err.stderr) {
+        const tail = err.stderr.trim().split('\n').slice(-10).join('\n');
+        p.log.error(tail);
+      }
+      p.log.warn(`Run \`cd ${targetArg} && ${pm} install\` manually once the error above is resolved.`);
+    }
+  }
+
+  const nextSteps = [
+    `  ${pc.cyan(`cd ${targetArg}`)}`,
+    installed ? null : `  ${pc.cyan(`${pm} install`)}`,
+    `  ${pc.cyan(`${devCommand(pm)} --filter=${domain}`)}`,
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  p.outro(`${pc.green('✓')} Fleet ready. Next:\n${nextSteps}`);
 }
 
 async function renameRootPackage(targetDir, newName) {

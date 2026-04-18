@@ -42,11 +42,14 @@ bunx create-astro-fleet ./my-fleet --domain acme.com --preset saas
 
 ### `init`
 
-- `--template <source>` — giget source, default `github:indivar/astro-fleet`
+- `--template <source>` — giget source, default `github:indivar/astro-fleet#v2.2.0` (pinned to a specific fleet release tag; bumped inside the CLI when a new template ships)
 - `--domain <name>` — skip the first-site domain prompt
 - `--preset <name>` — skip the preset prompt
 - `--keep-demos` — keep the three demo sites as reference
-- `--no-install` — skip dependency install (reserved; not yet implemented)
+- `--install` — install dependencies after scaffold without prompting
+- `--no-install` — skip dependency install without prompting
+
+When neither `--install` nor `--no-install` is passed, the CLI asks interactively. The package manager is auto-detected from `npm_config_user_agent` (so `bunx create-astro-fleet` uses Bun, `npm create astro-fleet` uses npm, etc.), falling back to Bun.
 
 ### `add`
 

@@ -1,3 +1,5 @@
+const BOOLEAN_FLAGS = new Set(['keep-demos', 'install', 'no-install', 'help', 'version']);
+
 export function parseArgs(argv) {
   const positional = [];
   const flags = {};
@@ -5,8 +7,9 @@ export function parseArgs(argv) {
     const token = argv[i];
     if (token.startsWith('--')) {
       const key = token.slice(2);
+      const isBoolean = BOOLEAN_FLAGS.has(key) || key.startsWith('no-');
       const next = argv[i + 1];
-      if (next === undefined || next.startsWith('--')) {
+      if (isBoolean || next === undefined || next.startsWith('--')) {
         flags[key] = true;
       } else {
         flags[key] = next;
