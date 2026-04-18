@@ -15,11 +15,12 @@ ${pc.bold('Commands:')}
   help                      Show this help
 
 ${pc.bold('Options (init):')}
-  --template <source>       giget template source (default: github:indivar/astro-fleet)
+  --template <source>       giget template source (default: github:indivar/astro-fleet#v2.2.0)
   --preset <name>           corporate | saas | warm (skips prompt)
   --domain <name>           first site domain (skips prompt)
   --keep-demos              keep the three demo sites as reference
-  --no-install              skip dependency install
+  --install                 install dependencies after scaffold (skips prompt)
+  --no-install              skip dependency install (skips prompt)
 
 ${pc.bold('Options (add):')}
   --preset <name>           corporate | saas | warm (default: corporate)

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Scaffold a new Astro Fleet monorepo or add a site to an existing one.",
   "license": "MIT",
+  "author": "Varinder Singh (https://github.com/indivar)",
   "type": "module",
   "bin": {
     "create-astro-fleet": "./bin/create-astro-fleet.mjs"
@@ -24,6 +25,10 @@
     "url": "https://github.com/indivar/astro-fleet.git",
     "directory": "packages/create-astro-fleet"
   },
+  "bugs": {
+    "url": "https://github.com/indivar/astro-fleet/issues"
+  },
+  "homepage": "https://github.com/indivar/astro-fleet/tree/main/packages/create-astro-fleet#readme",
   "engines": {
     "node": ">=18.20.0"
   },
