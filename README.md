@@ -47,6 +47,7 @@ Each demo composes the **same shared components** (`Header`, `Footer`, `ServiceC
 
 Real sites running in production on the same codebase as the demos above:
 
+- **[edubold.com](https://www.edubold.com)** — School management ERP for Indian schools and trusts: admissions, fees, payroll, and double-entry accounts on one set of records
 - **[moiengineering.com](https://www.moiengineering.com)** — Packaging and wrapping machinery, and a parts catalogue going back to 1960 (Mohali, India)
 - **[hybridagrobots.com](https://www.hybridagrobots.com)** — Computer-vision grading and sorting machines for agriculture and poultry
 - **[indivar.com](https://www.indivar.com)** — Independent technology consulting: architecture, cloud, and delivery
