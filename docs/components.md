@@ -1,6 +1,6 @@
 # Components Reference
 
-Astro Fleet ships **22 components** and **3 layouts** in `packages/shared-ui/`. Every component is self-contained: typed Props, scoped styles, CSS custom properties for theming, and zero third-party dependencies. Import them using the `@astro-fleet/shared-ui` workspace alias.
+Astro Fleet ships **24 components** and **3 layouts** in `packages/shared-ui/`. Every component is self-contained: typed Props, scoped styles, CSS custom properties for theming, and zero third-party dependencies. Import them using the `@astro-fleet/shared-ui` workspace alias.
 
 ```astro
 ---
@@ -29,6 +29,7 @@ import ComponentName from '@astro-fleet/shared-ui/src/components/ComponentName.a
 | [SectionDivider](#sectiondivider) | Decorative SVG wave/curve shapes (6 presets) | No |
 | [SEOHead](#seohead) | All `<head>` SEO tags: OG, Twitter Card, JSON-LD, canonical | No |
 | [ServiceCard](#servicecard) | Service offering card with icon slot and arrow link | No |
+| [Analytics](#analytics) | GA4 behind a consent banner; nothing loads until accepted | Deferred |
 | [SiteSearch](#sitesearch) | Search across every page, from a build-time index | Deferred |
 | [StatsBar](#statsbar) | Horizontal metrics strip (dark/light) | No |
 | [TeamGrid](#teamgrid) | People cards with photo fallback, bio, social links | No |
@@ -385,7 +386,7 @@ import FAQ from '@astro-fleet/shared-ui/src/components/FAQ.astro';
     },
     {
       question: 'Do components require client-side JavaScript?',
-      answer: 'Almost none. 20 of 22 components are pure CSS. Only HeroSlider and TestimonialSlider include a small inline script for carousel navigation.',
+      answer: 'Almost none. 20 of 24 components are pure CSS. HeroSlider and TestimonialSlider carry a small inline script for carousel navigation, and SiteSearch and Analytics load nothing until the visitor uses them.',
     },
   ]}
 />
@@ -1303,6 +1304,98 @@ import TrustBar from '@astro-fleet/shared-ui/src/components/TrustBar.astro';
 
 ---
 
+### Analytics
+
+Google Analytics 4 behind a consent banner, with the tag loading only after the
+visitor accepts.
+
+**Why this is stricter than usual.** The common pattern is Consent Mode v2: load
+`gtag.js` immediately with `analytics_storage: denied`, then flip it to granted.
+That still fetches Google's script and still sends cookieless pings before
+anybody has agreed to anything.
+
+Most privacy policies do not describe that. They say something closer to
+"analytics runs only if you agree, and if you decline it does not load". This
+component keeps that sentence literally: **nothing is requested from
+googletagmanager.com until the visitor accepts.** Consent Mode defaults are still
+set before the script arrives, because a granted signal needs something to
+update.
+
+The trade is worth stating up front: **your numbers will be lower than a site
+that tags everyone.** They will also match what your privacy page says.
+
+**Usage**
+
+```astro
+<BaseLayout
+  gaId="G-XXXXXXXXXX"
+  privacyHref="/privacy/"
+  ...
+>
+```
+
+That is the whole integration. Omit `gaId` and nothing renders at all.
+
+**Props**
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `gaId` | `string` | — | GA4 Measurement ID. Omit and no analytics renders |
+| `privacyHref` | `string` | `'/privacy/'` | Where your analytics and cookies section lives |
+
+On the component directly (if you mount it outside `BaseLayout`):
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `id` | `string` | — | The Measurement ID |
+| `policyHref` | `string` | `'/privacy/'` | Link in the banner |
+| `requireConsent` | `boolean` | `true` | `false` loads the tag immediately. Say so on your privacy page |
+| `storageKey` | `string` | `'analytics-consent'` | Change it to re-ask everybody after a policy change |
+
+**Behaviour**
+
+- Global Privacy Control is read as a decline, and the banner never shows.
+- The choice is stored in `localStorage`. Pages on the same origin share it, so
+  a visitor is never asked twice — including a hand-built static page that sets
+  the same key.
+- `window.track(name, params)` is available on every page and is a **no-op until
+  consent**, so callers never have to check. Events are not queued and replayed:
+  an event about what somebody did before they agreed is still an event about
+  what they did before they agreed.
+
+**Named events**
+
+```js
+window.track('generate_lead', { form: 'quote' });
+```
+
+`generate_lead` is GA4's own name for a form submission, so it lands in the
+standard reports rather than needing a custom definition.
+
+**Styling**
+
+Every rule is wrapped in `:where()`, so it scores zero specificity and your own
+stylesheet always wins without `!important`. Set these on `.cons`:
+
+```css
+.cons {
+  --consent-bg:     #16233A;
+  --consent-ink:    #EDF1EC;   /* buttons, borders */
+  --consent-ink-3:  #C9D6E4;   /* body text */
+  --consent-accent: #4FC6F2;   /* the policy link */
+  --consent-width:  1320px;    /* matches your content width */
+  --consent-gut:    24px;
+  --consent-scrim:  rgb(15 23 42 / 0.45);
+}
+```
+
+**Update your privacy page in the same commit.** A privacy page describing
+analytics behaviour the site does not have is the most common fault in this
+area, and the version that promises a consent banner that was never built is the
+worst of them.
+
+---
+
 ### SiteSearch
 
 Search across every page of a site, with no server and no search service.
@@ -1591,14 +1684,22 @@ Add comments to any page via the `footer-scripts` slot:
 - **Disqus**: Add the Disqus universal embed code.
 - **Cusdis**: Lightweight, privacy-first alternative.
 
-### Analytics
+### Other analytics providers
 
-Use the `footer-scripts` slot in BaseLayout:
+**For Google Analytics, use the built-in [Analytics](#analytics) component**
+rather than pasting a gtag snippet. It handles consent, and it will not leave
+your privacy page describing something the site does not do.
 
-- **Plausible** (recommended — privacy-first, no cookie banner needed): `<script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script>`
-- **Fathom**: Similar to Plausible, single script tag.
-- **Google Analytics 4**: Standard gtag.js snippet.
-- **PostHog**: Full product analytics with session replay.
+For anything else, use the `footer-scripts` slot in BaseLayout:
+
+- **Plausible** — privacy-first and cookieless, so no consent banner is needed:
+  `<script defer data-domain="yourdomain.com" src="https://plausible.io/js/script.js"></script>`
+- **Fathom** — similar to Plausible, single script tag.
+- **PostHog** — full product analytics with session replay. Sets cookies, so it
+  needs consent handling of its own.
+
+Whichever you pick, **say on your privacy page what it actually does.** If it
+sets a cookie, say so. If it needs consent, ask for it.
 
 ### Forms
 

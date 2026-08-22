@@ -61,6 +61,12 @@ _More coming soon._ If you ship a site with Astro Fleet, open a PR adding it her
 
 ## Quick Start
 
+**Building with Claude Code?** Clone the repo and read
+[Build a site with Claude](docs/build-a-site-with-claude.md). It walks from
+`git clone` to a live domain, with the exact things to type at each step.
+`CLAUDE.md` is the agent's copy of the same process, and Claude reads it
+automatically.
+
 **The fastest way — scaffold a new fleet with the CLI:**
 
 ```bash
@@ -92,7 +98,7 @@ bun install
 
 ## What's Included
 
-- **22 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, pricing tables, FAQ accordions, team grids, timelines, hero sliders, section dividers, comparison tables, and more. All accept content via typed props, all use CSS variables for theming.
+- **24 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, pricing tables, FAQ accordions, team grids, timelines, hero sliders, section dividers, comparison tables, and more. All accept content via typed props, all use CSS variables for theming.
 - **Design token system** — 3 presets (Corporate, SaaS, Warm) with a TypeScript interface. Create custom presets or modify colors and fonts per site without touching component code.
 - **Site scaffolder** — Either `bunx create-astro-fleet` (cross-platform, interactive prompts) or `./scripts/new-site.sh domain.com [preset]` (bash) creates a new site from the starter template with the correct config, styles, and build pipeline wired up.
 - **CMS-ready** — Meridian demo ships with [Keystatic](https://keystatic.com) wired up for editable content. Admin at `/keystatic` in dev, content committed as markdown. See [Adding a CMS](docs/adding-a-cms.md) for the pattern and alternatives.
@@ -103,6 +109,7 @@ bun install
 
 ## Documentation
 
+- [Build a site with Claude](docs/build-a-site-with-claude.md) — Clone to live domain with Claude Code, step by step
 - [Getting Started](docs/getting-started.md) — Clone to first deploy in 15 minutes
 - [Adding a Site](docs/adding-a-site.md) — Create and configure additional sites
 - [Adding a CMS](docs/adding-a-cms.md) — Keystatic pattern used in Meridian, plus when to pick a different CMS
