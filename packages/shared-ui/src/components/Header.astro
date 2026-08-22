@@ -5,6 +5,8 @@ export interface MenuItem {
   children?: MenuItem[];
 }
 
+import SiteSearch from './SiteSearch.astro';
+
 export interface Props {
   navigation: MenuItem[];
   logoSrc?: string;
@@ -12,6 +14,15 @@ export interface Props {
   siteName: string;
   ctaText?: string;
   ctaHref?: string;
+  /**
+   * Site-wide search. Off by default, because it needs an index: add
+   * `node ../../packages/shared-ui/scripts/search-index.mjs` to the site's
+   * build script after `astro build`, then set this. A search box with no
+   * index silently returns nothing, which is worse than no search box.
+   */
+  search?: boolean;
+  /** Name three things this site actually covers. Generic placeholders teach nobody what to type. */
+  searchPlaceholder?: string;
 }
 
 const {
@@ -21,6 +32,8 @@ const {
   siteName,
   ctaText = 'Get Started',
   ctaHref = '/contact',
+  search = false,
+  searchPlaceholder = 'Search this site',
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -79,6 +92,8 @@ const currentPath = Astro.url.pathname;
       </ul>
 
       <!-- CTA Button (Desktop) -->
+      {search && <SiteSearch placeholder={searchPlaceholder} class="header__search" />}
+
       <a href={ctaHref} class="header__cta">{ctaText}</a>
 
       <!-- Mobile Menu Toggle (CSS checkbox hack) -->

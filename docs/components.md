@@ -29,6 +29,7 @@ import ComponentName from '@astro-fleet/shared-ui/src/components/ComponentName.a
 | [SectionDivider](#sectiondivider) | Decorative SVG wave/curve shapes (6 presets) | No |
 | [SEOHead](#seohead) | All `<head>` SEO tags: OG, Twitter Card, JSON-LD, canonical | No |
 | [ServiceCard](#servicecard) | Service offering card with icon slot and arrow link | No |
+| [SiteSearch](#sitesearch) | Search across every page, from a build-time index | Deferred |
 | [StatsBar](#statsbar) | Horizontal metrics strip (dark/light) | No |
 | [TeamGrid](#teamgrid) | People cards with photo fallback, bio, social links | No |
 | [TestimonialSlider](#testimonialslider) | Horizontal testimonial carousel with star ratings | Minimal |
@@ -1299,6 +1300,93 @@ import TrustBar from '@astro-fleet/shared-ui/src/components/TrustBar.astro';
 ```
 
 **CSS variables consumed:** `--color-primary`, `--color-accent`, `--font-body`
+
+---
+
+### SiteSearch
+
+Search across every page of a site, with no server and no search service.
+
+The index is built from the HTML that actually shipped, so a page whose copy
+changed cannot then be missing from search, and a page that never rendered
+cannot appear in it. It is fetched on first use and never on load, so search
+costs nothing on the critical path.
+
+Deliberately not a search library. A dependency that ships a WebAssembly
+runtime and its own index format earns its size at a few thousand pages. On a
+forty-page marketing site it would be most of the JavaScript on the page.
+
+**Two steps. Both are required, and the order matters.**
+
+1. Add the index generator to the site's build, after `astro build`:
+
+   ```json
+   {
+     "scripts": {
+       "build": "astro build && node ../../packages/shared-ui/scripts/search-index.mjs"
+     }
+   }
+   ```
+
+2. Turn it on in the layout:
+
+   ```astro
+   <BaseLayout
+     search
+     searchPlaceholder="Pricing, integrations, security"
+     ...
+   >
+   ```
+
+A search box without step 1 returns nothing at all, silently, which is why it
+is off by default.
+
+**Props**
+
+| Prop | Type | Default | Notes |
+|------|------|---------|-------|
+| `search` | `boolean` | `false` | Shows the search control in the header |
+| `searchPlaceholder` | `string` | `'Search this site'` | Name three things the site actually covers. A generic placeholder teaches nobody what to type |
+
+**Generator options**
+
+| Flag | Default | Notes |
+|------|---------|-------|
+| `--dist <dir>` | `dist` | Where the build is |
+| `--public <dir>` | `public` | Dev copy, so `astro dev` can serve it. Gitignore this file |
+| `--exclude a,b` | `/lab/` | Extra path prefixes to leave out |
+| `--body <n>` | `1200` | Characters of body text kept per page |
+
+Pages carrying `<meta name="robots" content="noindex">` and the 404 are skipped:
+if it is not for search engines it is not for the reader either.
+
+**Keyboard.** `/` or Cmd/Ctrl-K opens it, arrows move through results, Enter
+follows the highlighted one, Escape closes and returns focus to the control
+that opened it.
+
+**Styling.** Every rule in the component is wrapped in `:where()`, so it scores
+zero specificity and your own stylesheet always wins without `!important`. Set
+these on `.srch` to restyle the panel:
+
+```css
+.srch {
+  --search-bg:     #fff;
+  --search-bg-2:   #f6f7f9;   /* hovered and selected rows */
+  --search-ink:    #111;
+  --search-ink-3:  #555;      /* snippets */
+  --search-ink-4:  #888;      /* placeholder, result count */
+  --search-rule:   #ddd;
+  --search-accent: #0066cc;   /* icons, rails, selected marker */
+  --search-mono:   ui-monospace, monospace;
+  --search-scrim:  rgb(15 23 42 / 0.45);
+}
+```
+
+Sizes are literal pixels rather than tokens from the type scale. Search chrome
+is interface, and a display-scale token here will set a result title at 49px.
+
+**Size.** The index is roughly 1.8 KB gzipped per page: 18 KB for a
+thirty-three page site, 12 KB for eight pages.
 
 ---
 

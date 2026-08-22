@@ -47,9 +47,14 @@ Each demo composes the **same shared components** (`Header`, `Footer`, `ServiceC
 
 Real sites running in production on the same codebase as the demos above:
 
-- **[vairi.com](https://www.vairi.com)** — AI-enhanced software development and business automation consultancy (Auckland, NZ)
-- **[claspt.app](https://www.claspt.app)** — Encrypted markdown notes and password vault, available on the Microsoft Store, macOS, and Linux
+- **[moiengineering.com](https://www.moiengineering.com)** — Packaging and wrapping machinery, and a parts catalogue going back to 1960 (Mohali, India)
+- **[hybridagrobots.com](https://www.hybridagrobots.com)** — Computer-vision grading and sorting machines for agriculture and poultry
+- **[indivar.com](https://www.indivar.com)** — Independent technology consulting: architecture, cloud, and delivery
 - **[stakteck.com](https://www.stakteck.com)** — IT staffing, contract hiring, and staff augmentation across India
+- **[vairi.com](https://www.vairi.com)** — AI-enhanced software development and business automation consultancy (Auckland, NZ)
+- **[claspt.app](https://www.claspt.app)** — Encrypted markdown notes and password vault, on the Microsoft Store, macOS, and Linux
+
+Every URL above was checked and returned 200 on 22 August 2026.
 
 _More coming soon._ If you ship a site with Astro Fleet, open a PR adding it here — we'd love to feature it.
 

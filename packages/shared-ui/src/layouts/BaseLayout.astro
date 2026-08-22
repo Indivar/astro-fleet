@@ -51,6 +51,10 @@ export interface Props {
   /** Footer tagline */
   tagline?: string;
   /** Header CTA text */
+  /** Site-wide search in the header. Needs the search index in the build. */
+  search?: boolean;
+  /** Placeholder for the search field. Name three things this site covers. */
+  searchPlaceholder?: string;
   ctaText?: string;
   /** Header CTA link */
   ctaHref?: string;
@@ -84,6 +88,8 @@ const {
   logoSrc,
   logoAlt,
   tagline,
+  search,
+  searchPlaceholder,
   ctaText,
   ctaHref,
   bodyClass = '',
@@ -276,6 +282,8 @@ const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
       siteName={siteName}
       logoSrc={logoSrc}
       logoAlt={logoAlt}
+      search={search}
+      searchPlaceholder={searchPlaceholder}
       ctaText={ctaText}
       ctaHref={ctaHref}
     />
