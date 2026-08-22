@@ -1,0 +1,194 @@
+---
+/**
+ * Google Analytics 4, gated on consent.
+ *
+ * WHY THE SCRIPT IS NOT LOADED UP FRONT.
+ *
+ * The usual pattern is Consent Mode v2: load gtag.js immediately with
+ * `analytics_storage: denied`, then flip it to granted once somebody agrees.
+ * That still loads Google's script and still sends cookieless pings before
+ * anybody has agreed to anything.
+ *
+ * Most privacy policies do not describe that. They say something closer to
+ * "analytics runs only if you agree to it, and if you decline it does not
+ * load". This component keeps that sentence literally: nothing from
+ * googletagmanager.com is requested until the visitor accepts. Consent Mode
+ * defaults are still set before the script arrives, because a granted signal
+ * has to have something to update.
+ *
+ * The consequence is honest and worth stating up front: your numbers will be
+ * lower than a site that tags everyone. They will also match what your privacy
+ * page says, which is the point.
+ *
+ * If you would rather have the standard behaviour, pass
+ * `requireConsent={false}` and say so on your privacy page.
+ *
+ * Costs nothing on the critical path. The banner is markup already in the
+ * page, the decision is read from localStorage, and gtag is injected after
+ * the page is interactive.
+ *
+ * STYLING. Every rule is wrapped in `:where()`, so it scores zero specificity
+ * and a site's own stylesheet always wins with no `!important`. Colours come
+ * from custom properties with fallbacks.
+ */
+export interface Props {
+  /** The Measurement ID, G-XXXXXXXXXX. Omit and nothing renders at all. */
+  id?: string;
+  /** Where the cookie and analytics section lives. */
+  policyHref?: string;
+  /** Ask before loading. Leave true unless a policy says otherwise. */
+  requireConsent?: boolean;
+  /** Storage key. Change it to re-ask everybody after a policy change. */
+  storageKey?: string;
+}
+
+const {
+  id,
+  policyHref = '/privacy/',
+  requireConsent = true,
+  storageKey = 'analytics-consent',
+} = Astro.props;
+---
+
+{id && (
+  <div
+    class="cons"
+    data-analytics
+    data-ga-id={id}
+    data-require-consent={requireConsent ? 'yes' : 'no'}
+    data-storage-key={storageKey}
+    hidden
+  >
+    <div class="cons__in" role="region" aria-label="Analytics consent">
+      <p class="cons__t">
+        We would like to count which pages people read, using Google Analytics. It tells us
+        nothing about who you are, and the site works exactly the same if you say no.
+        <a href={policyHref}>What we collect</a>
+      </p>
+      <div class="cons__b">
+        <button class="cons__no" type="button" data-consent="denied">No thanks</button>
+        <button class="cons__yes" type="button" data-consent="granted">Allow</button>
+      </div>
+    </div>
+  </div>
+)}
+
+<style is:global>
+  :where(.cons) {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 180;
+    background: var(--consent-bg, #fff);
+    border-top: 1px solid var(--consent-ink, #111);
+  }
+  :where(.cons__in) {
+    max-width: var(--consent-width, 1320px); margin: 0 auto;
+    padding: 14px var(--consent-gut, 20px);
+    display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center;
+  }
+  :where(.cons__t) {
+    margin: 0; flex: 1 1 22rem; min-width: 0;
+    font-size: 15px; line-height: 1.5; color: var(--consent-ink-3, #444);
+  }
+  :where(.cons__t a) { color: var(--consent-accent, #06c); }
+  :where(.cons__b) { display: flex; gap: 10px; flex: 0 0 auto; }
+  :where(.cons__yes), :where(.cons__no) {
+    font-family: inherit; font-size: 14.5px; font-weight: 600;
+    padding: 9px 18px; cursor: pointer; min-height: 42px;
+    border: 1px solid var(--consent-ink, #111);
+  }
+  :where(.cons__yes) { background: var(--consent-ink, #111); color: var(--consent-bg, #fff); }
+  :where(.cons__no)  { background: transparent; color: var(--consent-ink, #111); }
+  :where(.cons__yes:hover) { background: transparent; color: var(--consent-ink, #111); }
+  :where(.cons__no:hover)  { background: var(--consent-ink, #111); color: var(--consent-bg, #fff); }
+</style>
+
+<script>
+  /**
+   * `window.track(name, params)` is available on every page, whether or not
+   * consent was given. Before consent it is a no-op rather than a queue: an
+   * event queued and replayed after somebody agrees is still an event about
+   * what they did before they agreed.
+   */
+  declare global {
+    interface Window {
+      dataLayer: unknown[];
+      gtag: (...args: unknown[]) => void;
+      track: (name: string, params?: Record<string, unknown>) => void;
+    }
+  }
+
+  let loaded = false;
+
+  function loadGtag(id: string) {
+    if (loaded) return;
+    loaded = true;
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag() { window.dataLayer.push(arguments); };
+
+    // Set before the script arrives, so the granted signal has something to
+    // update rather than racing it.
+    window.gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500,
+    });
+    window.gtag('js', new Date());
+    window.gtag('config', id, { anonymize_ip: true });
+    window.gtag('consent', 'update', { analytics_storage: 'granted' });
+
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+    document.head.appendChild(s);
+  }
+
+  function wire() {
+    const root = document.querySelector<HTMLElement>('[data-analytics]');
+    window.track = window.track || function () {};
+    if (!root || root.dataset.wired) return;
+    root.dataset.wired = 'yes';
+
+    const id = root.dataset.gaId || '';
+    const key = root.dataset.storageKey || 'analytics-consent';
+    const needsConsent = root.dataset.requireConsent !== 'no';
+
+    const read = () => { try { return localStorage.getItem(key); } catch { return null; } };
+    const write = (v: string) => { try { localStorage.setItem(key, v); } catch { /* private mode */ } };
+
+    const start = () => {
+      loadGtag(id);
+      window.track = (name, params) => {
+        try { window.gtag('event', name, params || {}); } catch { /* blocked */ }
+      };
+    };
+
+    if (!needsConsent) { start(); return; }
+
+    /* Global Privacy Control is a legal signal in some places and a clear
+       statement of preference everywhere. Treated as a decline, and the
+       banner is never shown. */
+    if ((navigator as { globalPrivacyControl?: boolean }).globalPrivacyControl === true) {
+      write('denied');
+      return;
+    }
+
+    const decided = read();
+    if (decided === 'granted') { start(); return; }
+    if (decided === 'denied') return;
+
+    root.hidden = false;
+    root.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const choice = b.dataset.consent === 'granted' ? 'granted' : 'denied';
+        write(choice);
+        root.hidden = true;
+        if (choice === 'granted') start();
+      });
+    });
+  }
+
+  wire();
+  document.addEventListener('astro:page-load', wire);
+</script>

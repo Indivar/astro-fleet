@@ -2,6 +2,7 @@
 import SEOHead from '../components/SEOHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 import type { MenuItem } from '../components/Header.astro';
 import type { FooterColumn, ContactInfo, SocialLink } from '../components/Footer.astro';
 import type { DesignTokens } from '@astro-fleet/config';
@@ -51,6 +52,19 @@ export interface Props {
   /** Footer tagline */
   tagline?: string;
   /** Header CTA text */
+  /**
+   * GA4 Measurement ID. Omit and no analytics renders at all.
+   *
+   * The tag loads only after the visitor accepts. See Analytics.astro for why
+   * this is stricter than the usual Consent Mode v2 pattern.
+   */
+  gaId?: string;
+  /** Where your analytics and cookies section lives. */
+  privacyHref?: string;
+  /** Site-wide search in the header. Needs the search index in the build. */
+  search?: boolean;
+  /** Placeholder for the search field. Name three things this site covers. */
+  searchPlaceholder?: string;
   ctaText?: string;
   /** Header CTA link */
   ctaHref?: string;
@@ -84,6 +98,10 @@ const {
   logoSrc,
   logoAlt,
   tagline,
+  gaId,
+  privacyHref = '/privacy/',
+  search,
+  searchPlaceholder,
   ctaText,
   ctaHref,
   bodyClass = '',
@@ -276,6 +294,8 @@ const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
       siteName={siteName}
       logoSrc={logoSrc}
       logoAlt={logoAlt}
+      search={search}
+      searchPlaceholder={searchPlaceholder}
       ctaText={ctaText}
       ctaHref={ctaHref}
     />
@@ -291,6 +311,12 @@ const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
       siteName={siteName}
       tagline={tagline}
     />
+
+    {/* Conditional, so a site with no gaId does not ship the analytics script
+        at all. SiteSearch is rendered the same way in Header for the same
+        reason: Astro tree-shakes a component that is never in the tree, but
+        not one that renders nothing. */}
+    {gaId && <Analytics id={gaId} policyHref={privacyHref} />}
 
     <slot name="footer-scripts" />
   </body>

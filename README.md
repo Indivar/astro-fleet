@@ -47,13 +47,25 @@ Each demo composes the **same shared components** (`Header`, `Footer`, `ServiceC
 
 Real sites running in production on the same codebase as the demos above:
 
-- **[vairi.com](https://www.vairi.com)** — AI-enhanced software development and business automation consultancy (Auckland, NZ)
-- **[claspt.app](https://www.claspt.app)** — Encrypted markdown notes and password vault, available on the Microsoft Store, macOS, and Linux
+- **[edubold.com](https://www.edubold.com)** — School management ERP for Indian schools and trusts: admissions, fees, payroll, and double-entry accounts on one set of records
+- **[moiengineering.com](https://www.moiengineering.com)** — Packaging and wrapping machinery, and a parts catalogue going back to 1960 (Mohali, India)
+- **[hybridagrobots.com](https://www.hybridagrobots.com)** — Computer-vision grading and sorting machines for agriculture and poultry
+- **[indivar.com](https://www.indivar.com)** — Independent technology consulting: architecture, cloud, and delivery
 - **[stakteck.com](https://www.stakteck.com)** — IT staffing, contract hiring, and staff augmentation across India
+- **[vairi.com](https://www.vairi.com)** — AI-enhanced software development and business automation consultancy (Auckland, NZ)
+- **[claspt.app](https://www.claspt.app)** — Encrypted markdown notes and password vault, on the Microsoft Store, macOS, and Linux
+
+Every URL above was checked and returned 200 on 22 August 2026.
 
 _More coming soon._ If you ship a site with Astro Fleet, open a PR adding it here — we'd love to feature it.
 
 ## Quick Start
+
+**Building with Claude Code?** Clone the repo and read
+[Build a site with Claude](docs/build-a-site-with-claude.md). It walks from
+`git clone` to a live domain, with the exact things to type at each step.
+`CLAUDE.md` is the agent's copy of the same process, and Claude reads it
+automatically.
 
 **The fastest way — scaffold a new fleet with the CLI:**
 
@@ -86,7 +98,7 @@ bun install
 
 ## What's Included
 
-- **22 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, pricing tables, FAQ accordions, team grids, timelines, hero sliders, section dividers, comparison tables, and more. All accept content via typed props, all use CSS variables for theming.
+- **24 shared components + 3 layouts** — Header, Footer, SEO Head, CTA blocks, cards, forms, testimonials, breadcrumbs, pricing tables, FAQ accordions, team grids, timelines, hero sliders, section dividers, comparison tables, and more. All accept content via typed props, all use CSS variables for theming.
 - **Design token system** — 3 presets (Corporate, SaaS, Warm) with a TypeScript interface. Create custom presets or modify colors and fonts per site without touching component code.
 - **Site scaffolder** — Either `bunx create-astro-fleet` (cross-platform, interactive prompts) or `./scripts/new-site.sh domain.com [preset]` (bash) creates a new site from the starter template with the correct config, styles, and build pipeline wired up.
 - **CMS-ready** — Meridian demo ships with [Keystatic](https://keystatic.com) wired up for editable content. Admin at `/keystatic` in dev, content committed as markdown. See [Adding a CMS](docs/adding-a-cms.md) for the pattern and alternatives.
@@ -97,6 +109,7 @@ bun install
 
 ## Documentation
 
+- [Build a site with Claude](docs/build-a-site-with-claude.md) — Clone to live domain with Claude Code, step by step
 - [Getting Started](docs/getting-started.md) — Clone to first deploy in 15 minutes
 - [Adding a Site](docs/adding-a-site.md) — Create and configure additional sites
 - [Adding a CMS](docs/adding-a-cms.md) — Keystatic pattern used in Meridian, plus when to pick a different CMS

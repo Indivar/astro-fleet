@@ -1,6 +1,6 @@
 # Framework Integrations & Astro Capabilities
 
-Astro Fleet's 22 shared components are built as native `.astro` files — pure HTML templates with scoped CSS and zero framework dependencies. This is a deliberate choice: it means you can use **any** UI framework alongside them, or none at all.
+Astro Fleet's 24 shared components are built as native `.astro` files — pure HTML templates with scoped CSS and zero framework dependencies. This is a deliberate choice: it means you can use **any** UI framework alongside them, or none at all.
 
 This guide covers how to add interactive framework components to your Fleet sites, and how to take advantage of Astro's broader feature set.
 
@@ -164,7 +164,7 @@ If you build a React/Vue/Svelte component that multiple sites need, you have two
 
 ### Option 1: Add to shared-ui (recommended for Astro components)
 
-If the component is an `.astro` file (or can be), add it to `packages/shared-ui/src/components/`. This is the simplest path — it works exactly like the existing 22 components.
+If the component is an `.astro` file (or can be), add it to `packages/shared-ui/src/components/`. This is the simplest path — it works exactly like the existing 24 components.
 
 ### Option 2: Create a new shared package (for framework components)
 

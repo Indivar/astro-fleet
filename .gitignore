@@ -41,3 +41,7 @@ Thumbs.db
 
 # Internal docs (not published to the repo)
 .internal/
+
+# Written by packages/shared-ui/scripts/search-index.mjs so `astro dev` can
+# serve it. The authoritative copy is written into dist/ by the build.
+sites/*/public/search-index.json
