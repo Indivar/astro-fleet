@@ -90,15 +90,25 @@ const {
   }
   :where(.cons__t a) { color: var(--consent-accent, #06c); }
   :where(.cons__b) { display: flex; gap: 10px; flex: 0 0 auto; }
-  :where(.cons__yes), :where(.cons__no) {
-    font-family: inherit; font-size: 14.5px; font-weight: 600;
+  /* The buttons are the one part NOT written at zero specificity, and that is
+     deliberate. `:where()` loses to a bare `button { … }` element reset, and
+     plenty of sites have one. On a site whose reset strips background and
+     border, both buttons rendered as identical plain text: no affordance, and
+     no visual difference between accepting and declining. `.cons .cons__yes`
+     scores 0,2,0 and beats an element reset, while still being trivially
+     overridable by the nine custom properties, which is the documented way to
+     restyle this. */
+  .cons .cons__yes, .cons .cons__no {
+    font-family: inherit; font-size: 14.5px; font-weight: 600; line-height: 1.2;
     padding: 9px 18px; cursor: pointer; min-height: 42px;
     border: 1px solid var(--consent-ink, #111);
+    border-radius: var(--consent-radius, 0);
+    transition: background 0.15s, color 0.15s;
   }
-  :where(.cons__yes) { background: var(--consent-ink, #111); color: var(--consent-bg, #fff); }
-  :where(.cons__no)  { background: transparent; color: var(--consent-ink, #111); }
-  :where(.cons__yes:hover) { background: transparent; color: var(--consent-ink, #111); }
-  :where(.cons__no:hover)  { background: var(--consent-ink, #111); color: var(--consent-bg, #fff); }
+  .cons .cons__yes { background: var(--consent-ink, #111); color: var(--consent-bg, #fff); }
+  .cons .cons__no  { background: transparent; color: var(--consent-ink, #111); }
+  .cons .cons__yes:hover { background: transparent; color: var(--consent-ink, #111); }
+  .cons .cons__no:hover  { background: var(--consent-ink, #111); color: var(--consent-bg, #fff); }
 </style>
 
 <script>
