@@ -216,17 +216,37 @@ hero layouts and typography are unique to each brand.
 
 ## Built with Astro Fleet
 
-Real sites running in production on this codebase:
+Seven real sites running in production on this codebase. Seven different
+industries, one set of shared components.
 
-- **[edubold.com](https://www.edubold.com)** — School management ERP for Indian schools and trusts: admissions, fees, payroll and double-entry accounts on one set of records
-- **[moiengineering.com](https://www.moiengineering.com)** — Packaging and wrapping machinery, and a parts catalogue going back to 1960 (Mohali, India)
-- **[hybridagrobots.com](https://www.hybridagrobots.com)** — Computer-vision grading and sorting machines for agriculture and poultry
-- **[indivar.com](https://www.indivar.com)** — Independent technology consulting: architecture, cloud and delivery
-- **[stakteck.com](https://www.stakteck.com)** — IT staffing, contract hiring and staff augmentation across India
-- **[vairi.com](https://www.vairi.com)** — AI-enhanced software development and business automation consultancy (Auckland, NZ)
-- **[claspt.app](https://www.claspt.app)** — Encrypted markdown notes and password vault, on the Microsoft Store, macOS and Linux
-
-Every URL above was checked and returned 200 on 22 August 2026.
+<table>
+  <tr>
+    <td width="33%"><a href="https://www.edubold.com"><img src="docs/screenshots/production/edubold.jpg" alt="EduBold home page — school management ERP, editorial serif headline on pale green, with a register of the day's figures" /></a></td>
+    <td width="33%"><a href="https://www.moiengineering.com"><img src="docs/screenshots/production/moi.jpg" alt="MOI Engineering home page — industrial machinery, condensed uppercase headline on navy with a technical drawing of meshing gears" /></a></td>
+    <td width="33%"><a href="https://www.hybridagrobots.com"><img src="docs/screenshots/production/hybrid.jpg" alt="Hybrid Agrobots home page — computer-vision grading, dark hero with a live egg-sorting scene in lime and black" /></a></td>
+  </tr>
+  <tr>
+    <td><strong><a href="https://www.edubold.com">edubold.com</a></strong><br/>School management ERP for Indian schools and trusts</td>
+    <td><strong><a href="https://www.moiengineering.com">moiengineering.com</a></strong><br/>Packaging and wrapping machinery, built since 1960</td>
+    <td><strong><a href="https://www.hybridagrobots.com">hybridagrobots.com</a></strong><br/>Computer-vision grading and sorting machines</td>
+  </tr>
+  <tr>
+    <td><a href="https://www.indivar.com"><img src="docs/screenshots/production/indivar.jpg" alt="Indivar home page — independent technology consulting" /></a></td>
+    <td><a href="https://www.stakteck.com"><img src="docs/screenshots/production/stakteck.jpg" alt="StakTeck home page — IT staffing and recruitment across India" /></a></td>
+    <td><a href="https://www.vairi.com"><img src="docs/screenshots/production/vairi.jpg" alt="Vairi Technologies home page — AI-enhanced software and automation, Auckland" /></a></td>
+  </tr>
+  <tr>
+    <td><strong><a href="https://www.indivar.com">indivar.com</a></strong><br/>Independent technology consulting</td>
+    <td><strong><a href="https://www.stakteck.com">stakteck.com</a></strong><br/>IT staffing and contract hiring across India</td>
+    <td><strong><a href="https://www.vairi.com">vairi.com</a></strong><br/>AI-enhanced software and automation (Auckland, NZ)</td>
+  </tr>
+  <tr>
+    <td><a href="https://www.claspt.app"><img src="docs/screenshots/production/claspt.jpg" alt="Claspt home page — encrypted markdown notes and password vault" /></a></td>
+    <td colspan="2" valign="top"><br/><strong><a href="https://www.claspt.app">claspt.app</a></strong><br/>Encrypted markdown notes and password vault, on the Microsoft Store, macOS and Linux<br/><br/><em>Every URL was requested and returned 200 on 23 August 2026. The consent bar
+    visible along the bottom of each shot is the <a href="#analytics-behind-consent">analytics component</a> doing its job on a
+    first visit — nothing has been loaded from Google at that point.</em></td>
+  </tr>
+</table>
 
 If you ship a site with Astro Fleet, open a PR adding it here.
 
