@@ -216,37 +216,175 @@ hero layouts and typography are unique to each brand.
 
 ## Built with Astro Fleet
 
-Seven real sites running in production on this codebase. Seven different
-industries, one set of shared components.
+Eight sites in production on this codebase, across eight industries, plus one
+landing page that shares a domain with the site above it and looks nothing like
+it. Same components, same tokens, same build.
 
 <table>
-  <tr>
-    <td width="33%"><a href="https://www.edubold.com"><img src="docs/screenshots/production/edubold.jpg" alt="EduBold home page — school management ERP, editorial serif headline on pale green, with a register of the day's figures" /></a></td>
-    <td width="33%"><a href="https://www.moiengineering.com"><img src="docs/screenshots/production/moi.jpg" alt="MOI Engineering home page — industrial machinery, condensed uppercase headline on navy with a technical drawing of meshing gears" /></a></td>
-    <td width="33%"><a href="https://www.hybridagrobots.com"><img src="docs/screenshots/production/hybrid.jpg" alt="Hybrid Agrobots home page — computer-vision grading, dark hero with a live egg-sorting scene in lime and black" /></a></td>
-  </tr>
-  <tr>
-    <td><strong><a href="https://www.edubold.com">edubold.com</a></strong><br/>School management ERP for Indian schools and trusts</td>
-    <td><strong><a href="https://www.moiengineering.com">moiengineering.com</a></strong><br/>Packaging and wrapping machinery, built since 1960</td>
-    <td><strong><a href="https://www.hybridagrobots.com">hybridagrobots.com</a></strong><br/>Computer-vision grading and sorting machines</td>
-  </tr>
-  <tr>
-    <td><a href="https://www.indivar.com"><img src="docs/screenshots/production/indivar.jpg" alt="Indivar home page — independent technology consulting" /></a></td>
-    <td><a href="https://www.stakteck.com"><img src="docs/screenshots/production/stakteck.jpg" alt="StakTeck home page — IT staffing and recruitment across India" /></a></td>
-    <td><a href="https://www.vairi.com"><img src="docs/screenshots/production/vairi.jpg" alt="Vairi Technologies home page — AI-enhanced software and automation, Auckland" /></a></td>
-  </tr>
-  <tr>
-    <td><strong><a href="https://www.indivar.com">indivar.com</a></strong><br/>Independent technology consulting</td>
-    <td><strong><a href="https://www.stakteck.com">stakteck.com</a></strong><br/>IT staffing and contract hiring across India</td>
-    <td><strong><a href="https://www.vairi.com">vairi.com</a></strong><br/>AI-enhanced software and automation (Auckland, NZ)</td>
-  </tr>
-  <tr>
-    <td><a href="https://www.claspt.app"><img src="docs/screenshots/production/claspt.jpg" alt="Claspt home page — encrypted markdown notes and password vault" /></a></td>
-    <td colspan="2" valign="top"><br/><strong><a href="https://www.claspt.app">claspt.app</a></strong><br/>Encrypted markdown notes and password vault, on the Microsoft Store, macOS and Linux<br/><br/><em>Every URL was requested and returned 200 on 23 August 2026. The consent bar
-    visible along the bottom of each shot is the <a href="#analytics-behind-consent">analytics component</a> doing its job on a
-    first visit — nothing has been loaded from Google at that point.</em></td>
-  </tr>
+<tr valign="top">
+<td width="45%"><a href="https://www.edubold.com"><img src="docs/screenshots/production/edubold.jpg" alt="EduBold home page — an editorial serif headline on pale green, with a hairline-ruled register of the day's figures below it" /></a></td>
+<td>
+
+### [edubold.com](https://www.edubold.com)
+
+**School management ERP for Indian schools and trusts.** Admissions, fees,
+attendance, payroll and double-entry accounts on one set of records.
+
+Set as a ledger, because that is what every Indian school already runs on:
+hairline rules, a section index down the left margin, and red reserved for
+totals and corrections. The homepage opens with the questions a principal asks
+at 8am, each facing its answer.
+
+Site search, consent-gated GA4, and a blog with pagination and archives. 46
+pages.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://edubold.com/a-school-day/"><img src="docs/screenshots/production/aschoolday.jpg" alt="A School Day landing page — dark navy starfield, a live clock and timeline down the left margin, sans-serif display headline" /></a></td>
+<td>
+
+### [edubold.com/a-school-day/](https://edubold.com/a-school-day/)
+
+**The same site, and nothing like it.** A long-form landing page that walks
+through one school day from first bell to last, on the same domain as the page
+above.
+
+Dark navy against pale green. A live clock and timeline down the margin instead
+of a section index. Sans-serif display type instead of the serif. Scroll-driven
+scenes — a timetable that solves itself, a receipt posting to its journal
+entry — instead of a static register.
+
+Here because it makes the point better than any argument: **the codebase does
+not impose a look.** Nothing in the shared layer had to be fought to build it.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://www.moiengineering.com"><img src="docs/screenshots/production/moi.jpg" alt="MOI Engineering home page — condensed uppercase headline on navy, with an orange technical drawing of meshing involute gears" /></a></td>
+<td>
+
+### [moiengineering.com](https://www.moiengineering.com)
+
+**Packaging and wrapping machinery, built since 1960.** Cigarette making and
+packing lines, capsule machines for pharma, and high-speed wrapping, bundling
+and cartoning systems, shipped to manufacturers in 20+ countries.
+
+Drawn as an engineering document: drawing numbers, revision marks, a technical
+grid, and a hero of true involute gears meshing in WebGL. The catalogue runs to
+28 machines, each with a real specification sheet behind it.
+
+The largest site here at 77 pages.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://www.hybridagrobots.com"><img src="docs/screenshots/production/hybrid.jpg" alt="Hybrid Agrobots home page — dark hero with a live egg-sorting conveyor scene in lime and black" /></a></td>
+<td>
+
+### [hybridagrobots.com](https://www.hybridagrobots.com)
+
+**Computer-vision grading and sorting machines** for eggs, apples, fruit and
+vegetables, sorting by size, weight, colour and grade.
+
+The hero is the product: a live sorting line rendered in WebGL, eggs moving
+under a vision head that grades and rejects them as you watch. Eleven machines,
+each with its own bespoke scene, lazily loaded and replaced by a still on
+mobile so the phone budget survives.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://boldreach.io"><img src="docs/screenshots/production/boldreach.jpg" alt="BoldReach home page — large centred headline in black on white, above a product screenshot of the CRM risk dashboard" /></a></td>
+<td>
+
+### [boldreach.io](https://boldreach.io)
+
+**A field-sales CRM that fills itself in.** Voice notes become contacts and
+deals, the pipeline nudges reps on WhatsApp, and deals about to slip get flagged
+before anyone has to ask.
+
+The biggest build here: **512 pages**, generated across five regional variants
+so pricing, currency and compliance copy match the reader's market without five
+separate sites.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://www.indivar.com"><img src="docs/screenshots/production/indivar.jpg" alt="Indivar home page — independent technology consulting" /></a></td>
+<td>
+
+### [indivar.com](https://www.indivar.com)
+
+**Independent technology consulting**: architecture, cloud and delivery, for
+organisations that have already been sold a platform and now need someone
+without a stake in it.
+
+95 pages including a migrated blog, service and product catalogues, and case
+studies. Built to read as a consultancy rather than a vendor, which is the whole
+positioning.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://www.stakteck.com"><img src="docs/screenshots/production/stakteck.jpg" alt="StakTeck home page — IT staffing and recruitment across India" /></a></td>
+<td>
+
+### [stakteck.com](https://www.stakteck.com)
+
+**IT staffing, contract hiring and staff augmentation across India.** Job
+listings, a talent-pipeline view, and industry expertise grids.
+
+58 pages. The clearest example of the design-token system doing its job: a
+recruitment brand sharing every component with an industrial machinery site and
+looking nothing like it.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://www.vairi.com"><img src="docs/screenshots/production/vairi.jpg" alt="Vairi Technologies home page — AI-enhanced software and automation, Auckland" /></a></td>
+<td>
+
+### [vairi.com](https://www.vairi.com)
+
+**AI-enhanced software development, business automation, and AI-driven SEO and
+marketing.** Auckland, New Zealand.
+
+The only site here outside India, and the one that most exercises the
+token system's typography settings. Service pillars, a pricing table, process
+steps and an assessment form.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td><a href="https://www.claspt.app"><img src="docs/screenshots/production/claspt.jpg" alt="Claspt home page — encrypted markdown notes and password vault" /></a></td>
+<td>
+
+### [claspt.app](https://www.claspt.app)
+
+**Encrypted markdown notes and a password vault**, on the Microsoft Store, macOS
+and Linux.
+
+A product site rather than a company one: download paths per platform, a
+documentation tree, and a blog. The only entry here that was already running
+GA4 before this repo grew an analytics component.
+
+</td>
+</tr>
 </table>
+
+Every URL was requested and returned 200 on 23 August 2026. The consent bar
+along the bottom of each shot is the [analytics component](#analytics-behind-consent)
+behaving correctly on a first visit — at that moment nothing has been requested
+from Google.
 
 If you ship a site with Astro Fleet, open a PR adding it here.
 
