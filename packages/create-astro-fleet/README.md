@@ -42,7 +42,7 @@ bunx create-astro-fleet ./my-fleet --domain acme.com --preset saas
 
 ### `init`
 
-- `--template <source>` — giget source, default `github:indivar/astro-fleet#v2.2.0` (pinned to a specific fleet release tag; bumped inside the CLI when a new template ships)
+- `--template <source>` — giget source, default `github:indivar/astro-fleet#v2.3.0` (pinned to a specific fleet release tag; bumped inside the CLI when a new template ships)
 - `--domain <name>` — skip the first-site domain prompt
 - `--preset <name>` — skip the preset prompt
 - `--keep-demos` — keep the three demo sites as reference
