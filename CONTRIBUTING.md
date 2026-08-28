@@ -76,3 +76,7 @@ chore: upgrade Astro to 5.3
 ## Questions
 
 For general questions about using Astro Fleet, use [GitHub Discussions](https://github.com/indivar/astro-fleet/discussions). Issues are for bugs and confirmed feature requests only.
+
+## Releasing
+
+See [docs/releasing.md](docs/releasing.md). The template tag and the `create-astro-fleet` npm package ship together; a release without the CLI publish leaves new projects on the old template.

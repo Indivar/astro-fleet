@@ -1,6 +1,6 @@
 # Astro Fleet
 
-[![CI](https://github.com/Indivar/astro-fleet/actions/workflows/ci.yml/badge.svg)](https://github.com/Indivar/astro-fleet/actions/workflows/ci.yml) [![GitHub release](https://img.shields.io/github/v/release/Indivar/astro-fleet)](https://github.com/Indivar/astro-fleet/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![CI](https://github.com/Indivar/astro-fleet/actions/workflows/ci.yml/badge.svg)](https://github.com/Indivar/astro-fleet/actions/workflows/ci.yml) [![GitHub release](https://img.shields.io/github/v/release/Indivar/astro-fleet)](https://github.com/Indivar/astro-fleet/releases) [![npm](https://img.shields.io/npm/v/create-astro-fleet)](https://www.npmjs.com/package/create-astro-fleet) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 **One codebase, many sites.** A multi-site Astro monorepo for agencies and
 multi-brand companies.
