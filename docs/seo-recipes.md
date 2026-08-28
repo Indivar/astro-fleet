@@ -247,6 +247,37 @@ Catch SEO regressions before they ship. Add a post-build script that walks `dist
 
 Keep it out of `astro check` (which is type-only) and wire it into CI as a separate step. The [`lychee`](https://github.com/lycheeverse/lychee-action) GitHub Action handles internal + external link validation in ~1 line of YAML.
 
+## 11. One canonical host
+
+**Problem:** a Pages project with both `acme.com` and `www.acme.com` attached answers 200 on both. Every page exists at two URLs. The `<link rel="canonical">` from `BaseLayout` is a hint, and a hint loses to a second live copy often enough that rankings split.
+
+**Fix:** the host in `site:` (astro.config.mjs) is canonical; the other host answers `301`. `scripts/cf-canonical-redirects.py` creates one Single Redirect rule per Cloudflare zone from `infrastructure/zones.json`, and `--check` HEADs each host to prove it. Full steps in `docs/deployment.md`, "One canonical host".
+
+Verify from outside, not from the config:
+
+```bash
+curl -sI https://acme.com/pricing/ | grep -i '^location'
+# location: https://www.acme.com/pricing/
+```
+
+## 12. Content-Security-Policy without breaking the page
+
+The starter's `public/_headers` ships an enforced CSP starting at `'self'`. It is a whitelist, so anything the page fetches from another origin is blocked until listed: the form endpoint in `connect-src` and `form-action`, GA4 in `script-src`, `connect-src` and `img-src`, and the Cloudflare Web Analytics beacon (`static.cloudflareinsights.com` in `script-src`, `cloudflareinsights.com` in `connect-src`) if it is switched on in the dashboard. That last one is injected at the edge and appears in no source file, which is how it gets missed.
+
+Verify in a browser on the live site, by submitting the form and reading the console. `curl -I` confirms the header; only the browser shows what it blocked. The table of what goes where is in `docs/deployment.md`, "Security headers".
+
+## 13. Content-Signal in robots.txt
+
+Cloudflare's `Content-Signal` directive lets a site say, per crawler, whether content may be used for search, AI input or AI training. It is a plain line in `robots.txt`:
+
+```
+User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+Allow: /
+```
+
+Two things to know before adding it. Nothing enforces it; it is a statement of terms that well-behaved crawlers may read. And Lighthouse's `robots-txt` audit does not parse the directive, so it reports "unknown directive" and marks the audit as failed even though the file is valid. Lighthouse's `robots.txt` parser only knows the classic directives, and this is not a fault in the file, so do not "fix" it by removing the line. If the failed audit matters to whoever reads your reports, leave the directive out; if the terms matter more, keep it and note why the audit is red.
+
 ---
 
 ## When you hit the ceiling

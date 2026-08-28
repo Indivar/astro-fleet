@@ -1,6 +1,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import responsiveImages from '@astro-fleet/shared-ui/utils/responsive-images.mjs';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
@@ -17,6 +18,7 @@ export default defineConfig({
     markdoc(),
     ...(isDev ? [keystatic()] : []),
     sitemap(),
+    responsiveImages(),
   ],
   vite: { plugins: [tailwindcss()] },
   output: 'static',

@@ -94,6 +94,67 @@ In the Cloudflare dashboard: Pages project → Custom Domains → Add a domain. 
 | `--branch=staging` | Preview deployment — unique URL, not the production domain |
 | `--branch=main` | Production deployment — served from custom domain |
 
+### One canonical host
+
+Attaching both `acme.com` and `www.acme.com` to a Pages project makes both
+answer 200, with no redirect between them. Every page now exists at two URLs.
+Search engines treat that as duplicate content: the `<link rel="canonical">`
+that `BaseLayout` emits is a hint, and a hint loses to a second live copy often
+enough that rankings split between the two hosts.
+
+Pick one. The canonical host is whatever `site:` says in `astro.config.mjs`;
+the other host should answer `301` to it. Cloudflare does this with a Single
+Redirect rule on the zone, and `scripts/cf-canonical-redirects.py` creates one
+per zone from a list you fill in:
+
+```bash
+cp infrastructure/zones.example.json infrastructure/zones.json   # gitignored
+# edit: name, zone_id, from, canonical (canonical must match astro.config.mjs)
+export CLOUDFLARE_API_TOKEN=...
+python3 scripts/cf-canonical-redirects.py            # create the rules
+python3 scripts/cf-canonical-redirects.py --check    # HEAD each `from` host; needs no token
+```
+
+The token needs **Zone → Single Redirect → Edit** on each zone, which the
+"Edit Cloudflare Workers" template does not include. The script is idempotent:
+a zone that already has the rule is skipped. `--check` is worth running after
+any DNS or Pages change, because a domain re-attached in the dashboard comes
+back without the redirect.
+
+Query strings are preserved and the path is kept, so `http://acme.com/pricing/?utm_source=x`
+lands on `https://www.acme.com/pricing/?utm_source=x`.
+
+### Security headers
+
+`public/_headers` in the starter sets the full set: HSTS,
+`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+`Permissions-Policy`, `No-Vary-Search`, cache lifetimes, and an enforced
+`Content-Security-Policy`. Cloudflare Pages and Netlify both read the file as
+is. Vercel wants the same values in `vercel.json`; Caddy sets them in the
+Caddyfile.
+
+The CSP starts at `'self'` plus the inline styles and scripts Astro emits.
+**Every host a page talks to has to be added to it**, or the browser blocks
+the request and the only sign is a line in the console:
+
+| The page does this | Add the host to |
+|---|---|
+| Posts the contact form to an endpoint | `connect-src` (fetch) and `form-action` (a plain submit) |
+| Loads GA4 through the `Analytics` component | `script-src`: `https://www.googletagmanager.com`; `connect-src`: `https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com`; `img-src`: `https://*.google-analytics.com` |
+| Has Cloudflare Web Analytics switched on in the dashboard | `script-src`: `https://static.cloudflareinsights.com`; `connect-src`: `https://cloudflareinsights.com` |
+| Embeds a map, video or calendar | `frame-src` (the starter sets it to `'none'`) |
+| Shows an image from another host | `img-src` |
+
+The Cloudflare beacon is the one that catches people: it is injected at the
+edge, not by anything in the repo, so a CSP that was correct on staging blocks
+it in production and page views quietly stop counting.
+
+**After any change to `_headers`, verify it on the live site in a real
+browser**, not with `curl`: open the page, submit the form, and read the
+console. `curl -I` shows the header arrived; only the browser shows what it
+blocked. A response header that is right and a form that no longer submits
+look identical from the terminal.
+
 ---
 
 ## Option 2 — Vercel or Netlify

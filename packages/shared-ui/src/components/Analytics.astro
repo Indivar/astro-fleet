@@ -88,7 +88,7 @@ const {
     margin: 0; flex: 1 1 22rem; min-width: 0;
     font-size: 15px; line-height: 1.5; color: var(--consent-ink-3, #444);
   }
-  :where(.cons__t a) { color: var(--consent-accent, #06c); }
+  :where(.cons__t a) { color: var(--consent-accent, #06c); text-decoration: underline; text-underline-offset: 2px; }
   :where(.cons__b) { display: flex; gap: 10px; flex: 0 0 auto; }
   /* The buttons are the one part NOT written at zero specificity, and that is
      deliberate. `:where()` loses to a bare `button { … }` element reset, and

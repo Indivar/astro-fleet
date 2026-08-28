@@ -1,12 +1,51 @@
 # Cloudflare Pages / Netlify-compatible headers
 # See https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Every host a page talks to must be listed in the Content-Security-Policy
+# below, or the browser blocks the request and the only sign is a line in the
+# console. The two places this bites: the form endpoint (connect-src and
+# form-action) and analytics (script-src, connect-src, img-src). After any
+# change here, open the live site in a real browser, submit the form, and read
+# the console. See docs/deployment.md, "Security headers".
+#
+# Placeholders to fill in, then delete this paragraph:
+#   FORM_ENDPOINT   the origin your contact form posts to, e.g. https://formspree.io
+#                   -> add to connect-src and form-action
+#   GA4             if BaseLayout gets a gaId, add
+#                   https://www.googletagmanager.com to script-src,
+#                   https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com to connect-src,
+#                   https://*.google-analytics.com to img-src
+#   CLOUDFLARE WEB ANALYTICS   if you switch the beacon on in the dashboard, add
+#                   https://static.cloudflareinsights.com to script-src and
+#                   https://cloudflareinsights.com to connect-src, or every page view is blocked silently.
+
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+  No-Vary-Search: key-order, params=("utm_source" "utm_medium" "utm_campaign" "utm_term" "utm_content" "gclid" "fbclid" "ref")
 
 # Astro emits hashed filenames under /_astro/ (including fonts under /_astro/fonts/).
-# Hashed URLs are safe to cache forever — content changes ⇒ filename changes.
+# Hashed URLs are safe to cache forever: content changes => filename changes.
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Keep UTM + ad-click tracking params out of the CDN cache key so a single cached
-# response is served regardless of marketing attribution.
-/*
-  No-Vary-Search: params=("utm_source" "utm_medium" "utm_campaign" "utm_term" "utm_content" "gclid" "fbclid" "ref")
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Renditions written by scripts/responsive-images.py are named by size, not by
+# hash, so a week is the honest limit.
+/images/*
+  Cache-Control: public, max-age=604800
+
+/favicon.svg
+  Cache-Control: public, max-age=604800
+
+/sitemap-index.xml
+  Cache-Control: public, max-age=3600
+
+/robots.txt
+  Cache-Control: public, max-age=3600

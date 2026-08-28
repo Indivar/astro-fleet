@@ -23,6 +23,8 @@ import {
   {contactInfo}
   {socialLinks}
   siteName={SITE_NAME}
+  search
+  searchPlaceholder="Services, pricing, contact"
   tagline={TAGLINE}
   logoSrc={LOGO_SRC}
   ctaText="Get Started"
@@ -54,8 +56,69 @@ import {
     formAction="#"
     heading="Send Us a Message"
     description="Tell us about your project and we'll get back to you within 24 hours."
+    successText="Thank you. We reply within one working day."
+    errorText="We could not send that just now. Please email us instead."
   />
 </BaseLayout>
+
+<script>
+  // The shared ContactForm is plain HTML; this page owns the submit.
+  // Pattern documented in docs/components.md, "A site-owned submit handler".
+  //
+  // Replace FORM_ENDPOINT with the URL that receives the enquiry (Formspree,
+  // Basin, your own API). Then add that origin to connect-src and form-action
+  // in public/_headers, or the browser blocks the request silently.
+  const FORM_ENDPOINT = 'https://example.com/api/enquiry'; // [REPLACE]
+
+  function initContactForm() {
+    const form = document.querySelector<HTMLFormElement>('#enquiry-form form');
+    if (!form || form.dataset.bound === '1') return;
+    form.dataset.bound = '1';
+
+    const field = (name: string) => {
+      const el = form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+      return el && 'value' in el ? el.value.trim() : '';
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const button = form.querySelector<HTMLButtonElement>('.contact-form__submit');
+      const ok = form.querySelector<HTMLElement>('[data-cf-status="success"]');
+      const err = form.querySelector<HTMLElement>('[data-cf-status="error"]');
+      if (ok) ok.hidden = true;
+      if (err) err.hidden = true;
+      if (button) button.disabled = true;
+      try {
+        const res = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            name: field('name'),
+            company: field('company'),
+            email: field('email'),
+            phone: field('phone'),
+            interest: field('machineInterest'),
+            message: field('message'),
+            _hp: field('_hp'), // honeypot; the endpoint should drop anything with a value here
+          }),
+        });
+        if (!res.ok) throw new Error(`form endpoint ${res.status}`);
+        if (ok) ok.hidden = false;
+        form.reset();
+        // Only after a 2xx: a lead that never arrived is not a lead.
+        (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', { form: 'contact' });
+      } catch {
+        if (err) err.hidden = false;
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+  }
+
+  initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
+</script>
 
 <style>
   .contact-hero {

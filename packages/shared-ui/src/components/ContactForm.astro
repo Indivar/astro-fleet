@@ -5,6 +5,11 @@
  * - Input validation and sanitization
  * - CSRF protection
  * - Rate limiting / spam prevention
+ *
+ * Spam and states: the form carries an off-screen `_hp` honeypot (reject any
+ * submission where it is filled) and two hidden status lines,
+ * `[data-cf-status="success"]` and `[data-cf-status="error"]`, for a site's
+ * own submit handler to reveal. The handler pattern is in docs/components.md.
  */
 export interface Props {
   formAction?: string;
@@ -16,6 +21,10 @@ export interface Props {
   heading?: string;
   description?: string;
   industries?: string[];
+  /** Shown by a site's submit handler after a 2xx. */
+  successText?: string;
+  /** Shown by a site's submit handler after anything else. Say what to do instead. */
+  errorText?: string;
 }
 
 const {
@@ -28,6 +37,8 @@ const {
   heading = 'Send Us an Enquiry',
   description = 'Fill in the form below and our team will get back to you within 24 hours.',
   industries,
+  successText = 'Thank you. We reply within one working day.',
+  errorText = 'We could not send that just now. Please email or call us instead.',
 } = Astro.props;
 ---
 
@@ -146,6 +157,12 @@ const {
         </div>
       </div>
 
+      <!-- Honeypot: off-screen, humans never see it; a filled value marks a bot. -->
+      <div class="contact-form__hp" aria-hidden="true">
+        <label for="cf-hp">Leave this field empty</label>
+        <input type="text" id="cf-hp" name="_hp" tabindex="-1" autocomplete="off" />
+      </div>
+
       <!-- Submit -->
       <div class="contact-form__submit-row">
         <button type="submit" class="contact-form__submit">
@@ -156,6 +173,10 @@ const {
           </svg>
         </button>
       </div>
+
+      <!-- Status lines: a site's own submit handler shows one of these. See docs/components.md. -->
+      <p class="contact-form__status contact-form__status--ok" data-cf-status="success" role="status" hidden>{successText}</p>
+      <p class="contact-form__status contact-form__status--err" data-cf-status="error" role="alert" hidden>{errorText}</p>
     </form>
 
     {showWhatsApp && whatsAppNumber && (
@@ -276,6 +297,33 @@ const {
   .contact-form__textarea {
     resize: vertical;
     min-height: 100px;
+  }
+
+  .contact-form__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .contact-form__status {
+    margin: 1rem 0 0;
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 0.95rem;
+  }
+
+  .contact-form__status--ok {
+    color: var(--color-primary, #1e3a5f);
+  }
+
+  .contact-form__status--err {
+    color: #b42318;
+  }
+
+  .contact-form__submit:disabled {
+    opacity: 0.6;
+    cursor: progress;
   }
 
   .contact-form__submit-row {

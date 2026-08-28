@@ -10,7 +10,8 @@ deployment to Cloudflare Pages, Vercel or your own VPS. Create a site in one
 command, brand it with a preset, ship it on its own domain.
 
 Site-wide search, consent-gated analytics and full SEO are built in and **off by
-default** — each is one instruction away.
+default** — each is one instruction away. Responsive images are on: write a
+plain `<img>`, ship `<picture>` with AVIF and WebP.
 
 **Built for AI-driven development.** The structure, typed props and single-file
 site config exist so an AI assistant can work in this repo without guessing.
@@ -65,7 +66,9 @@ bun run dev          # starter site at localhost:4321
 ```
 
 **Requires** Bun 1.1+ and Node 20+. A Cloudflare account is needed only to
-deploy, and it is free.
+deploy, and it is free. Python 3 with Pillow is the one extra, and only on the
+machine that adds photos: it writes the image renditions that get committed.
+The build needs nothing beyond Bun.
 
 ---
 
@@ -93,9 +96,28 @@ bun install                                     # always, after adding
 npx wrangler pages deploy sites/acme.com/dist \
   --project-name=acme-com --branch=main
 
+# Images (Python 3 + Pillow, once per new photo; renditions are committed)
+python3 scripts/responsive-images.py acme.com         # AVIF + WebP at 4 widths
+python3 scripts/localize-stock-images.py acme.com     # bring Unsplash/Pexels hotlinks in-house
+python3 scripts/responsive-images.py --check          # no large image without srcset
+python3 scripts/image-weight.py                       # bytes per page, before vs after
+
+# One canonical host per zone (apex -> www or the reverse)
+python3 scripts/cf-canonical-redirects.py --check
+
 # Self-hosted infrastructure
 ./scripts/setup-infra.sh acme.com,other.com
 ```
+
+| Script | Does |
+|---|---|
+| `scripts/new-site.sh` | Copies the starter into `sites/<domain>` and applies a preset |
+| `scripts/setup-infra.sh` | Generates the Caddyfile and `.env` for the self-hosted stack |
+| `scripts/responsive-images.py` | Writes AVIF and WebP renditions plus a manifest into `public/images/_r/`; `--check` fails the build on a large image without `srcset` |
+| `scripts/localize-stock-images.py` | Downloads hotlinked Unsplash and Pexels photos, writes WebP, rewrites the URLs; `--check` fails on any remaining hotlink |
+| `scripts/image-weight.py` | Per-page image bytes at 375 and 1440 px, from the built HTML |
+| `scripts/cf-canonical-redirects.py` | One 301 rule per Cloudflare zone from `infrastructure/zones.json`; `--check` verifies with HEAD requests |
+| `packages/shared-ui/scripts/search-index.mjs` | Builds the search index from the HTML that shipped |
 
 ---
 
@@ -141,7 +163,17 @@ Automatic once `site` is set in `astro.config.mjs`: per-page titles and
 descriptions, canonicals, Open Graph, Twitter cards, JSON-LD, sitemap.
 [SEO Recipes](docs/seo-recipes.md) covers the rest — per-page OG images,
 git-based `lastmod`, `llms.txt` for answer engines, IndexNow, fuzzy 404
-redirects and build-time validation.
+redirects, one canonical host, a CSP that does not break the form, and
+build-time validation.
+
+### Responsive images
+
+On by default. Drop a photo in `public/images/`, run
+`python3 scripts/responsive-images.py <site>` once, commit the renditions.
+Every `<img>` in the built HTML that has them becomes `<picture>` with AVIF
+and WebP `srcset`, `width`/`height` and lazy loading. Nothing is generated at
+build time and nothing is resized on request. [Images](docs/images.md) has the
+per-image controls and the two checks.
 
 ---
 
@@ -158,6 +190,15 @@ redirects and build-time validation.
 - **Site scaffolder** — `bunx create-astro-fleet` or `./scripts/new-site.sh`,
   wiring config, styles and the build pipeline.
 - **Search and analytics**, as above.
+- **Responsive images, pre-generated** — AVIF and WebP at four widths, written
+  once by a script and committed; the build rewrites `<img>` to `<picture>`.
+  Two checks fail on a large image without `srcset` or a stock-photo hotlink.
+- **Security headers with an enforced CSP** in the starter's `_headers`, with
+  the placeholders for the form endpoint and analytics marked, and a script
+  that gives each zone one canonical host.
+- **Hardened contact form** — honeypot, success and error states, and a
+  documented submit handler that counts the lead only after the endpoint said
+  yes.
 - **CMS-ready** — the Meridian demo ships with [Keystatic](https://keystatic.com);
   admin at `/keystatic` in dev, content committed as markdown.
   [Adding a CMS](docs/adding-a-cms.md) covers the pattern and the alternatives.
@@ -408,8 +449,9 @@ If you ship a site with Astro Fleet, open a PR adding it here.
 
 **Shipping**
 
-- [SEO Recipes](docs/seo-recipes.md) — OG images, `llms.txt`, IndexNow, validation
-- [Deployment](docs/deployment.md) — Cloudflare Pages, Vercel, Netlify, self-hosted
+- [SEO Recipes](docs/seo-recipes.md) — OG images, `llms.txt`, IndexNow, canonical host, CSP, validation
+- [Images](docs/images.md) — pre-generated renditions, stock-photo localisation, the checks
+- [Deployment](docs/deployment.md) — Cloudflare Pages, Vercel, Netlify, self-hosted, security headers
 - [AI Workflow](docs/ai-workflow.md) — prompts, tool setup, AI-driven patterns
 - [Changelog](CHANGELOG.md) — what changed, and when
 

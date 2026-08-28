@@ -22,6 +22,8 @@ import {
   {contactInfo}
   {socialLinks}
   siteName={SITE_NAME}
+  search
+  searchPlaceholder="Services, pricing, contact"
   tagline={TAGLINE}
   logoSrc={LOGO_SRC}
   ctaText="Get Started"
@@ -51,6 +53,18 @@ import {
   <!-- Story -->
   <section class="section about-body">
     <div class="container about-body__inner">
+      <!--
+        A plain <img> is all a page writes. After the build, responsiveImages()
+        (astro.config.mjs) turns it into <picture> with AVIF and WebP srcset,
+        width/height and lazy loading, using the renditions in public/images/_r/.
+        See docs/images.md. Replace this placeholder with a real photo.
+      -->
+      <img
+        src="/images/sample-photo.jpg"
+        alt="Placeholder image. Replace with a photo of your team or workplace."
+        class="about-body__photo"
+        data-sizes="(max-width: 768px) 100vw, 800px"
+      />
       <div class="about-body__prose">
         <h2>Our Story</h2>
         <p>
@@ -107,6 +121,15 @@ import {
 </BaseLayout>
 
 <style>
+  .about-body__photo {
+    display: block;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
   .about-hero {
     background: linear-gradient(160deg, #f0f4ff 0%, #ffffff 60%);
     padding-bottom: 2rem;
