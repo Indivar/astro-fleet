@@ -45,3 +45,7 @@ Thumbs.db
 # Written by packages/shared-ui/scripts/search-index.mjs so `astro dev` can
 # serve it. The authoritative copy is written into dist/ by the build.
 sites/*/public/search-index.json
+
+# Your Cloudflare zone list for scripts/cf-canonical-redirects.py.
+# Start from infrastructure/zones.example.json.
+infrastructure/zones.json

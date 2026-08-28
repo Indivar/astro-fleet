@@ -1,0 +1,7 @@
+{
+  "_comment": "Copy to infrastructure/zones.json (gitignored) and fill in. One entry per Cloudflare zone. `canonical` must match `site:` in that site's astro.config.mjs; `from` is the other host. Zone IDs are on the zone's Overview page, right column.",
+  "zones": [
+    { "name": "acme.com", "zone_id": "0123456789abcdef0123456789abcdef", "from": "acme.com", "canonical": "www.acme.com" },
+    { "name": "shop.example", "zone_id": "fedcba9876543210fedcba9876543210", "from": "www.shop.example", "canonical": "shop.example" }
+  ]
+}

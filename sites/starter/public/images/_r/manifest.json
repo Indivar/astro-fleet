@@ -1,0 +1,18 @@
+{
+ "/images/sample-photo.jpg": {
+  "alpha": false,
+  "formats": [
+   "avif",
+   "webp"
+  ],
+  "h": 1000,
+  "slug": "images-sample-photo",
+  "w": 1600,
+  "widths": [
+   480,
+   768,
+   1200,
+   1600
+  ]
+ }
+}

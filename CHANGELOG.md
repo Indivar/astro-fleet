@@ -16,6 +16,103 @@ new projects silently scaffold from the previous version.
 
 ---
 
+## [2.4.0] — 2026-08-28
+
+Images served at the size the slot needs, headers that say no to everything
+not listed, and a contact form that counts a lead only after the endpoint
+took it.
+
+### Added
+
+- **Responsive images, pre-generated.** `scripts/responsive-images.py` writes
+  AVIF and WebP renditions at 480, 768, 1200 and 1920 px into
+  `public/images/_r/` with a manifest, once, on the machine that adds the
+  photo. The renditions are committed. `responsiveImages()` from
+  `@astro-fleet/shared-ui/utils/responsive-images.mjs`, now in every site's
+  `astro.config.mjs`, rewrites each built `<img>` that has renditions into
+  `<picture>` with both `srcset`s, a `sizes` hint, `width` and `height`,
+  `loading="lazy"` and `decoding="async"`. Markdown images get the same
+  treatment because it runs on the finished HTML. Per image: `data-sizes`,
+  `fetchpriority="high"`, `data-no-picture`.
+
+  Nothing runs at build time beyond reading files already in the repo, so CI
+  needs nothing installed. Python 3 and Pillow are the one extra, and only for
+  whoever adds photos. There is deliberately no Node version of the generator.
+
+  `--check` fails when a built page serves an image over 150 KB without
+  `srcset`. `scripts/image-weight.py` prints the image bytes a browser would
+  download per page, before and after, at 375 and 1440 px.
+
+- **`scripts/localize-stock-images.py`** brings hotlinked Unsplash and Pexels
+  photos in-house: downloads the original once into `_media/stock-originals/`
+  with a licence manifest, writes WebP renditions, rewrites the URLs in `src/`.
+  `--helper-id-regex` covers sites that build URLs from bare ids. `--check`
+  fails on any hotlink left in built HTML.
+
+- **`scripts/cf-canonical-redirects.py`** creates one 301 Single Redirect rule
+  per Cloudflare zone from `infrastructure/zones.json` (start from
+  `zones.example.json`), so each site answers on one host. A Pages project
+  with apex and www both attached serves 200 on both, which is every page as
+  duplicate content. `--check` HEADs each host and needs no token.
+
+- **Security headers in the starter's `_headers`**: HSTS,
+  `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`,
+  `Permissions-Policy`, `No-Vary-Search`, cache lifetimes per path, and an
+  enforced `Content-Security-Policy` that allows `'self'` and the inline
+  styles and scripts Astro emits. Placeholders for the form endpoint, GA4 and
+  the Cloudflare Web Analytics beacon are marked in the file. The three demo
+  sites carry the same file.
+
+- **`ContactForm`** gains an off-screen `_hp` honeypot, two hidden status
+  lines (`[data-cf-status="success"]` and `[data-cf-status="error"]`, with
+  `successText` and `errorText` props), and a disabled style for the submit
+  button. The starter's contact page carries a working submit handler that
+  posts JSON, shows the states, disables the button while in flight, and fires
+  `generate_lead` only after a 2xx.
+
+- **`docs/images.md`**, and new sections in `docs/deployment.md` (one
+  canonical host; security headers, with the table of which host goes in
+  which directive), `docs/components.md` (the submit handler pattern and why
+  each line is there), and `docs/seo-recipes.md` (canonical host, CSP, and
+  the note that Lighthouse's `robots-txt` audit does not parse
+  `Content-Signal` and fails on a valid file).
+
+- **The starter ships one placeholder photo** with its renditions, so the
+  rewrite can be seen in the build log before any real photo is added.
+
+### Changed
+
+- **`@astro-fleet/shared-ui`** is 1.1.0 and now declares `exports`:
+  `./src/*`, `./utils/*` and `./scripts/*`. Existing import paths are
+  unchanged.
+
+- **The starter has search on**, with the index step in its build script and
+  `search` and `searchPlaceholder` on every page, so a new site starts with
+  the control wired and the index built.
+
+- **`create-astro-fleet`** is 0.3.0 and pins template tag `v2.4.0`.
+
+- **`docs/deployment.md`** now says, in one place, the rule learned the hard
+  way: every host a page talks to must be in the CSP, and any change to
+  `_headers` is verified in a real browser on the live site by submitting the
+  form and reading the console. `curl` shows the header arrived; only the
+  browser shows what it blocked.
+
+### Fixed
+
+- **`SiteSearch`'s trigger button had no accessible name below 700px**, where
+  its text label is hidden and only the icon shows. It now carries
+  `aria-label`.
+
+- **`Footer` rendered a social icon with `href=""`** for any entry whose URL
+  was left blank in `site-config.ts`. Entries without a destination are now
+  skipped.
+
+- **The consent banner's policy link was distinguishable from the text by
+  colour alone.** It is now underlined.
+
+---
+
 ## [2.3.0] — 2026-08-23
 
 Two shared components and a documentation set built to be executed rather than
@@ -190,6 +287,7 @@ Initial release. Multi-site Astro monorepo with shared components, a design
 token system with three presets, three demo sites, scaffolding scripts and
 infrastructure templates. MIT licensed.
 
+[2.4.0]: https://github.com/Indivar/astro-fleet/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/Indivar/astro-fleet/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/Indivar/astro-fleet/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/Indivar/astro-fleet/compare/v2.0.0...v2.1.0

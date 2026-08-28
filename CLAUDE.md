@@ -36,6 +36,7 @@ Check these before doing anything else. Do not assume; run the checks.
 bun --version        # 1.1+.  Install: curl -fsSL https://bun.sh/install | bash
 node --version       # 20+.   Some tooling still shells out to node.
 git --version
+python3 -c "import PIL"   # only for adding photos: pip install pillow
 ```
 
 Then:
@@ -294,6 +295,35 @@ writing any of that yourself.
 **Write for answer engines too.** Answer-first sections, real FAQs, consistent
 entity naming, and factual statements an AI could quote without mangling.
 
+### 6.4 Images
+
+On by default. Put the original in `public/images/`, then once:
+
+```bash
+python3 scripts/responsive-images.py acme.com    # writes public/images/_r/, commit it
+```
+
+The build turns every `<img src="/images/x.jpg">` that has renditions into
+`<picture>` with AVIF and WebP `srcset`, `width`/`height` and lazy loading.
+Pages keep writing a plain `<img>`. Say how wide the slot is with
+`data-sizes` (`100vw` for a hero, `(max-width: 768px) 100vw, 33vw` for a
+three-up grid) and mark the LCP image `fetchpriority="high"`.
+
+**Never hotlink a stock photo.** If a page has an Unsplash or Pexels URL, run
+`python3 scripts/localize-stock-images.py acme.com` and commit what it writes.
+Both checks are part of finishing: `responsive-images.py --check` and
+`localize-stock-images.py --check` must print zero.
+
+Full detail: `docs/images.md`.
+
+### 6.5 The contact form
+
+`ContactForm` is plain HTML with a honeypot (`_hp`) and two hidden status
+lines. The page owns the submit: the starter's `src/pages/contact.astro` has
+the handler. Replace `FORM_ENDPOINT`, then add that origin to `connect-src` and
+`form-action` in `public/_headers`. The `generate_lead` event fires only after
+a 2xx; never on click.
+
 ---
 
 ## 7. Deployment
@@ -366,6 +396,28 @@ somewhere recoverable.** Apex `CNAME` flattening means `MX` records keep working
 so mail survives an apex change — but change only the records you mean to, and
 check the rest afterwards.
 
+### 7.4a One host, not two
+
+With both `acme.com` and `www.acme.com` attached, both answer 200 and every
+page is duplicate content. The host in `site:` is canonical; the other must
+301 to it:
+
+```bash
+cp infrastructure/zones.example.json infrastructure/zones.json   # fill in; gitignored
+python3 scripts/cf-canonical-redirects.py            # needs Zone -> Single Redirect -> Edit
+python3 scripts/cf-canonical-redirects.py --check    # HEAD both hosts, no token needed
+```
+
+### 7.4b Headers
+
+`public/_headers` ships with HSTS, `nosniff`, frame and referrer policies and
+an enforced CSP that allows only `'self'`. **Every host the page talks to must
+be listed** or the browser blocks it silently: the form endpoint, GA4 if
+`gaId` is set, and the Cloudflare Web Analytics beacon
+(`static.cloudflareinsights.com`, `cloudflareinsights.com`) if it is on in the
+dashboard. After changing the file, open the live site in a browser, submit the
+form, read the console. `curl` cannot see a CSP block.
+
 ### 7.5 Purge the cache
 
 After any deploy that changes HTML, or you will spend twenty minutes debugging a
@@ -402,6 +454,11 @@ At minimum, against the built output:
       tag loads after. If analytics is enabled.
 - [ ] Canonical, title and description correct and unique on every page.
 - [ ] `robots.txt` and the sitemap present and reachable.
+- [ ] `python3 scripts/responsive-images.py --check` and
+      `python3 scripts/localize-stock-images.py --check` both print zero.
+- [ ] The other host 301s to the canonical one (`cf-canonical-redirects.py --check`).
+- [ ] On the live site, in a browser: the form submits, the console shows no
+      CSP block, and `generate_lead` fired once.
 - [ ] If this replaces an existing site: every indexed old URL has a 301, or the
       rankings go on launch day.
 
@@ -477,6 +534,15 @@ bun run lint
 # Search index (only if not already in the site's build script)
 cd sites/acme.com && node ../../packages/shared-ui/scripts/search-index.mjs
 
+# Images (Python 3 + Pillow); commit what they write
+python3 scripts/responsive-images.py acme.com
+python3 scripts/localize-stock-images.py acme.com
+python3 scripts/responsive-images.py --check && python3 scripts/localize-stock-images.py --check
+python3 scripts/image-weight.py acme.com
+
+# Canonical host
+python3 scripts/cf-canonical-redirects.py --check
+
 # Deploy
 npx wrangler pages deploy sites/acme.com/dist --project-name=acme-com --branch=main
 
@@ -493,9 +559,11 @@ npx wrangler pages deploy sites/acme.com/dist --project-name=acme-com --branch=m
 ```
 packages/config/       DesignTokens interface + 3 presets (CORPORATE, SAAS, WARM)
 packages/shared-ui/    24 components + 3 layouts + scripts/search-index.mjs
+                       + src/utils/responsive-images.mjs (Astro integration)
 sites/<domain>/        one site; own astro.config, package.json, pages
-scripts/               new-site.sh, setup-infra.sh
-infrastructure/        Docker Compose + Traefik + Caddy templates
+scripts/               new-site.sh, setup-infra.sh, responsive-images.py,
+                       localize-stock-images.py, image-weight.py, cf-canonical-redirects.py
+infrastructure/        Docker Compose + Traefik + Caddy templates, zones.example.json
 ```
 
 ### Design tokens
@@ -559,7 +627,8 @@ content passed via typed props; no global state.
 | `docs/adding-a-site.md` | `site-config.ts` in full, selective builds |
 | `docs/components.md` | All 24 components and 3 layouts, with props |
 | `docs/design-tokens.md` | The token system and the three presets |
-| `docs/seo-recipes.md` | OG images, llms.txt, IndexNow, validation |
+| `docs/seo-recipes.md` | OG images, llms.txt, IndexNow, canonical host, CSP, validation |
+| `docs/images.md` | Pre-generated renditions, stock photos, the checks |
 | `docs/deployment.md` | Cloudflare, Vercel, Netlify, self-hosted |
 | `docs/adding-a-cms.md` | The Keystatic pattern and alternatives |
 | `docs/framework-integrations.md` | React/Vue/Svelte islands, view transitions |
@@ -571,6 +640,8 @@ content passed via typed props; no global state.
 - `packages/config/src/css.ts` — `tokensToCSSVars()`
 - `packages/shared-ui/src/layouts/BaseLayout.astro` — the page shell
 - `packages/shared-ui/scripts/search-index.mjs` — the search index generator
+- `packages/shared-ui/src/utils/responsive-images.mjs` — the `<img>` to `<picture>` build step
+- `sites/<domain>/public/_headers` — security headers and the CSP; every external host goes here
 - `sites/<domain>/src/lib/site-config.ts` — one file controls a site's brand
 - `sites/<domain>/src/styles/global.css` — Tailwind `@theme` token mirror
 - `sites/<domain>/astro.config.mjs` — per-site config; **set `site`**

@@ -10,7 +10,7 @@ import { scaffoldSite } from './scaffold.mjs';
 // The fleet template release this CLI ships with.
 // Bump to match the latest https://github.com/indivar/astro-fleet/releases tag
 // when you cut a new template release.
-const TEMPLATE_VERSION = 'v2.3.0';
+const TEMPLATE_VERSION = 'v2.4.0';
 const DEFAULT_TEMPLATE = `github:indivar/astro-fleet#${TEMPLATE_VERSION}`;
 
 const DEMO_SITES = ['flux-analytics.com', 'meridian-advisory.com', 'olive-and-vine.com'];

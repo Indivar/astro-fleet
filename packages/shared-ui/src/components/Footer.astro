@@ -89,9 +89,9 @@ const socialIcons: Record<string, string> = {
           </div>
         )}
 
-        {socialLinks.length > 0 && (
+        {socialLinks.some((link) => link.url) && (
           <div class="footer__social">
-            {socialLinks.map((link) => (
+            {socialLinks.filter((link) => link.url).map((link) => (
               <a
                 href={link.url}
                 class="footer__social-link"

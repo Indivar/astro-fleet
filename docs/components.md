@@ -15,7 +15,7 @@ import ComponentName from '@astro-fleet/shared-ui/src/components/ComponentName.a
 | [Banner](#banner) | Top-of-page announcement or cookie bar (dismissible, 4 variants) | No |
 | [Breadcrumb](#breadcrumb) | Navigation trail with JSON-LD structured data | No |
 | [ComparisonTable](#comparisontable) | Feature comparison grid with ✓/✗ and custom text | No |
-| [ContactForm](#contactform) | Enquiry form with validation, optional WhatsApp CTA | No |
+| [ContactForm](#contactform) | Enquiry form with validation, honeypot, status lines, optional WhatsApp CTA | No |
 | [CTABlock](#ctablock) | Full-width call-to-action with heading, description, and buttons | No |
 | [FAQ](#faq) | Accordion via `<details>/<summary>` — pure CSS, accessible | No |
 | [FeatureGrid](#featuregrid) | Icon + title + description cards (2/3/4 columns) | No |
@@ -244,7 +244,7 @@ import ComparisonTable from '@astro-fleet/shared-ui/src/components/ComparisonTab
 
 ### ContactForm
 
-A full enquiry form with fields for name, company, email, phone, optional industry dropdown, product interest, and message. Includes built-in validation styling (`:invalid:not(:placeholder-shown)`) and an optional WhatsApp CTA for markets where WhatsApp is preferred.
+A full enquiry form with fields for name, company, email, phone, optional industry dropdown, product interest, and message. Includes built-in validation styling (`:invalid:not(:placeholder-shown)`), an off-screen honeypot, two hidden status lines for a submit handler to reveal, and an optional WhatsApp CTA for markets where WhatsApp is preferred.
 
 **When to use:** Contact pages, product inquiry pages, demo request forms. The form is provider-agnostic — set `formAction` to your own API endpoint, Formspree, Netlify Forms, or any backend.
 
@@ -259,8 +259,27 @@ export interface Props {
   heading?:         string;     // default: 'Send Us an Enquiry'
   description?:     string;
   industries?:      string[];   // renders a <select> dropdown when provided
+  successText?:     string;     // status line a handler shows after a 2xx
+  errorText?:       string;     // status line after anything else; say what to do instead
 }
 ```
+
+**Spam.** The form carries an off-screen text field named `_hp`. Visitors never
+see it (it is positioned off-canvas, `tabindex="-1"`, `aria-hidden`), so a
+submission that arrives with `_hp` filled in came from a bot. Reject those at
+the endpoint. Your endpoint still needs rate limiting; a honeypot is a filter,
+not a wall.
+
+**States.** Two lines sit under the submit button, hidden until something
+happens:
+
+```html
+<p data-cf-status="success" role="status" hidden>Thank you. We reply within one working day.</p>
+<p data-cf-status="error"   role="alert"  hidden>We could not send that just now. Please email or call us instead.</p>
+```
+
+Set the copy with `successText` and `errorText`. The error line should say what
+to do instead, not apologise.
 
 **Basic usage:**
 
@@ -293,7 +312,78 @@ import ContactForm from '@astro-fleet/shared-ui/src/components/ContactForm.astro
 - **Formspree:** `formAction="https://formspree.io/f/your-form-id"`
 - **Netlify Forms:** add `data-netlify="true"` to the form via a slot or custom integration
 - **Custom API:** `formAction="/api/contact"` and handle the POST on your backend
-- **Static fallback:** Leave `formAction="#"` and add a `footer-scripts` slot with your preferred form handler JS
+- **Site-owned handler:** leave `formAction="#"` and post from a script on the page, as below
+
+**A site-owned submit handler.** The component is plain HTML and owns nothing
+about the request. A page that wants to post JSON, show the status lines and
+count the lead adds a `<script>` beside the component. The starter's
+`src/pages/contact.astro` carries a working one; the shape is:
+
+```ts
+const FORM_ENDPOINT = 'https://example.com/api/enquiry';
+
+function initContactForm() {
+  const form = document.querySelector<HTMLFormElement>('#enquiry-form form');
+  if (!form || form.dataset.bound === '1') return;
+  form.dataset.bound = '1';
+  const field = (name: string) => {
+    const el = form.elements.namedItem(name) as HTMLInputElement | null;
+    return el && 'value' in el ? el.value.trim() : '';
+  };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    const button = form.querySelector<HTMLButtonElement>('.contact-form__submit');
+    const ok = form.querySelector<HTMLElement>('[data-cf-status="success"]');
+    const err = form.querySelector<HTMLElement>('[data-cf-status="error"]');
+    if (ok) ok.hidden = true;
+    if (err) err.hidden = true;
+    if (button) button.disabled = true;
+    try {
+      const res = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: field('name'), company: field('company'), email: field('email'),
+          phone: field('phone'), message: field('message'), _hp: field('_hp'),
+        }),
+      });
+      if (!res.ok) throw new Error(`form endpoint ${res.status}`);
+      if (ok) ok.hidden = false;
+      form.reset();
+      // Only after a 2xx. A lead that never arrived is not a lead.
+      (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.('event', 'generate_lead', { form: 'contact' });
+    } catch {
+      if (err) err.hidden = false;
+    } finally {
+      if (button) button.disabled = false;
+    }
+  });
+}
+initContactForm();
+document.addEventListener('astro:page-load', initContactForm);
+```
+
+Four things in it are deliberate:
+
+1. **The button is disabled while the request is in flight** and re-enabled in
+   `finally`, so a slow endpoint cannot collect the same enquiry twice and a
+   failed one leaves the button usable.
+2. **The analytics event fires only after a 2xx.** Firing on click counts
+   submissions the endpoint never received, and every dashboard downstream
+   inherits the lie. With the built-in `Analytics` component,
+   `window.track('generate_lead', ...)` does the same and is a no-op until
+   consent.
+3. **`_hp` is sent as-is.** The endpoint rejects the submission if it has a
+   value. Do not filter it out client-side; the bot's script is what you are
+   catching.
+4. **It re-binds on `astro:page-load`** and guards with `data-bound`, so it
+   survives view transitions and cannot attach twice.
+
+The endpoint's origin has to be in `connect-src` (and `form-action`) in
+`public/_headers`, or the browser blocks the request and the visitor sees the
+error line for no reason they can fix. See `docs/deployment.md`, "Security
+headers".
 
 **CSS variables consumed:** `--color-accent`, `--color-cta`, `--color-primary`, `--cta-radius`, `--font-heading`, `--font-body`
 
@@ -1441,6 +1531,12 @@ is off by default.
 | `search` | `boolean` | `false` | Shows the search control in the header |
 | `searchPlaceholder` | `string` | `'Search this site'` | Name three things the site actually covers. A generic placeholder teaches nobody what to type |
 
+Both props are on `BaseLayout` and passed through to `Header`, which renders
+`SiteSearch` between the navigation and the CTA. The starter has search on
+with its index step in the build; the demo sites show it on Meridian only. The
+trigger button carries `aria-label` because its text label is hidden below
+700px, where only the icon shows.
+
 **Generator options**
 
 | Flag | Default | Notes |
@@ -1709,6 +1805,10 @@ The `ContactForm` and `Newsletter` components accept any `formAction` URL:
 - **Netlify Forms**: Add `data-netlify="true"` to the form element
 - **Basin**: `https://usebasin.com/f/your-form-id`
 - **Custom API**: Any URL that accepts a POST with form data
+- **Posting JSON from the page**: see [ContactForm](#contactform), "A site-owned submit handler"
+
+Whichever you use, add its origin to `connect-src` and `form-action` in
+`public/_headers`.
 
 ### Cookie consent
 

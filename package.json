@@ -1,6 +1,6 @@
 {
   "name": "astro-fleet",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "private": true,
   "description": "Multi-site Astro monorepo starter for agencies and multi-brand companies",
   "license": "MIT",
