@@ -1,0 +1,25 @@
+{
+  "_comment": [
+    "Languages this site offers. Delete this whole i18n/ directory and the two",
+    "i18n steps in package.json to turn translation off: nothing else in the",
+    "template depends on it.",
+    "",
+    "English keeps the root, so every URL that ranks today is untouched. Each",
+    "other language lives under its own prefix: /es/about/ for /about/.",
+    "",
+    "reviewed=false means the language is live for visitors through the switcher",
+    "but carries noindex and stays out of the sitemaps, so Google only ever sees",
+    "a language a person has actually read. Google's spam policy names machine",
+    "translation published without human review as scaled content abuse, and the",
+    "penalty lands on the whole domain, not on one language. Flip it to true the",
+    "day a native speaker has been through the pages.",
+    "",
+    "`site` must match the `site` in astro.config.mjs: the alternate and",
+    "canonical URLs are built from it."
+  ],
+  "site": "https://www.example.com",
+  "locales": [
+    { "code": "en", "label": "English", "english": "English" },
+    { "code": "es", "label": "Español", "english": "Spanish", "reviewed": false }
+  ]
+}

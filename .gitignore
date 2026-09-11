@@ -49,3 +49,6 @@ sites/*/public/search-index.json
 # Your Cloudflare zone list for scripts/cf-canonical-redirects.py.
 # Start from infrastructure/zones.example.json.
 infrastructure/zones.json
+
+# i18n working batches: scratch handed to the translator, not history.
+sites/*/i18n/.batches/

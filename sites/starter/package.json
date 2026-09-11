@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node ../../packages/shared-ui/scripts/search-index.mjs",
+    "build": "astro build && node ../../packages/shared-ui/scripts/search-index.mjs && node ../../packages/shared-ui/scripts/i18n-extract.mjs . && node ../../packages/shared-ui/scripts/i18n-build.mjs .",
+    "i18n": "node ../../packages/shared-ui/scripts/i18n-extract.mjs . && node ../../packages/shared-ui/scripts/i18n-build.mjs .",
     "preview": "astro preview",
     "lint": "astro check"
   },

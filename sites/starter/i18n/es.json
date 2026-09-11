@@ -1,0 +1,490 @@
+{
+ "df4167303807": {
+  "en": "&copy; 2026 Starter Site. All rights reserved.",
+  "t": "&copy; 2026 Sitio inicial. Todos los derechos reservados."
+ },
+ "cd204db5f26f": {
+  "en": "<!-- Default icon if no slot content provided --> <0/>",
+  "t": "<!-- Default icon if no slot content provided --> <0/>"
+ },
+ "2791ca5cfb9e": {
+  "en": "<0/> 123 Main Street, Anytown",
+  "t": "<0/> Calle Mayor 123, Ciudad"
+ },
+ "f0986be27761": {
+  "en": "<0/> hello@example.com",
+  "t": "<0/> hello@example.com"
+ },
+ "dea37b2cbf90": {
+  "en": "<0>Home</0> <1/>",
+  "t": "<0>Inicio</0> <1/>"
+ },
+ "411cc505cdc6": {
+  "en": "A battle-tested library of Astro components — Header, Footer, ServiceCard, CTABlock and more — shared across every site in your fleet.",
+  "t": "Una biblioteca probada de componentes de Astro: Header, Footer, ServiceCard, CTABlock y más, compartida por todos los sitios de tu flota."
+ },
+ "6b21fb791ac0": {
+  "en": "About",
+  "t": "Quiénes somos"
+ },
+ "c887b9d3b390": {
+  "en": "About Us",
+  "t": "Quiénes somos"
+ },
+ "f616cab21340": {
+  "en": "About Us — Starter Site",
+  "t": "Quiénes somos: Sitio inicial"
+ },
+ "78d482edf6fb": {
+  "en": "Alex Chen",
+  "t": "Alex Chen"
+ },
+ "25bc96295797": {
+  "en": "Analytics",
+  "t": "Analítica"
+ },
+ "a0363cf3baf2": {
+  "en": "Astro Fleet bundles the patterns that every multi-site project needs — so you can focus on content and conversion, not boilerplate.",
+  "t": "Astro Fleet reúne los patrones que necesita todo proyecto de varios sitios, para que te ocupes del contenido y la conversión, no del andamiaje."
+ },
+ "43ee1b1ceba5": {
+  "en": "Astro Fleet gives your team a shared component library, typed design tokens, and a Turborepo pipeline — so spinning up a new brand site takes minutes, not weeks.",
+  "t": "Astro Fleet da a tu equipo una biblioteca de componentes compartida, tokens de diseño tipados y una tubería de Turborepo, de modo que lanzar el sitio de una marca nueva lleva minutos, no semanas."
+ },
+ "8407a9bdf7db": {
+  "en": "Astro Fleet is an open-source multi-site monorepo starter. Shared components, design tokens, and one-command deploys for agencies and multi-brand teams.",
+  "t": "Astro Fleet es un monorepo inicial de código abierto para varios sitios. Componentes compartidos, tokens de diseño y despliegues con una sola orden, para agencias y equipos con varias marcas."
+ },
+ "0b9d2b2362bc": {
+  "en": "Blog",
+  "t": "Blog"
+ },
+ "c766e665183d": {
+  "en": "Breadcrumb",
+  "t": "Ruta de navegación"
+ },
+ "b09087d46995": {
+  "en": "Build Multiple Sites,<0/> <1>One Codebase</1>",
+  "t": "Varios sitios,<0/> <1>un solo código</1>"
+ },
+ "066e5e5bd84d": {
+  "en": "Built with Astro Fleet",
+  "t": "Creado con Astro Fleet"
+ },
+ "164b3d4809f9": {
+  "en": "Changelog",
+  "t": "Registro de cambios"
+ },
+ "179dc495a9d8": {
+  "en": "Clone the repo, run bun install, and have your first site live in under 10 minutes.",
+  "t": "Clona el repositorio, ejecuta bun install y ten tu primer sitio en línea en menos de 10 minutos."
+ },
+ "0906f923243f": {
+  "en": "Close search",
+  "t": "Cerrar búsqueda"
+ },
+ "534f3ce800c5": {
+  "en": "Cloud Hosting",
+  "t": "Alojamiento en la nube"
+ },
+ "7a1994999d18": {
+  "en": "Company",
+  "t": "Empresa"
+ },
+ "b2d0bdaaebe3": {
+  "en": "Company Logo",
+  "t": "Logotipo de la empresa"
+ },
+ "b37456c4530b": {
+  "en": "Contact",
+  "t": "Contacto"
+ },
+ "9ad0ccff7c60": {
+  "en": "Contact Us",
+  "t": "Contáctanos"
+ },
+ "da8493006710": {
+  "en": "Contact Us — Starter Site",
+  "t": "Contacto: Sitio inicial"
+ },
+ "22641f5bd599": {
+  "en": "Content Strategy",
+  "t": "Estrategia de contenidos"
+ },
+ "ac1138c49e1c": {
+  "en": "Custom websites and web applications built with modern frameworks. We prioritise performance, accessibility, and long-term maintainability.",
+  "t": "Sitios y aplicaciones web a medida con frameworks modernos. Damos prioridad al rendimiento, la accesibilidad y el mantenimiento a largo plazo."
+ },
+ "034aa193676d": {
+  "en": "Deployment guide <0/>",
+  "t": "Guía de despliegue <0/>"
+ },
+ "5f9f38106cd2": {
+  "en": "Design Lead",
+  "t": "Responsable de diseño"
+ },
+ "0f1cbd54c653": {
+  "en": "Design Tokens",
+  "t": "Tokens de diseño"
+ },
+ "9e9cf3221a30": {
+  "en": "Documentation",
+  "t": "Documentación"
+ },
+ "f64b0de239fd": {
+  "en": "Drop us a message and we'll recommend the right approach for your project.",
+  "t": "Escríbenos y te recomendaremos el enfoque adecuado para tu proyecto."
+ },
+ "16840e292bc5": {
+  "en": "e.g., Product name or model",
+  "t": "p. ej., nombre o modelo del producto"
+ },
+ "8ba9540b29f0": {
+  "en": "Each site builds independently via Turborepo. Deploy to Cloudflare Pages, Netlify, or any static host with a single wrangler command.",
+  "t": "Cada sitio se compila por separado con Turborepo. Despliega en Cloudflare Pages, Netlify o cualquier alojamiento estático con una sola orden de wrangler."
+ },
+ "c6dca0f4f18d": {
+  "en": "Editorial planning, keyword research, and content calendars aligned to your business goals. Built for teams who publish regularly.",
+  "t": "Planificación editorial, investigación de palabras clave y calendarios de contenido alineados con tus objetivos de negocio. Pensado para equipos que publican con regularidad."
+ },
+ "071e3a9d4855": {
+  "en": "Email Address <0>*</0>",
+  "t": "Correo electrónico <0>*</0>"
+ },
+ "87825fd5be7a": {
+  "en": "Enquire now <0/>",
+  "t": "Solicitar información <0/>"
+ },
+ "9c50b0d4b195": {
+  "en": "Everything in this repository is MIT-licensed. Fork it, extend it, and make it your own. If you build something useful on top of it, we'd love to hear about it.",
+  "t": "Todo lo que hay en este repositorio tiene licencia MIT. Haz un fork, amplíalo y hazlo tuyo. Si construyes algo útil sobre él, nos encantará saberlo."
+ },
+ "edca329b261a": {
+  "en": "Everything You Need Out of the Box",
+  "t": "Todo lo que necesitas, desde el primer momento"
+ },
+ "1f245784cf87": {
+  "en": "Explore our full range of services: web development, cloud hosting, SEO, content strategy, analytics, and ongoing support.",
+  "t": "Descubre toda nuestra gama de servicios: desarrollo web, alojamiento en la nube, SEO, estrategia de contenidos, analítica y soporte continuo."
+ },
+ "7ece98ea4f4c": {
+  "en": "Explore tokens <0/>",
+  "t": "Explorar los tokens <0/>"
+ },
+ "4efde0007fdb": {
+  "en": "Follow us on linkedin",
+  "t": "Síguenos en linkedin"
+ },
+ "6e4ed8984d15": {
+  "en": "Follow us on twitter",
+  "t": "Síguenos en twitter"
+ },
+ "a8fdc3f800d8": {
+  "en": "Founder & CEO",
+  "t": "Fundadora y directora general"
+ },
+ "3e839acc63e3": {
+  "en": "From a single landing page to a full multi-site fleet — we cover everything you need to launch fast and grow with confidence.",
+  "t": "Desde una sola página de aterrizaje hasta una flota completa de sitios: cubrimos todo lo que necesitas para lanzar rápido y crecer con confianza."
+ },
+ "7d1049c686aa": {
+  "en": "Full Name <0>*</0>",
+  "t": "Nombre completo <0>*</0>"
+ },
+ "56cddd34054c": {
+  "en": "Get in Touch",
+  "t": "Ponte en contacto"
+ },
+ "5ee489cdc9bd": {
+  "en": "Get in touch with our team. Fill in the form and we'll get back to you within 24 hours.",
+  "t": "Ponte en contacto con nuestro equipo. Rellena el formulario y te responderemos en 24 horas."
+ },
+ "bd2cb051773a": {
+  "en": "Get Started",
+  "t": "Empezar"
+ },
+ "6b131224eb8e": {
+  "en": "Go back home",
+  "t": "Volver al inicio"
+ },
+ "0351c6797e4e": {
+  "en": "Good infrastructure should be invisible. Your team should spend time crafting content and conversion flows, not wiring up CSS variables or debugging shared dependency versions. Astro Fleet handles the plumbing so you can focus on what matters.",
+  "t": "Una buena infraestructura debería ser invisible. Tu equipo debería dedicar el tiempo a crear contenido y flujos de conversión, no a conectar variables CSS ni a depurar versiones de dependencias compartidas. Astro Fleet se ocupa de la fontanería para que tú te ocupes de lo importante."
+ },
+ "a65057bf70ed": {
+  "en": "Have a question or ready to start a project? Fill in the form below and we'll get back to you within one business day.",
+  "t": "¿Tienes una pregunta o quieres empezar un proyecto? Rellena el formulario y te responderemos en un día laborable."
+ },
+ "70f8bb9a8a53": {
+  "en": "Home",
+  "t": "Inicio"
+ },
+ "cac7bbb6b67b": {
+  "en": "Jane Doe",
+  "t": "Jane Doe"
+ },
+ "e61a3587b3f7": {
+  "en": "John Smith",
+  "t": "John Smith"
+ },
+ "647c8f13bb29": {
+  "en": "Lead Engineer",
+  "t": "Ingeniero principal"
+ },
+ "a63d9dc55534": {
+  "en": "Learn about our team, our mission, and why we built this platform. We're a small team passionate about great software and developer experience.",
+  "t": "Conoce a nuestro equipo, nuestra misión y por qué creamos esta plataforma. Somos un equipo pequeño al que le apasiona el buen software y la experiencia de quien programa."
+ },
+ "378cbbf54cbb": {
+  "en": "Learn More",
+  "t": "Saber más"
+ },
+ "5826b136ec5c": {
+  "en": "Leave this field empty",
+  "t": "Deja este campo vacío"
+ },
+ "efd197f3fce4": {
+  "en": "Main navigation",
+  "t": "Navegación principal"
+ },
+ "2a6c908556bd": {
+  "en": "Managed hosting on Cloudflare Pages, AWS, or your preferred provider. Sub-30 ms edge delivery with automatic cache invalidation on deploy.",
+  "t": "Alojamiento gestionado en Cloudflare Pages, AWS o el proveedor que prefieras. Entrega desde el borde en menos de 30 ms, con invalidación automática de la caché al desplegar."
+ },
+ "68f4145fee7d": {
+  "en": "Message",
+  "t": "Mensaje"
+ },
+ "058f36b25e30": {
+  "en": "Mobile navigation",
+  "t": "Navegación móvil"
+ },
+ "d19dadae19da": {
+  "en": "Not Sure Which Service You Need?",
+  "t": "¿No sabes qué servicio necesitas?"
+ },
+ "c3f920385347": {
+  "en": "One-Command Deploy",
+  "t": "Despliegue con una sola orden"
+ },
+ "8137c931be8e": {
+  "en": "Ongoing maintenance, dependency updates, and on-call support plans. We keep your sites healthy so you can focus on your business.",
+  "t": "Mantenimiento continuo, actualización de dependencias y planes de soporte con guardia. Mantenemos tus sitios sanos para que te ocupes de tu negocio."
+ },
+ "66d123b38815": {
+  "en": "Open Source & MIT Licensed",
+  "t": "Código abierto con licencia MIT"
+ },
+ "211ad386846a": {
+  "en": "Open Source First",
+  "t": "Primero el código abierto"
+ },
+ "6835157ba857": {
+  "en": "Open Source Monorepo Starter",
+  "t": "Monorepo inicial de código abierto"
+ },
+ "7a772597f41f": {
+  "en": "Our Services",
+  "t": "Nuestros servicios"
+ },
+ "c8927cf4e88c": {
+  "en": "Our Story",
+  "t": "Nuestra historia"
+ },
+ "e637d9faea1e": {
+  "en": "Page Not Found",
+  "t": "Página no encontrada"
+ },
+ "e1bfa906ffc0": {
+  "en": "Page Not Found — Starter Site",
+  "t": "Página no encontrada: Sitio inicial"
+ },
+ "ab25d61bb124": {
+  "en": "Phone Number",
+  "t": "Teléfono"
+ },
+ "21ce1867dd66": {
+  "en": "Placeholder image. Replace with a photo of your team or workplace.",
+  "t": "Imagen de ejemplo. Sustitúyela por una foto de tu equipo o de tu lugar de trabajo."
+ },
+ "9db108ba6b7f": {
+  "en": "Privacy Policy",
+  "t": "Política de privacidad"
+ },
+ "e6d22cf6d75a": {
+  "en": "Privacy-first analytics setup with Plausible or GA4. Custom dashboards, conversion tracking, and monthly insight reports.",
+  "t": "Analítica respetuosa con la privacidad, con Plausible o GA4. Paneles a medida, seguimiento de conversiones e informes mensuales."
+ },
+ "dc779e5f99ff": {
+  "en": "Product Interest",
+  "t": "Producto de interés"
+ },
+ "ba8315acb5b6": {
+  "en": "Ready to Launch Your Fleet?",
+  "t": "¿Listo para lanzar tu flota?"
+ },
+ "4bb2e7314b83": {
+  "en": "Replace this section with your actual team members. A simple grid of name + role cards works well here — or link to a dedicated team page.",
+  "t": "Sustituye esta sección por los miembros reales de tu equipo. Una rejilla sencilla de tarjetas con nombre y cargo funciona bien aquí, o enlaza a una página dedicada al equipo."
+ },
+ "1a77d416224c": {
+  "en": "required",
+  "t": "obligatorio"
+ },
+ "87df60de337f": {
+  "en": "Resources",
+  "t": "Recursos"
+ },
+ "bce06414177f": {
+  "en": "Search",
+  "t": "Buscar"
+ },
+ "8b66cdfcc0d3": {
+  "en": "Search this site",
+  "t": "Buscar en este sitio"
+ },
+ "61447c487aaa": {
+  "en": "See all components <0/>",
+  "t": "Ver todos los componentes <0/>"
+ },
+ "09cb49d6b92a": {
+  "en": "Send Enquiry <0/>",
+  "t": "Enviar consulta <0/>"
+ },
+ "b45573500ca3": {
+  "en": "Send Us a Message",
+  "t": "Envíanos un mensaje"
+ },
+ "4f55c0317242": {
+  "en": "SEO Optimisation",
+  "t": "Optimización SEO"
+ },
+ "08f1439ada7d": {
+  "en": "SEO Optimization",
+  "t": "Optimización SEO"
+ },
+ "5cbd58404686": {
+  "en": "Services",
+  "t": "Servicios"
+ },
+ "86f81abe7da1": {
+  "en": "Services — Starter Site",
+  "t": "Servicios: Sitio inicial"
+ },
+ "668429284e85": {
+  "en": "Services, pricing, contact",
+  "t": "Servicios, precios, contacto"
+ },
+ "337b544b6e97": {
+  "en": "Shared Components",
+  "t": "Componentes compartidos"
+ },
+ "84ec3e71d2c9": {
+  "en": "Sitemap",
+  "t": "Mapa del sitio"
+ },
+ "be504f616fd1": {
+  "en": "Skip to main content",
+  "t": "Saltar al contenido principal"
+ },
+ "16b40d54d94a": {
+  "en": "Starter Site",
+  "t": "Sitio inicial"
+ },
+ "3c12224f75f5": {
+  "en": "Starter Site - Home",
+  "t": "Sitio inicial - Inicio"
+ },
+ "35e6ec7a4864": {
+  "en": "Starter Site — Build Multiple Sites, One Codebase",
+  "t": "Sitio inicial: varios sitios, un solo código"
+ },
+ "f32d5a3b17e6": {
+  "en": "Support",
+  "t": "Soporte"
+ },
+ "01ce1ce311b1": {
+  "en": "Tailwind CSS v4",
+  "t": "Tailwind CSS v4"
+ },
+ "a8af1677986a": {
+  "en": "Technical SEO audits, structured data, Core Web Vitals tuning, and content strategy. Every page ships with valid JSON-LD out of the box.",
+  "t": "Auditorías SEO técnicas, datos estructurados, ajuste de Core Web Vitals y estrategia de contenidos. Cada página se publica con JSON-LD válido desde el primer momento."
+ },
+ "d7a3ff16fc2d": {
+  "en": "Tell us about your project and we'll get back to you within 24 hours.",
+  "t": "Cuéntanos tu proyecto y te responderemos en 24 horas."
+ },
+ "1fede207dc10": {
+  "en": "Tell us about your requirements...",
+  "t": "Cuéntanos qué necesitas..."
+ },
+ "0c8a9a95e21a": {
+  "en": "Terms of Service",
+  "t": "Términos del servicio"
+ },
+ "7e30d1ce6dc7": {
+  "en": "Thank you. We reply within one working day.",
+  "t": "Gracias. Respondemos en un día laborable."
+ },
+ "af3f69e85511": {
+  "en": "The page you were looking for could not be found.",
+  "t": "No se ha encontrado la página que buscabas."
+ },
+ "c6ac94d1c470": {
+  "en": "The page you were looking for doesn't exist or has been moved.",
+  "t": "La página que buscabas no existe o se ha movido."
+ },
+ "fc1c56fbc8a3": {
+  "en": "The Team",
+  "t": "El equipo"
+ },
+ "d76d909c257a": {
+  "en": "This starter began as an internal template we used every time a new client needed a fresh website. After rebuilding the same header, footer, and design-token system for the fifth time, we packaged everything into Astro Fleet — a monorepo starter that ships with shared components, typed design tokens, and a Turborepo build pipeline ready to go.",
+  "t": "Este proyecto inicial nació como una plantilla interna que usábamos cada vez que un cliente nuevo necesitaba un sitio web. Después de rehacer la misma cabecera, el mismo pie y el mismo sistema de tokens de diseño por quinta vez, lo empaquetamos todo en Astro Fleet: un monorepo inicial que viene con componentes compartidos, tokens de diseño tipados y una tubería de compilación de Turborepo lista para usar."
+ },
+ "5f891e54be56": {
+  "en": "Three ready-made presets (Corporate, SaaS, Warm) powered by a typed DesignTokens interface. Reskin any site by changing a single config value.",
+  "t": "Tres ajustes preestablecidos listos para usar (Corporate, SaaS, Warm) sobre una interfaz DesignTokens tipada. Cambia el aspecto de cualquier sitio modificando un solo valor de configuración."
+ },
+ "21f9064a33f2": {
+  "en": "Toggle mobile menu",
+  "t": "Abrir o cerrar el menú móvil"
+ },
+ "e124bfbec7fd": {
+  "en": "Trust indicators",
+  "t": "Señales de confianza"
+ },
+ "ecdd82afb581": {
+  "en": "Type-Safe Config",
+  "t": "Configuración con tipos"
+ },
+ "5d5b3e81fcb8": {
+  "en": "View Services",
+  "t": "Ver servicios"
+ },
+ "9027ece64648": {
+  "en": "We could not send that just now. Please email us instead.",
+  "t": "No hemos podido enviarlo ahora mismo. Escríbenos por correo electrónico."
+ },
+ "45840a34f57b": {
+  "en": "We're a small, distributed team that believes great tools should be simple, open, and fast to deploy.",
+  "t": "Somos un equipo pequeño y distribuido que cree que las buenas herramientas deben ser simples, abiertas y rápidas de desplegar."
+ },
+ "9adbbf981a60": {
+  "en": "Web Development",
+  "t": "Desarrollo web"
+ },
+ "cbc1149258cb": {
+  "en": "What We Believe",
+  "t": "En qué creemos"
+ },
+ "e1e98a6f8e0f": {
+  "en": "Your Company Ltd.",
+  "t": "Tu Empresa S.L."
+ },
+ "c143b22ef89b": {
+  "en": "Zero JS by Default",
+  "t": "Cero JS por defecto"
+ }
+}

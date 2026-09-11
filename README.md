@@ -124,7 +124,7 @@ python3 scripts/cf-canonical-redirects.py --check
 ## Turning features on
 
 Everything is opt-in. Full detail in
-[`CLAUDE.md`](CLAUDE.md) §6 and the [components reference](docs/components.md).
+[`CLAUDE.md`](CLAUDE.md) §6 and the [component docs](docs/components/README.md).
 
 ### Site search
 
@@ -442,10 +442,13 @@ If you ship a site with Astro Fleet, open a PR adding it here.
 **Building**
 
 - [Adding a Site](docs/adding-a-site.md) — create and configure additional sites
-- [Components Reference](docs/components.md) — props, examples and CSS variables for all 24
+- [Components](docs/components/README.md) — one page per component: what it is, when to use it,
+  every setting in plain words, a copy-paste example, and the mistakes people make
 - [Design Tokens](docs/design-tokens.md) — presets and custom palettes
 - [Framework Integrations](docs/framework-integrations.md) — React, Vue, Svelte, islands, view transitions
 - [Adding a CMS](docs/adding-a-cms.md) — the Keystatic pattern, and when to pick something else
+- [Translating a Site](docs/i18n.md) — **optional.** A second language under its own URL prefix,
+  with translated pages held back from Google until a person has read them
 
 **Shipping**
 

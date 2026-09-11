@@ -65,6 +65,13 @@ export interface Props {
   search?: boolean;
   /** Placeholder for the search field. Name three things this site covers. */
   searchPlaceholder?: string;
+  /**
+   * Show the language switcher in the header. Off by default: translation is
+   * opt-in and needs `i18n/locales.json` plus the two i18n build steps. See
+   * docs/i18n.md. With those missing the control stays hidden, so turning this
+   * on early costs nothing and shows nothing.
+   */
+  showLanguages?: boolean;
   ctaText?: string;
   /** Header CTA link */
   ctaHref?: string;
@@ -102,6 +109,7 @@ const {
   privacyHref = '/privacy/',
   search,
   searchPlaceholder,
+  showLanguages,
   ctaText,
   ctaHref,
   bodyClass = '',
@@ -296,6 +304,7 @@ const cssVars = designTokens ? tokensToCSSVars(designTokens) : '';
       logoAlt={logoAlt}
       search={search}
       searchPlaceholder={searchPlaceholder}
+      showLanguages={showLanguages}
       ctaText={ctaText}
       ctaHref={ctaHref}
     />

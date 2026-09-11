@@ -5,6 +5,7 @@ export interface MenuItem {
   children?: MenuItem[];
 }
 
+import LanguageSwitcher from './LanguageSwitcher.astro';
 import SiteSearch from './SiteSearch.astro';
 
 export interface Props {
@@ -23,6 +24,13 @@ export interface Props {
   search?: boolean;
   /** Name three things this site actually covers. Generic placeholders teach nobody what to type. */
   searchPlaceholder?: string;
+  /**
+   * Show the language switcher. Off by default, because translation is opt-in:
+   * see docs/i18n.md. The control ships hidden and `i18n-build.mjs` unhides it
+   * only on pages that really have a second language, so turning this on
+   * without the i18n build step shows nothing rather than an empty menu.
+   */
+  showLanguages?: boolean;
 }
 
 const {
@@ -34,6 +42,7 @@ const {
   ctaHref = '/contact',
   search = false,
   searchPlaceholder = 'Search this site',
+  showLanguages = false,
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
@@ -93,6 +102,8 @@ const currentPath = Astro.url.pathname;
 
       <!-- CTA Button (Desktop) -->
       {search && <SiteSearch placeholder={searchPlaceholder} class="header__search" />}
+
+      {showLanguages && <LanguageSwitcher class="header__lang" />}
 
       <a href={ctaHref} class="header__cta">{ctaText}</a>
 
@@ -179,7 +190,8 @@ const currentPath = Astro.url.pathname;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.5rem;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
     height: 4.5rem;
     position: relative;
   }
@@ -213,7 +225,7 @@ const currentPath = Astro.url.pathname;
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 0.25rem;
+    gap: 0.125rem;
   }
 
   .header__menu-item {
@@ -224,7 +236,7 @@ const currentPath = Astro.url.pathname;
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.75rem;
     font-family: var(--font-body, system-ui, sans-serif);
     font-size: 0.9375rem;
     font-weight: 500;
@@ -304,6 +316,15 @@ const currentPath = Astro.url.pathname;
   }
 
   /* ===== CTA Button ===== */
+  /* The switcher sits between search and the CTA. With a nav of six or seven
+     items, a search box, a language control and a CTA all sharing 1280px, the
+     row overflowed and flex crushed the zero-width SVG icons to nothing. The
+     trim above (link padding 1rem to 0.75rem, menu gap halved, container
+     padding 1.5rem to 1.25rem plus a 0.5rem gap) buys the room back. */
+  .header__lang {
+    flex: none;
+  }
+
   .header__cta {
     display: none;
     padding: 0.625rem 1.5rem;
