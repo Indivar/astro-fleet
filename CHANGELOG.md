@@ -16,6 +16,60 @@ new projects silently scaffold from the previous version.
 
 ---
 
+## [2.5.0] — 2026-09-11
+
+An optional second language, held back from Google until a person has read it,
+and a component reference split into pages a non-specialist can follow.
+
+### Added
+
+- **Translation, entirely optional.** Three scripts in `packages/shared-ui/scripts/`
+  take a built English site and write a complete translated copy into
+  `dist/<code>/`. English keeps the root, so no URL that ranks today moves.
+  Source pages are never duplicated: the extractor reads the finished HTML, so
+  one set of `.astro` files serves every language and an English copy fix can
+  never leave a translation silently stale.
+
+  A site opts in by adding `i18n/locales.json` and two commands to its build
+  script. Without that file both scripts exit immediately, write nothing and
+  print nothing, so a single-language site is untouched. Full walkthrough in
+  [docs/i18n.md](docs/i18n.md).
+
+- **`LanguageSwitcher`**, and `showLanguages` on `Header` and `BaseLayout`. Off
+  by default. The control ships hidden and is filled in after the build, once
+  it is known which languages really have the page being rendered, so it never
+  offers a language that would land on English text or a 404.
+
+- **Translated pages are `noindex` until reviewed.** A locale marked
+  `"reviewed": false` is live for visitors through the switcher but carries
+  `noindex, follow` and stays out of the sitemaps. Google's spam policy names
+  machine translation published without human review as scaled content abuse,
+  and the penalty lands on the domain rather than on the one language. One flag
+  in `locales.json` publishes a language the day a person signs it off.
+
+- **A worked example.** The `starter` site ships in English and Spanish, 122
+  units, so the pipeline is exercised by CI on every pull request and there is
+  something real to read before setting it up yourself.
+
+### Changed
+
+- **Component documentation is now one page per component**, under
+  [`docs/components/`](docs/components/README.md). Each page opens with what the
+  component is in a sentence, when to use it and when to use something else,
+  every setting in a plain table rather than a TypeScript interface, a
+  copy-paste example, and the mistakes people actually make. The full technical
+  reference is kept at the bottom of each page. `docs/components.md` remains as
+  an index so existing links still work.
+
+- **Header spacing trimmed** so a full navigation, search, the language control
+  and a call-to-action fit 1280px without the row overflowing: menu link padding
+  1rem to 0.75rem, menu gap halved, container padding 1.5rem to 1.25rem with a
+  0.5rem gap. `.header__lang` carries `flex: none`, because a flex row that
+  overflows crushes a zero-intrinsic-width SVG icon to nothing rather than
+  shrinking the text beside it.
+
+---
+
 ## [2.4.0] — 2026-08-28
 
 Images served at the size the slot needs, headers that say no to everything

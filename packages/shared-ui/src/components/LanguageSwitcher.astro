@@ -1,0 +1,152 @@
+---
+/**
+ * LanguageSwitcher: one control, every language written in its own script.
+ *
+ * THE LIST IS EMPTY ON PURPOSE.
+ * Astro renders the shell; `i18n-build.mjs` fills in the entries after the
+ * build, once it knows which languages actually have THIS page. It has to work
+ * that way round: which languages exist is a fact about the dictionaries, not
+ * about the source, and it differs page by page.
+ *
+ * The first version had the list here and let i18n-build delete the entries it
+ * did not want. That is destructive: the second run reads the first run's
+ * output, finds nothing left to delete, and the control disappears from the
+ * site. Generating the list instead of pruning it makes the step idempotent,
+ * and leaves locales.json as the single place a language is named.
+ *
+ * Ships hidden. i18n-build unhides it when there is more than one language to
+ * offer, so a site that never runs the i18n step shows no empty menu.
+ *
+ * A language name is written in its own script, never transliterated: a reader
+ * looking for Tamil scans for தமிழ், not for the word "Tamil" in English. The
+ * English entry stays "English" for the same reason.
+ *
+ * Progressive enhancement: with no JavaScript this is a <details> disclosure
+ * holding real links, which works. The script only closes it on outside click
+ * and on Escape.
+ */
+export interface Props {
+  /** Extra class for host-site positioning. */
+  class?: string;
+}
+
+const { class: klass = '' } = Astro.props;
+---
+
+<details class:list={['langsw', klass]} data-i18n-switcher data-i18n-skip data-i18n-current="en" hidden>
+  <summary class="langsw__btn" aria-label="Choose a language">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
+    </svg>
+    <span class="langsw__label" data-i18n-label>English</span>
+    <svg class="langsw__caret" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </summary>
+  <ul class="langsw__list" data-i18n-list></ul>
+</details>
+
+<script>
+  /**
+   * Close on outside click and on Escape, and keep the button label showing the
+   * language you are actually in. Idempotent and re-bound after ClientRouter
+   * navigation, like every other island on these sites.
+   */
+  function bindLangSwitcher() {
+    document.querySelectorAll<HTMLDetailsElement>('[data-i18n-switcher]').forEach((el) => {
+      if (el.dataset.bound === '1') return;
+      el.dataset.bound = '1';
+
+      const current = el.dataset.i18nCurrent || 'en';
+      const active = el.querySelector<HTMLAnchorElement>(`[data-i18n-to="${current}"]`);
+      const label = el.querySelector<HTMLElement>('[data-i18n-label]');
+      if (active && label) label.textContent = active.querySelector('.langsw__native')?.textContent || 'English';
+      active?.setAttribute('aria-current', 'true');
+
+      document.addEventListener('click', (e) => {
+        if (el.open && !el.contains(e.target as Node)) el.open = false;
+      });
+      el.addEventListener('keydown', (e) => {
+        if ((e as KeyboardEvent).key === 'Escape') { el.open = false; el.querySelector('summary')?.focus(); }
+      });
+    });
+  }
+  bindLangSwitcher();
+  document.addEventListener('astro:page-load', bindLangSwitcher);
+</script>
+
+<style>
+  .langsw {
+    position: relative;
+  }
+  .langsw__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    list-style: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: inherit;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+  }
+  .langsw__btn::-webkit-details-marker { display: none; }
+  /* The globe and the caret carry no text, so in a flex row that is short of
+     space they are the first things the browser squeezes, and they squeeze all
+     the way to zero: the control silently loses both its icons and reads as a
+     bare word. They keep their size. */
+  .langsw__btn > svg { flex: none; }
+  .langsw__btn:hover { background: currentColor; }
+  /* The hover fill must not swallow the text: tint the background with the
+     inherited colour at low alpha instead of painting it solid. */
+  .langsw__btn:hover { background: color-mix(in srgb, currentColor 10%, transparent); }
+  .langsw__btn:active { transform: translateY(1px); }
+  .langsw__btn:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+  .langsw[open] .langsw__caret { transform: rotate(180deg); }
+  .langsw__caret { transition: transform 0.15s ease; }
+
+  .langsw__list {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.4rem);
+    z-index: 80;
+    margin: 0;
+    padding: 0.35rem;
+    list-style: none;
+    min-width: 13rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    background: #ffffff;
+    color: #16233a;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    border-radius: 0.6rem;
+    box-shadow: 0 24px 48px -24px rgba(15, 23, 42, 0.4);
+  }
+  .langsw__item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.4rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .langsw__item:hover { background: rgba(15, 23, 42, 0.06); }
+  .langsw__item:focus-visible { outline: 2px solid currentColor; outline-offset: -2px; }
+  .langsw__item[aria-current='true'] { font-weight: 700; background: rgba(15, 23, 42, 0.06); }
+  .langsw__native { font-size: 0.95rem; }
+  .langsw__english {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .langsw__btn, .langsw__caret { transition: none; }
+    .langsw__btn:active { transform: none; }
+  }
+</style>
