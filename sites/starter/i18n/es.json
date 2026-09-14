@@ -15,9 +15,21 @@
   "en": "<0/> hello@example.com",
   "t": "<0/> hello@example.com"
  },
+ "df01f2f490c3": {
+  "en": "<0>Advise</0> <1> Architecture </1>",
+  "t": "<0>Asesorar</0> <1> Arquitectura </1>"
+ },
+ "71a99dad2b34": {
+  "en": "<0>Build</0> <1> Web applications </1>",
+  "t": "<0>Crear</0> <1> Aplicaciones web </1>"
+ },
  "dea37b2cbf90": {
   "en": "<0>Home</0> <1/>",
   "t": "<0>Inicio</0> <1/>"
+ },
+ "627fd9c41461": {
+  "en": "<0>Run</0> <1> Hosting </1>",
+  "t": "<0>Operar</0> <1> Alojamiento </1>"
  },
  "411cc505cdc6": {
   "en": "A battle-tested library of Astro components — Header, Footer, ServiceCard, CTABlock and more — shared across every site in your fleet.",
@@ -35,13 +47,29 @@
   "en": "About Us — Starter Site",
   "t": "Quiénes somos: Sitio inicial"
  },
+ "9580e1f866b8": {
+  "en": "Advise",
+  "t": "Asesorar"
+ },
  "78d482edf6fb": {
   "en": "Alex Chen",
   "t": "Alex Chen"
  },
+ "53840e9c7fd0": {
+  "en": "All services",
+  "t": "Todos los servicios"
+ },
+ "bfd3d979c134": {
+  "en": "All Services",
+  "t": "Todos los servicios"
+ },
  "25bc96295797": {
   "en": "Analytics",
   "t": "Analítica"
+ },
+ "b040b4179b8b": {
+  "en": "Architecture",
+  "t": "Arquitectura"
  },
  "a0363cf3baf2": {
   "en": "Astro Fleet bundles the patterns that every multi-site project needs — so you can focus on content and conversion, not boilerplate.",
@@ -55,6 +83,10 @@
   "en": "Astro Fleet is an open-source multi-site monorepo starter. Shared components, design tokens, and one-command deploys for agencies and multi-brand teams.",
   "t": "Astro Fleet es un monorepo inicial de código abierto para varios sitios. Componentes compartidos, tokens de diseño y despliegues con una sola orden, para agencias y equipos con varias marcas."
  },
+ "a80e3858c02a": {
+  "en": "Audits",
+  "t": "Auditorías"
+ },
  "0b9d2b2362bc": {
   "en": "Blog",
   "t": "Blog"
@@ -62,6 +94,10 @@
  "c766e665183d": {
   "en": "Breadcrumb",
   "t": "Ruta de navegación"
+ },
+ "bbd80cf7e2de": {
+  "en": "Build",
+  "t": "Crear"
  },
  "b09087d46995": {
   "en": "Build Multiple Sites,<0/> <1>One Codebase</1>",
@@ -219,6 +255,14 @@
   "en": "Home",
   "t": "Inicio"
  },
+ "8766cde61214": {
+  "en": "Hosting",
+  "t": "Alojamiento"
+ },
+ "a7881cac6e64": {
+  "en": "Integrations",
+  "t": "Integraciones"
+ },
  "cac7bbb6b67b": {
   "en": "Jane Doe",
   "t": "Jane Doe"
@@ -255,9 +299,17 @@
   "en": "Message",
   "t": "Mensaje"
  },
+ "c737d4187d81": {
+  "en": "Mobile apps",
+  "t": "Aplicaciones móviles"
+ },
  "058f36b25e30": {
   "en": "Mobile navigation",
   "t": "Navegación móvil"
+ },
+ "a81434589757": {
+  "en": "Monitoring",
+  "t": "Monitorización"
  },
  "d19dadae19da": {
   "en": "Not Sure Which Service You Need?",
@@ -335,6 +387,10 @@
   "en": "Resources",
   "t": "Recursos"
  },
+ "b1b392607dea": {
+  "en": "Run",
+  "t": "Operar"
+ },
  "bce06414177f": {
   "en": "Search",
   "t": "Buscar"
@@ -370,6 +426,14 @@
  "86f81abe7da1": {
   "en": "Services — Starter Site",
   "t": "Servicios: Sitio inicial"
+ },
+ "d6c330b7c8df": {
+  "en": "Services <0/>",
+  "t": "Servicios <0/>"
+ },
+ "a30cf5d990cb": {
+  "en": "Services submenu",
+  "t": "Submenú de Servicios"
  },
  "668429284e85": {
   "en": "Services, pricing, contact",
@@ -470,6 +534,10 @@
  "45840a34f57b": {
   "en": "We're a small, distributed team that believes great tools should be simple, open, and fast to deploy.",
   "t": "Somos un equipo pequeño y distribuido que cree que las buenas herramientas deben ser simples, abiertas y rápidas de desplegar."
+ },
+ "66b843bfe5cb": {
+  "en": "Web applications",
+  "t": "Aplicaciones web"
  },
  "9adbbf981a60": {
   "en": "Web Development",

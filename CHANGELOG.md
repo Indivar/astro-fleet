@@ -16,6 +16,57 @@ new projects silently scaffold from the previous version.
 
 ---
 
+## [2.6.0] — 2026-09-14
+
+A dropdown that can carry a long menu without becoming a column of twenty.
+
+### Added
+
+- **Grouped, multi-column dropdowns, opt-in.** Give any child in `navigation` a
+  `group` and that item's dropdown becomes a panel with headings and columns.
+  Leave `group` off and the dropdown renders exactly as it did before, a single
+  column, so a site that does not want this sees no change at all.
+
+  ```ts
+  {
+    label: 'Services',
+    href: '/services/',
+    children: [
+      { group: 'Build', label: 'Web applications', href: '/services/web/' },
+      { group: 'Run',   label: 'Hosting',          href: '/services/hosting/' },
+      { label: 'All services', href: '/services/' },
+    ],
+  }
+  ```
+
+  Children with no `group` sort last and share one full-width row at the foot of
+  the panel, so general links like "All services" do not cost a whole column.
+
+  The `starter` site ships a grouped Services menu, so every CI run exercises it.
+  Headings carry through to the mobile drawer, which stays one scrolling column.
+
+### Fixed
+
+- **`create-astro-fleet` help showed the wrong template version.** `init.mjs`
+  pinned v2.5.0 while `help.mjs` still printed v2.4.0, so the CLI reported a
+  version it did not clone. Both now come from the same release.
+
+### Notes
+
+Three faults in the panel were found by measuring the rendered menu at 1440
+rather than by reading the code, and are worth repeating because each looks
+correct in source:
+
+- anchored left, a wide panel on a nav item near the end of the bar ended 175px
+  past the viewport; it is anchored to the item's right edge instead;
+- anchored right, it then overhung the left edge, because a panel wider than the
+  space either side cannot be fixed by choosing a side;
+- `grid-template-columns: repeat(auto-fit, ...)` with a `max-width` let three
+  groups render as six columns, 1302px wide. The column count now comes from the
+  data and the columns are bounded.
+
+---
+
 ## [2.5.0] — 2026-09-11
 
 An optional second language, held back from Google until a person has read it,
