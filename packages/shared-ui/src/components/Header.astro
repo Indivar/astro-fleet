@@ -3,10 +3,39 @@ export interface MenuItem {
   label: string;
   href: string;
   children?: MenuItem[];
+  /**
+   * Optional heading this child sits under. Give any child a `group` and the
+   * dropdown becomes a multi-column panel with headings. Leave it off and the
+   * dropdown renders as a single column, exactly as before.
+   *
+   * Opt-in on purpose. A menu long enough to need columns is one site's
+   * problem, and a site that does not use `group` sees no change at all.
+   */
+  group?: string;
 }
 
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import SiteSearch from './SiteSearch.astro';
+
+/**
+ * Children in declaration order, bucketed by `group`. Groups appear in the
+ * order they are first mentioned, so a site controls the column order by the
+ * order it lists its items rather than by sorting here.
+ *
+ * Children with no group sort last and render as one full-width row at the
+ * foot of the panel, so a couple of general links ("All services", "Pricing")
+ * do not cost a whole column.
+ */
+function groupChildren(children: MenuItem[]): [string, MenuItem[]][] {
+  const out: [string, MenuItem[]][] = [];
+  for (const child of children) {
+    const key = child.group ?? '';
+    const bucket = out.find(([k]) => k === key);
+    if (bucket) bucket[1].push(child);
+    else out.push([key, [child]]);
+  }
+  return out.sort(([a], [b]) => (a === '' ? 1 : 0) - (b === '' ? 1 : 0));
+}
 
 export interface Props {
   navigation: MenuItem[];
@@ -81,7 +110,7 @@ const currentPath = Astro.url.pathname;
                 </svg>
               )}
             </a>
-            {item.children?.length && (
+            {item.children?.length && !item.children.some((c) => c.group) && (
               <ul class="header__dropdown" role="menu" aria-label={`${item.label} submenu`}>
                 {item.children.map((child) => (
                   <li role="none">
@@ -92,6 +121,33 @@ const currentPath = Astro.url.pathname;
                     >
                       {child.label}
                     </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {item.children?.length && item.children.some((c) => c.group) && (
+              <ul
+                class="header__dropdown header__dropdown--mega"
+                role="menu"
+                aria-label={`${item.label} submenu`}
+                style={`--mega-cols:${Math.min(4, Math.max(1, groupChildren(item.children).filter(([h]) => h).length))}`}
+              >
+                {groupChildren(item.children).map(([heading, kids]) => (
+                  <li role="none" class:list={['header__dropdown-group', { 'header__dropdown-group--wide': !heading }]}>
+                    {heading && <span class="header__dropdown-heading">{heading}</span>}
+                    <ul class="header__dropdown-sublist" role="none">
+                      {kids.map((child) => (
+                        <li role="none">
+                          <a
+                            href={child.href}
+                            class:list={['header__dropdown-link', { 'is-active': currentPath === child.href }]}
+                            role="menuitem"
+                          >
+                            {child.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
                   </li>
                 ))}
               </ul>
@@ -140,8 +196,11 @@ const currentPath = Astro.url.pathname;
                         All {item.label}
                       </a>
                     </li>
-                    {item.children.map((child) => (
+                    {item.children.map((child, i) => (
                       <li>
+                        {child.group && child.group !== item.children?.[i - 1]?.group && (
+                          <span class="header__mobile-subheading">{child.group}</span>
+                        )}
                         <a href={child.href} class="header__mobile-sublink">
                           {child.label}
                         </a>
@@ -291,6 +350,65 @@ const currentPath = Astro.url.pathname;
 
   .header__menu-item.has-dropdown:hover .header__chevron {
     transform: rotate(180deg);
+  }
+
+  /* Multi-column panel, used only when children declare a `group`.
+     Three things here were each a bug first, found by measuring the rendered
+     panel at 1440 rather than by reading the code:
+       - the column count comes from the data. `auto-fit` with a max-width let
+         three groups render as six columns, 1302px wide;
+       - the panel is anchored to the item's RIGHT edge. Left-anchored, a wide
+         panel on a nav item near the end of the bar ended 175px past the
+         viewport;
+       - columns are bounded, so the panel is exactly as wide as it needs. */
+  .header__dropdown--mega {
+    display: grid;
+    grid-template-columns: repeat(var(--mega-cols, 3), minmax(190px, 228px));
+    gap: 0.25rem 1.5rem;
+    left: auto;
+    right: 0;
+    max-width: calc(100vw - 2rem);
+    padding: 1rem 1.25rem 0.875rem;
+    align-items: start;
+  }
+  .header__dropdown-group {
+    min-width: 0;
+  }
+  .header__dropdown-group--wide {
+    grid-column: 1 / -1;
+    border-top: 1px solid rgba(0, 0, 0, 0.07);
+    margin-top: 0.375rem;
+    padding-top: 0.375rem;
+  }
+  .header__dropdown-group--wide .header__dropdown-sublist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.5rem;
+    margin-bottom: 0;
+  }
+  .header__dropdown-heading {
+    display: block;
+    padding: 0.375rem 0.5rem 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    white-space: nowrap;
+  }
+  .header__dropdown-sublist {
+    list-style: none;
+    margin: 0 0 0.5rem;
+    padding: 0;
+  }
+  .header__mobile-subheading {
+    display: block;
+    padding: 0.75rem 0 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.55;
   }
 
   .header__dropdown-link {

@@ -44,12 +44,34 @@ export const LOGO_SRC = '/favicon.svg';
  *   { label: 'Products', href: '/products/', children: [
  *     { label: 'Widget A', href: '/products/widget-a/' },
  *   ]}
+ *
+ * Give a child a `group` and the dropdown becomes a multi-column panel with
+ * headings, which is what a menu of a dozen or more items needs to stay
+ * readable. Children with no `group` sort last and share one full-width row
+ * at the foot, so links like "All services" do not cost a whole column.
+ * Leave `group` off everywhere and the dropdown stays a single column.
+ *
+ * The Services item below is grouped so the starter ships a working example.
  */
 export const navigation: MenuItem[] = [
-  { label: 'Home',     href: '/'          },
-  { label: 'About',    href: '/about/'    },
-  { label: 'Services', href: '/services/' },
-  { label: 'Contact',  href: '/contact/'  },
+  { label: 'Home',  href: '/'       },
+  { label: 'About', href: '/about/' },
+  {
+    label: 'Services',
+    href: '/services/',
+    children: [
+      { group: 'Build',   label: 'Web applications', href: '/services/#build'   },
+      { group: 'Build',   label: 'Mobile apps',      href: '/services/#build'   },
+      { group: 'Build',   label: 'Integrations',     href: '/services/#build'   },
+      { group: 'Run',     label: 'Hosting',          href: '/services/#run'     },
+      { group: 'Run',     label: 'Monitoring',       href: '/services/#run'     },
+      { group: 'Run',     label: 'Support',          href: '/services/#run'     },
+      { group: 'Advise',  label: 'Architecture',     href: '/services/#advise'  },
+      { group: 'Advise',  label: 'Audits',           href: '/services/#advise'  },
+      { label: 'All services', href: '/services/' },
+    ],
+  },
+  { label: 'Contact', href: '/contact/' },
 ];
 
 // ---------------------------------------------------------------------------

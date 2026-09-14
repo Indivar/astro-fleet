@@ -71,8 +71,164 @@
       "/services/"
     ]
   },
-  "5cbd58404686": {
-    "en": "Services",
+  "d6c330b7c8df": {
+    "en": "Services <0/>",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "a30cf5d990cb": {
+    "en": "Services submenu",
+    "kind": "aria-label",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "bbd80cf7e2de": {
+    "en": "Build",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "66b843bfe5cb": {
+    "en": "Web applications",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "c737d4187d81": {
+    "en": "Mobile apps",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "a7881cac6e64": {
+    "en": "Integrations",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "b1b392607dea": {
+    "en": "Run",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "8766cde61214": {
+    "en": "Hosting",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "a81434589757": {
+    "en": "Monitoring",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "f32d5a3b17e6": {
+    "en": "Support",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "9580e1f866b8": {
+    "en": "Advise",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "b040b4179b8b": {
+    "en": "Architecture",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "a80e3858c02a": {
+    "en": "Audits",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "53840e9c7fd0": {
+    "en": "All services",
     "kind": "unit",
     "count": 5,
     "pages": [
@@ -179,6 +335,54 @@
       "/services/"
     ]
   },
+  "bfd3d979c134": {
+    "en": "All Services",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "71a99dad2b34": {
+    "en": "<0>Build</0> <1> Web applications </1>",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "627fd9c41461": {
+    "en": "<0>Run</0> <1> Hosting </1>",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
+  "df01f2f490c3": {
+    "en": "<0>Advise</0> <1> Architecture </1>",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
   "16b40d54d94a": {
     "en": "Starter Site",
     "kind": "unit",
@@ -275,6 +479,18 @@
       "/services/"
     ]
   },
+  "5cbd58404686": {
+    "en": "Services",
+    "kind": "unit",
+    "count": 5,
+    "pages": [
+      "/",
+      "/404.html",
+      "/about/",
+      "/contact/",
+      "/services/"
+    ]
+  },
   "9adbbf981a60": {
     "en": "Web Development",
     "kind": "unit",
@@ -361,18 +577,6 @@
   },
   "164b3d4809f9": {
     "en": "Changelog",
-    "kind": "unit",
-    "count": 5,
-    "pages": [
-      "/",
-      "/404.html",
-      "/about/",
-      "/contact/",
-      "/services/"
-    ]
-  },
-  "f32d5a3b17e6": {
-    "en": "Support",
     "kind": "unit",
     "count": 5,
     "pages": [
