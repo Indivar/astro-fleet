@@ -12,6 +12,29 @@ want. Claude reads it.
 
 ---
 
+## 0. This is a public repository
+
+Anyone can clone it, so two things never appear in it.
+
+**No personal data.** No individual's name, email, phone number or address, in
+code, docs, package metadata or commit content.
+
+**No credentials or infrastructure identifiers.** No API key, token, account ID,
+zone ID, server IP or real analytics ID, not even expired or revoked. Examples
+use `acme.com`, `you@company.com`, `+1 555 000 0000`, `G-XXXXXXXXXX`, and the
+three invented demo sites (`meridian-advisory.com`, `flux-analytics.com`,
+`olive-and-vine.com`).
+
+The showcase of production sites in the README is deliberate and stays: real
+sites built on this template are the evidence that it works. Adding one is a
+decision for the repository owner, not something to do or undo on your own.
+
+When porting work in from a private monorepo, read the diff for the two things
+above before opening the PR, **code comments included**: comments are what
+carried private page counts and client names in before.
+
+---
+
 ## 0. What this repo is
 
 A multi-site Astro monorepo. Each site lives in `sites/<domain>/` and deploys
