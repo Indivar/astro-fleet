@@ -12,7 +12,7 @@ want. Claude reads it.
 
 ---
 
-## 0. This is a public repository
+## Ground rule: this is a public repository
 
 Anyone can clone it, so two things never appear in it.
 
