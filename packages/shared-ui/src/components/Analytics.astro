@@ -48,6 +48,17 @@ const {
   requireConsent = true,
   storageKey = 'analytics-consent',
 } = Astro.props;
+
+/*
+ * Analytics runs only on the production host. `Astro.site` is the site's own
+ * canonical URL from astro.config, so nothing extra has to be configured and
+ * nothing can drift. The www and bare forms are both accepted.
+ *
+ * Without this, every `astro dev`, `astro preview`, automated test run and
+ * *.pages.dev preview deploy loads the production tag and writes test traffic
+ * into the real property, where it can easily outnumber the real visitors.
+ */
+const prodHost = Astro.site ? new URL(Astro.site).hostname.replace(/^www\./, '') : '';
 ---
 
 {id && (
@@ -55,6 +66,7 @@ const {
     class="cons"
     data-analytics
     data-ga-id={id}
+    data-ga-host={prodHost}
     data-require-consent={requireConsent ? 'yes' : 'no'}
     data-storage-key={storageKey}
     hidden
@@ -161,6 +173,13 @@ const {
     root.dataset.wired = 'yes';
 
     const id = root.dataset.gaId || '';
+
+    /* Not the production host: a local preview, a test run or a preview
+       deploy. Load nothing, send nothing, ask nothing. The banner stays
+       hidden because there is nothing to consent to. */
+    const prod = root.dataset.gaHost || '';
+    const here = location.hostname.replace(/^www\./, '');
+    if (prod && here !== prod) return;
     const key = root.dataset.storageKey || 'analytics-consent';
     const needsConsent = root.dataset.requireConsent !== 'no';
 

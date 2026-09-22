@@ -15,7 +15,7 @@ ${pc.bold('Commands:')}
   help                      Show this help
 
 ${pc.bold('Options (init):')}
-  --template <source>       giget template source (default: github:indivar/astro-fleet#v2.6.0)
+  --template <source>       giget template source (default: github:indivar/astro-fleet#v2.6.1)
   --preset <name>           corporate | saas | warm (skips prompt)
   --domain <name>           first site domain (skips prompt)
   --keep-demos              keep the three demo sites as reference

@@ -16,6 +16,29 @@ new projects silently scaffold from the previous version.
 
 ---
 
+## [2.6.1] — 2026-09-22
+
+Analytics stays out of the numbers when the site is not the real site.
+
+### Fixed
+
+- **`Analytics` sends nothing unless the page is on the production host.**
+  Every `astro dev`, `astro preview`, automated test run and preview deploy was
+  loading the production GA4 tag and writing test traffic into the live
+  property, where it can easily outnumber real visitors. The component now
+  compares `location.hostname` with the host in `Astro.site` (www and bare
+  forms both accepted) and, on any other host, loads nothing, sends nothing
+  and shows no consent banner. Nothing to configure: `site` in
+  `astro.config.mjs` is already the source. A site with no `site` set behaves
+  as before.
+
+### CLI
+
+- `create-astro-fleet` 0.5.1, pinned to `v2.6.1`. 0.5.0 was never published
+  to npm; 0.5.1 supersedes it.
+
+---
+
 ## [2.6.0] — 2026-09-14
 
 A dropdown that can carry a long menu without becoming a column of twenty.
