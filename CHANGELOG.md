@@ -16,6 +16,30 @@ new projects silently scaffold from the previous version.
 
 ---
 
+## [2.6.2] — 2026-09-26
+
+The phone menu stops widening every page.
+
+### Fixed
+
+- **The closed mobile menu no longer makes the page scroll sideways.** It was
+  parked off screen with `translateX(100%)`, which counts toward the page's
+  scrollable width, so on a 375px phone every page using the shared `Header`
+  measured about 734px wide and could be panned sideways. Its links also
+  stayed in the keyboard tab order while invisible. The closed state is now a
+  short fade with `visibility: hidden`: nothing overflows, hidden links cannot
+  take focus, and `prefers-reduced-motion` turns the fade off.
+- **A long text logo wraps instead of pushing the menu button off screen.**
+  With `flex-shrink: 0`, a company name set as text could be wider than the
+  space left beside the search and menu buttons. Text logos may now wrap onto
+  two lines. Image logos are unchanged.
+
+### Changed
+
+- `create-astro-fleet` 0.5.2 pins this tag.
+
+---
+
 ## [2.6.1] — 2026-09-22
 
 Analytics stays out of the numbers when the site is not the real site.

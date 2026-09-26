@@ -276,6 +276,16 @@ const currentPath = Astro.url.pathname;
     font-weight: 700;
     color: var(--color-primary, #0a0f1a);
     letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  /* A text logo may wrap. A long company name set as text is wider than a
+     phone header once the search and menu buttons sit beside it, and with
+     flex-shrink: 0 it pushed the menu button off screen. Image logos keep
+     their size. */
+  .header__logo:has(.header__logo-text) {
+    flex-shrink: 1;
+    min-width: 0;
   }
 
   /* ===== Desktop Menu ===== */
@@ -520,14 +530,31 @@ const currentPath = Astro.url.pathname;
     bottom: 0;
     background: #ffffff;
     overflow-y: auto;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
+    /* Closed: faded and hidden, not parked off screen. A menu held at
+       translateX(100%) widens the page to roughly twice the viewport on a
+       phone, so the whole page can be panned sideways, and its links stay
+       in the tab order while invisible. visibility removes them from focus;
+       the small upward nudge cannot overflow. */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-0.5rem);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
     z-index: 1000;
     padding: 1.5rem;
   }
 
   .header__toggle-input:checked ~ .header__mobile-menu {
-    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header__mobile-menu,
+    .header__toggle-input:checked ~ .header__mobile-menu {
+      transition: none;
+    }
   }
 
   .header__mobile-list {

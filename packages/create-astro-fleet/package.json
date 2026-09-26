@@ -1,6 +1,6 @@
 {
   "name": "create-astro-fleet",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Scaffold a new Astro Fleet monorepo or add a site to an existing one.",
   "license": "MIT",
   "author": "Indivar Software Solutions (https://github.com/indivar)",
